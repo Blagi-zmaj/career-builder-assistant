@@ -6,6 +6,8 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
+import MiniDrawer from "./components/Drawer";
+import { StyledRoot } from "./util/StyledRoot";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={"1"}>{children}</body>
+      <body className={"1"}>
+        <StyledRoot>{children}</StyledRoot>
+      </body>
     </html>
   );
 }
