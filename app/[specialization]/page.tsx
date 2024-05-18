@@ -15,7 +15,10 @@ export default function Specialization({
 
   return (
     <>
-      <Drawer />
+      <Drawer>
+        <h1>{pathname}</h1>
+        <h2>{params.specialization}</h2>
+      </Drawer>
     </>
   );
 }

@@ -19,9 +19,7 @@ import { usePathname } from "next/navigation";
 import Navigation from "./Navigation";
 import {
   drawerTabs,
-  // imagesSrc,
   pagesUrls,
-  // cardsDescriptions,
   DrawerHeader,
   Drawer,
   dynamicUrls,
@@ -29,9 +27,8 @@ import {
 } from "../util/helpers";
 import Main from "./Main";
 
-export default function MiniDrawer() {
+export default function MiniDrawer({ children }) {
   const pathname = usePathname();
-  console.log(`MINIDRAWER` + pathname);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [collapse, setCollapse] = React.useState(false);
@@ -144,70 +141,18 @@ export default function MiniDrawer() {
           </Collapse>
         </List>
       </Drawer>
-      <Main open={open} />
-      {/* <Box
+      {/* <Main open={open} /> */}
+      <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           ...(open && { display: { xs: "none", md: "block" } }),
+          // display: { xs: "none", md: "block" },
         }}
       >
-        <DrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-        <Grid2
-          container
-          spacing={4}
-          alignItems={"center"}
-          justifyContent={"stretch"}
-        >
-          {cardsDescriptions.map((card, index) => {
-            return (
-              <Link
-                key={"card" + index}
-                href={pagesUrls[index]}
-                style={{ textDecoration: "none" }}
-              >
-                <Grid2>
-                  <MultiActionAreaCard
-                    src={imagesSrc[index]}
-                    title={drawerTabs[index]}
-                    content={card}
-                  />
-                </Grid2>
-              </Link>
-            );
-          })}
-        </Grid2>
-      </Box> */}
+        {children}
+      </Box>
     </Box>
   );
 }

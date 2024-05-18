@@ -64,10 +64,11 @@ export const icons = [
   <ManageAccountsSharpIcon key="ManageAccountsSharpIcon" />,
 ];
 
-export const screenSize = window.innerWidth;
-console.log(screenSize);
+// export const screenSize = window.innerWidth;
+// console.log(screenSize);
 
-export const drawerWidth = screenSize < 800 ? screenSize : screenSize / 5;
+// export const drawerWidth = screenSize < 800 ? screenSize : screenSize / 5;
+const drawerWidth = "30rem";
 
 export const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,

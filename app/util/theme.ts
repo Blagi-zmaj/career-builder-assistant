@@ -50,7 +50,7 @@ const theme = createTheme({
       main: "#121212",
     },
     // Uncomment below to activate dark mode and comment above
-    // mode: "dark",
+    mode: "dark",
   },
 
   typography: {

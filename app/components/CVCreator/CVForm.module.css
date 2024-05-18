@@ -1,0 +1,117 @@
+.form {
+  background: linear-gradient(180deg, #3621ac, #1d4949);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-areas:
+    "aside summary summary"
+    "aside education education"
+    "aside experience experience"
+    "aside projects projects";
+  /* height: 50vh; */
+  box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+}
+
+.section {
+  background-color: green;
+}
+
+.aside {
+  grid-area: aside;
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin: 0 2rem;
+  background-color: goldenrod;
+}
+
+.detailsBox {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 25% 75%;
+  background-color: silver;
+  justify-items: stretch;
+}
+
+.addLanguageContainer {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 3fr 2fr 1fr;
+  background-color: rebeccapurple;
+  justify-items: stretch;
+  gap: 1rem;
+}
+
+.languageUI {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 25% 75%;
+  background-color: silver;
+  justify-items: stretch;
+}
+
+.hobbiesBox {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 5fr 1fr;
+  background-color: rgb(20, 31, 133);
+  justify-items: stretch;
+  gap: 1rem;
+}
+
+.hobbiesUI {
+  display: grid;
+  width: 100%;
+  /* grid-template-columns: 25% 75%; */
+  background-color: silver;
+  justify-items: stretch;
+}
+
+.skillsUI {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 3fr 3fr;
+  background-color: rgb(114, 60, 9);
+  justify-items: stretch;
+  gap: 1rem;
+}
+
+.summary {
+  grid-area: summary;
+  background-color: burlywood;
+}
+
+.education {
+  grid-area: education;
+  background-color: burlywood;
+}
+
+.experience {
+  grid-area: experience;
+  background-color: burlywood;
+}
+
+.projects {
+  grid-area: projects;
+  background-color: burlywood;
+}
+
+.control {
+  display: block;
+  width: 100%;
+  max-width: 15rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #758a8a;
+  background-color: #869999;
+  color: #142020;
+}
