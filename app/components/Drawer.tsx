@@ -120,20 +120,18 @@ export default function MiniDrawer({ children }) {
               {["React Developer", "ML Developer"].map(
                 (specialization, index) => {
                   return (
-                    <>
-                      <ListItemButton
-                        key={specialization + index}
-                        href={dynamicUrls[index]}
-                        selected={selectedIndex === index + 5}
-                        onClick={() => handleSelectItem(index + 5)}
-                        sx={{ pl: 4, color: "white" }}
-                      >
-                        <ListItemIcon key={specialization + 5}>
-                          <StarBorder />
-                        </ListItemIcon>
-                        <ListItemText primary={specialization} />
-                      </ListItemButton>
-                    </>
+                    <ListItemButton
+                      key={specialization + index}
+                      href={dynamicUrls[index]}
+                      selected={selectedIndex === index + 5}
+                      onClick={() => handleSelectItem(index + 5)}
+                      sx={{ pl: 4, color: "white" }}
+                    >
+                      <ListItemIcon key={specialization + 5}>
+                        <StarBorder />
+                      </ListItemIcon>
+                      <ListItemText primary={specialization} />
+                    </ListItemButton>
                   );
                 }
               )}

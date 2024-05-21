@@ -46,21 +46,26 @@ function IconContainer(props: IconContainerProps) {
   return <span {...other}>{customIcons[value].icon}</span>;
 }
 
-export default function RadioGroupRating() {
-  const [rating, setRating] = React.useState(3);
+export default function RadioGroupRating({
+  rate,
+  handleChangeRatingSkill,
+  index,
+}) {
+  const [rating, setRating] = React.useState(rate);
 
   return (
     <StyledRating
       sx={{ border: 2, display: "flex", alignItems: "center" }}
       max={5}
       name="highlight-selected-only"
-      defaultValue={3}
       value={rating}
       IconContainerComponent={IconContainer}
       getLabelText={(value: number) => customIcons[value].label}
       highlightSelectedOnly
       onChange={(event, num) => {
-        console.log(event.target.value);
+        console.log(typeof event.target.value);
+        setRating(event.target.value);
+        handleChangeRatingSkill(Number(event.target.value), index);
       }}
     />
   );
