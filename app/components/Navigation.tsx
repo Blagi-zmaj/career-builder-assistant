@@ -28,7 +28,7 @@ export default function Navigation({
   handleDrawerOpen: () => void;
 }) {
   const pathname = usePathname();
-  console.log(`Navigation` + pathname);
+  // console.log(`Navigation` + pathname);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =

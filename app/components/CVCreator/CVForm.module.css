@@ -3,12 +3,12 @@
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   grid-template-areas:
-    "aside summary summary"
+    /* "aside summary summary" */
     "aside education education"
-    "aside experience experience"
-    "aside projects projects";
+    "aside experience experience";
+  /* "aside projects projects"; */
   /* height: 50vh; */
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
@@ -84,10 +84,10 @@
   gap: 1rem;
 }
 
-.summary {
+/* .summary {
   grid-area: summary;
   background-color: burlywood;
-}
+} */
 
 .education {
   grid-area: education;
