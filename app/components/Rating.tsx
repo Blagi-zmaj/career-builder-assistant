@@ -67,11 +67,11 @@ export default function RadioGroupRating({
         setRating(event.target.value);
         handleChangeRatingSkill(Number(event.target.value), index);
       }}
-      onClick={(event, num) => {
-        console.log(typeof event.target.value);
-        setRating(event.target.value);
-        handleChangeRatingSkill(Number(event.target.value), index);
-      }}
+      // onClick={(event, num) => {
+      //   console.log(typeof event.target.value);
+      //   setRating(event.target.value);
+      //   handleChangeRatingSkill(Number(event.target.value), index);
+      // }}
     />
   );
 }

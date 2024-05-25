@@ -7,7 +7,9 @@ import Button from "@mui/material/Button";
 import RadioGroupRating from "../Rating";
 import Modal from "./ModalDialog";
 import * as React from "react";
-import setIsEditingItem from "./CVCreatorUtils/helpers";
+import setIsEditingItem, {
+  setIsEditingItemInSet,
+} from "./CVCreatorUtils/helpers";
 
 export default function CVForm() {
   const [inputValues, setInputValues] = useState({
@@ -52,118 +54,38 @@ export default function CVForm() {
     isEditingSkills: false,
     isEditingLanguages: false,
     isEditingHobbies: false,
-    // add status for languages, hobbies and skills
   };
 
-  console.log(
-    `=====================================================================`
-  );
-  console.table(inputValues);
-  // console.table(userProfileValues.skills);
-  // console.table(userProfileValues.languages);
-  // console.table(userProfileValues.hobbies);
-  // console.log(
-  //   userProfileValues.newSkill,
-  //   userProfileValues.newLanguage,
-  //   userProfileValues.newHobby
-  // );
-  console.log(
-    `=====================================================================`
-  );
-
   const reducer = function (state, action) {
-    console.table(isEditingStates);
-    if (action.inputType === "name") {
-      return { ...state, isEditingName: !state.isEditingName };
-    }
-
-    if (action.inputType === "surname") {
-      return { ...state, isEditingSurname: !state.isEditingSurname };
-    }
-
-    if (action.inputType === "address") {
-      return { ...state, isEditingAddress: !state.isEditingAddress };
-    }
-
-    if (action.inputType === "email") {
-      return { ...state, isEditingEmail: !state.isEditingEmail };
-    }
-
-    if (action.inputType === "phone") {
-      return { ...state, isEditingPhone: !state.isEditingPhone };
-    }
-
-    if (action.inputType === "github") {
-      return { ...state, isEditingGithub: !state.isEditingGithub };
-    }
-
-    if (action.inputType === "linkedin") {
-      return { ...state, isEditingLinkedin: !state.isEditingLinkedin };
-    }
-
     if (action.inputType === "skills") {
-      console.log(state);
-      const updatedOneSkill = {
-        ...userProfileValues.skills[action.listItemIndex],
-        isEditing: !userProfileValues.skills[action.listItemIndex].isEditing,
-      };
-      const updatedSkills = [
-        ...userProfileValues.skills.slice(0, action.listItemIndex),
-        updatedOneSkill,
-        ...userProfileValues.skills.slice(action.listItemIndex + 1),
-      ];
-      setUserProfileValues((prevValues) => {
-        return { ...prevValues, skills: updatedSkills };
-      });
-      return state;
+      setUserProfileValues(
+        setIsEditingItemInSet(userProfileValues, action.listItemIndex, "skills")
+      );
+      return { ...state, isEditingSkills: !state.isEditingSkills };
     }
 
     if (action.inputType === "languages") {
-      console.log(`Editing languages`);
-      const updatedLanguage = {
-        ...userProfileValues.languages[action.listItemIndex],
-        isEditing: !userProfileValues.languages[action.listItemIndex].isEditing,
-      };
-      console.log(updatedLanguage);
-
-      setUserProfileValues((prevValues) => {
-        return {
-          ...prevValues,
-          languages: [
-            ...prevValues.languages.slice(0, action.listItemIndex),
-            updatedLanguage,
-            ...prevValues.languages.slice(action.listItemIndex + 1),
-          ],
-        };
-      });
-
-      return state;
+      setUserProfileValues(
+        setIsEditingItemInSet(
+          userProfileValues,
+          action.listItemIndex,
+          "languages"
+        )
+      );
+      return { ...state, isEditingLanguages: !state.isEditingLanguages };
     }
 
     if (action.inputType === "hobbies") {
-      console.log(`Editing hobbies`);
-
-      const updatedHobby = {
-        ...userProfileValues.hobbies[action.listItemIndex],
-        isEditing: !userProfileValues.hobbies[action.listItemIndex].isEditing,
-      };
-      console.log(updatedHobby);
-
-      setUserProfileValues((prevValues) => {
-        return {
-          ...prevValues,
-          hobbies: [
-            ...prevValues.hobbies.slice(0, action.listItemIndex),
-            updatedHobby,
-            ...prevValues.hobbies.slice(action.listItemIndex + 1),
-          ],
-        };
-      });
-
-      return state;
+      setUserProfileValues(
+        setIsEditingItemInSet(
+          userProfileValues,
+          action.listItemIndex,
+          "hobbies"
+        )
+      );
+      return { ...state, isEditingHobbies: !state.isEditingHobbies }; // SHOULD UPDATE THE CHANGING STATE OF ISEDITING OBJECT => isEditingStates
     }
-
-    // return setIsEditingItem(state, action.inputType);
+    return setIsEditingItem(state, action.inputType);
   };
 
   const [isEditingInput, dispatch] = useReducer(reducer, isEditingStates);
@@ -193,11 +115,11 @@ export default function CVForm() {
     dispatch({ inputType: inputName, listItemIndex: listItemIndex });
   };
 
-  const handleUserDetails = function (event, identifier, index) {
+  const handleChangeUserActualInput = function (event, identifier, index) {
     console.log(userProfileValues.skills);
     console.log(identifier);
     const updatedDetail = {
-      ...userProfileValues.skills[index],
+      ...userProfileValues[identifier][index],
       name: event.target.value,
     };
     console.log(updatedDetail);
@@ -206,169 +128,55 @@ export default function CVForm() {
       return {
         ...prevValues,
         [identifier]: [
-          ...prevValues.skills.slice(0, index),
+          ...prevValues[identifier].slice(0, index),
           updatedDetail,
-          ...prevValues.skills.slice(index + 1),
+          ...prevValues[identifier].slice(index + 1),
         ],
       };
     });
   };
 
-  const handleUserLanguages = function (event, identifier, index) {
-    console.log(userProfileValues.skills);
-    console.log(identifier, index);
-
-    const updatedLanguage = {
-      ...userProfileValues.languages[index],
-      name: event.target.value,
-    };
-
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues.languages.slice(0, index),
-          updatedLanguage,
-          ...prevValues.languages.slice(index + 1),
-        ],
-      };
-    });
-  };
-
-  const handleUserHobbies = function (event, identifier, index) {
-    console.log(userProfileValues.skills);
-    console.log(identifier, index);
-
-    const updatedLanguage = {
-      ...userProfileValues.hobbies[index],
-      name: event.target.value,
-    };
-
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues.hobbies.slice(0, index),
-          updatedLanguage,
-          ...prevValues.hobbies.slice(index + 1),
-        ],
-      };
-    });
-  };
-
-  const handleDeleteSkill = function (event, skillName) {
-    console.log(`Delete item `);
+  const handleDeleteListItem = function (event, skillName, identifier) {
+    console.log(`Delete item ${skillName}`);
     console.log(skillName);
 
-    const updatedList = userProfileValues.skills.filter((el) => {
+    const updatedList = userProfileValues[identifier].filter((el) => {
       return el.name !== skillName;
     });
 
     console.log(updatedList);
 
     setUserProfileValues((prevValues) => {
-      return { ...prevValues, skills: updatedList };
+      return { ...prevValues, [identifier]: updatedList };
     });
+
+    //////////////////////////////////////////// UPDATE UI ON RATING!!!//////////////////////////////////////////////////////////////////
   };
 
-  const handleDeleteLanguage = function (event, languageName) {
-    console.log(`Delete item `);
-    console.log(languageName);
-
-    const updatedList = userProfileValues.languages.filter((el) => {
-      return el.name !== languageName;
-    });
-
-    console.log(updatedList);
-
-    setUserProfileValues((prevValues) => {
-      return { ...prevValues, languages: updatedList };
-    });
-  };
-
-  const handleDeleteHobby = function (event, hobbyName) {
-    console.log(`Delete item `);
-    console.log(hobbyName);
-
-    const updatedList = userProfileValues.hobbies.filter((el) => {
-      return el.name !== hobbyName;
-    });
-
-    console.log(updatedList);
-
-    setUserProfileValues((prevValues) => {
-      return { ...prevValues, hobbies: updatedList };
-    });
-  };
-
-  const handleAddSkill = function (event, identifier) {
-    console.log(`Handle add skill`);
-
+  const handleAddNewItemList = function (event, identifier, listName) {
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        skills: [...prevValues.skills, prevValues.newSkill],
+        [listName]: [...prevValues[listName], prevValues[identifier]],
       };
     });
   };
 
-  const handleAddLanguage = function (event, identifier) {
-    console.log(`Handle add skill`);
-
+  const handleChangeAddNewListItem = function (event, identifier) {
+    console.log(identifier);
+    console.log();
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        languages: [...prevValues.languages, prevValues.newLanguage],
-      };
-    });
-  };
-
-  const handleAddHobby = function (event, identifier) {
-    console.log(`Handle add skill`);
-
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        hobbies: [...prevValues.hobbies, prevValues.newHobby],
-      };
-    });
-  };
-
-  const handleChangeAddSkill = function (event) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        newSkill: {
-          ...prevValues.newSkill,
+        [identifier]: {
+          ...prevValues[identifier],
           name: event.target.value,
         },
       };
     });
   };
 
-  const handleChangeAddLanguage = function (event) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        newLanguage: {
-          ...prevValues.newLanguage,
-          name: event.target.value,
-        },
-      };
-    });
-  };
-
-  const handleChangeAddHobby = function (event) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        newHobby: {
-          ...prevValues.newHobby,
-          name: event.target.value,
-        },
-      };
-    });
-  };
+  ///////////////////// UPDATE RATING UI UPDATES /////////////////////
 
   const handleChangeRatingExistingSkill = function (rate, index) {
     console.log(`Rating `, rate, index);
@@ -478,7 +286,6 @@ export default function CVForm() {
           <h3>Skills</h3>
           {/* //////////// SKILLS //////////// */}
           {userProfileValues.skills.map((skill, index) => {
-            console.log("Render skill!");
             return (
               <div
                 key={index}
@@ -500,7 +307,7 @@ export default function CVForm() {
                       handleUserDetailsKeyDown(event, "skills", index)
                     }
                     onChange={(event) =>
-                      handleUserDetails(event, "skills", index)
+                      handleChangeUserActualInput(event, "skills", index)
                     }
                   />
                 ) : (
@@ -517,7 +324,9 @@ export default function CVForm() {
                   index={index}
                 />
                 <Button
-                  onClick={(event) => handleDeleteSkill(event, skill.name)}
+                  onClick={(event) =>
+                    handleDeleteListItem(event, skill.name, "skills")
+                  }
                   variant="contained"
                 >
                   -
@@ -532,8 +341,11 @@ export default function CVForm() {
               type="text"
               name={"addSkill"}
               value={userProfileValues.newSkill.name}
+              placeholder={"New skill"}
               className={styles.control}
-              onChange={(event) => handleChangeAddSkill(event)}
+              onChange={(event) =>
+                handleChangeAddNewListItem(event, "newSkill")
+              }
             />
             <RadioGroupRating
               rate={3}
@@ -541,7 +353,9 @@ export default function CVForm() {
               index={0}
             />
             <Button
-              onClick={(event) => handleAddSkill(event, "newSkill")}
+              onClick={(event) =>
+                handleAddNewItemList(event, "newSkill", "skills")
+              }
               variant="contained"
             >
               +
@@ -571,7 +385,7 @@ export default function CVForm() {
                       handleUserDetailsKeyDown(event, "languages", index)
                     }
                     onChange={(event) =>
-                      handleUserLanguages(event, "languages", index)
+                      handleChangeUserActualInput(event, "languages", index)
                     }
                   />
                 ) : (
@@ -589,7 +403,7 @@ export default function CVForm() {
                 />
                 <Button
                   onClick={(event) =>
-                    handleDeleteLanguage(event, language.name)
+                    handleDeleteListItem(event, language.name, "languages")
                   }
                   variant="contained"
                 >
@@ -603,7 +417,10 @@ export default function CVForm() {
               key={"addLanguage"}
               type="text"
               name={"addLanguage"}
-              onChange={(event) => handleChangeAddLanguage(event)}
+              onChange={(event) =>
+                handleChangeAddNewListItem(event, "newLanguage")
+              }
+              placeholder={"Language level"}
               value={userProfileValues.newLanguage.name}
               className={styles.control}
               autoFocus
@@ -615,7 +432,9 @@ export default function CVForm() {
             />
 
             <Button
-              onClick={(event) => handleAddLanguage(event, "newLanguage")}
+              onClick={(event) =>
+                handleAddNewItemList(event, "newLanguage", "languages")
+              }
               variant="contained"
             >
               +
@@ -638,6 +457,7 @@ export default function CVForm() {
                     name={hobby.name}
                     value={hobby.name}
                     className={styles.control}
+                    placeholder={"New hobby"}
                     autoFocus
                     onBlur={() =>
                       dispatch({ inputType: "hobbies", listItemIndex: index })
@@ -646,7 +466,7 @@ export default function CVForm() {
                       handleUserDetailsKeyDown(event, "hobbies", index)
                     }
                     onChange={(event) =>
-                      handleUserHobbies(event, "hobbies", index)
+                      handleChangeUserActualInput(event, "hobbies", index)
                     }
                   />
                 ) : (
@@ -658,7 +478,9 @@ export default function CVForm() {
                   </span>
                 )}
                 <Button
-                  onClick={(event) => handleDeleteHobby(event, hobby.name)}
+                  onClick={(event) =>
+                    handleDeleteListItem(event, hobby.name, "hobbies")
+                  }
                   variant="contained"
                 >
                   -
@@ -673,11 +495,15 @@ export default function CVForm() {
               name={"addHobby"}
               value={userProfileValues.newHobby.name}
               className={styles.control}
-              onChange={(event) => handleChangeAddHobby(event)}
+              onChange={(event) =>
+                handleChangeAddNewListItem(event, "newHobby")
+              }
             />
 
             <Button
-              onClick={(event) => handleAddHobby(event, "newHobby")}
+              onClick={(event) =>
+                handleAddNewItemList(event, "newHobby", "hobbies")
+              }
               variant="contained"
             >
               +
