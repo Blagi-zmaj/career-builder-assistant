@@ -4,12 +4,14 @@ import frog from "../../../public/cv_creator.jpg";
 import { useState, useRef, useEffect, useReducer, act } from "react";
 import InputForm from "./InputForm/InputForm";
 import Button from "@mui/material/Button";
-import RadioGroupRating from "../Rating";
 import Modal from "./ModalDialog";
 import * as React from "react";
 import setIsEditingItem, {
   setIsEditingItemInSet,
 } from "./CVCreatorUtils/helpers";
+import UserDetailsList from "./UserDetailsList";
+
+///////////////////////////////////////////
 
 export default function CVForm() {
   const [inputValues, setInputValues] = useState({
@@ -56,6 +58,22 @@ export default function CVForm() {
     isEditingHobbies: false,
   };
 
+  // console.log(
+  //   `=====================================================================`
+  // );
+  console.table(inputValues);
+  console.table(userProfileValues.skills);
+  console.table(userProfileValues.languages);
+  console.table(userProfileValues.hobbies);
+  // console.log(
+  //   userProfileValues.newSkill,
+  //   userProfileValues.newLanguage,
+  //   userProfileValues.newHobby
+  // );
+  // console.log(
+  //   `=====================================================================`
+  // );
+
   const reducer = function (state, action) {
     if (action.inputType === "skills") {
       setUserProfileValues(
@@ -83,7 +101,7 @@ export default function CVForm() {
           "hobbies"
         )
       );
-      return { ...state, isEditingHobbies: !state.isEditingHobbies }; // SHOULD UPDATE THE CHANGING STATE OF ISEDITING OBJECT => isEditingStates
+      return { ...state, isEditingHobbies: !state.isEditingHobbies };
     }
     return setIsEditingItem(state, action.inputType);
   };
@@ -149,8 +167,6 @@ export default function CVForm() {
     setUserProfileValues((prevValues) => {
       return { ...prevValues, [identifier]: updatedList };
     });
-
-    //////////////////////////////////////////// UPDATE UI ON RATING!!!//////////////////////////////////////////////////////////////////
   };
 
   const handleAddNewItemList = function (event, identifier, listName) {
@@ -164,7 +180,6 @@ export default function CVForm() {
 
   const handleChangeAddNewListItem = function (event, identifier) {
     console.log(identifier);
-    console.log();
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
@@ -176,61 +191,38 @@ export default function CVForm() {
     });
   };
 
-  ///////////////////// UPDATE RATING UI UPDATES /////////////////////
-
-  const handleChangeRatingExistingSkill = function (rate, index) {
-    console.log(`Rating `, rate, index);
+  const handleChangeRatingExistingListItem = function (
+    rate,
+    identifier,
+    index
+  ) {
+    console.log(`Rating `, rate, index, identifier);
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        skills: [
-          ...prevValues.skills.slice(0, index),
-          { ...prevValues.skills[index], level: rate },
-          ...prevValues.skills.slice(index + 1),
+        [identifier]: [
+          ...prevValues[identifier].slice(0, index),
+          { ...prevValues[identifier][index], level: rate },
+          ...prevValues[identifier].slice(index + 1),
         ],
       };
     });
   };
 
-  const handleChangeRatingNewSkill = function (
-    rate,
-    editNewSkill = false,
-    index = 0
-  ) {
-    console.log(`Rating `, rate);
+  const handleChangeRatingNewListItem = function (rate, identifier, index = 0) {
+    console.log(`Rating `, rate, identifier);
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        newSkill: { ...prevValues.newSkill, level: rate },
+        [identifier]: { ...prevValues[identifier], level: rate },
       };
     });
   };
 
-  const handleChangeRatingExistingLanguage = function (rate, index) {
-    console.log(`Rating `, rate, index);
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        languages: [
-          ...prevValues.languages.slice(0, index),
-          { ...prevValues.languages[index], level: rate },
-          ...prevValues.languages.slice(index + 1),
-        ],
-      };
-    });
-  };
-
-  const handleChangeRatingNewLanguage = function (
-    rate,
-    editNewSkill = false,
-    index = 0
-  ) {
-    console.log(`Rating `, rate);
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        newLanguage: { ...prevValues.newLanguage, level: rate },
-      };
+  const handleBlur = function (categoryList, listIndex) {
+    dispatch({
+      inputType: categoryList,
+      listItemIndex: listIndex,
     });
   };
 
@@ -283,163 +275,30 @@ export default function CVForm() {
               </div>
             );
           })}
-          <h3>Skills</h3>
-          {/* //////////// SKILLS //////////// */}
-          {userProfileValues.skills.map((skill, index) => {
+
+          {["skills", "languages"].map((categoryList, indexCategory) => {
             return (
-              <div
-                key={index}
-                className={styles.skillsUI}
-                style={{ backgroundColor: "yellowgreen" }}
-              >
-                {userProfileValues.skills[index].isEditing ? (
-                  <InputForm
-                    key={skill.name}
-                    type="text"
-                    name={skill.name}
-                    value={skill.name}
-                    className={styles.control}
-                    autoFocus
-                    onBlur={() =>
-                      dispatch({ inputType: "skills", listItemIndex: index })
-                    }
-                    onKeyDown={(event) =>
-                      handleUserDetailsKeyDown(event, "skills", index)
-                    }
-                    onChange={(event) =>
-                      handleChangeUserActualInput(event, "skills", index)
-                    }
-                  />
-                ) : (
-                  <span
-                    onClick={() => replaceTextWithInput("skills", index)}
-                    key={skill.name}
-                  >
-                    {skill.name}
-                  </span>
-                )}
-                <RadioGroupRating
-                  rate={skill.level}
-                  handleChangeRatingSkill={handleChangeRatingExistingSkill}
-                  index={index}
-                />
-                <Button
-                  onClick={(event) =>
-                    handleDeleteListItem(event, skill.name, "skills")
+              <div key={categoryList}>
+                <h3>{categoryList}</h3>
+                <UserDetailsList
+                  categoryList={categoryList}
+                  userData={userProfileValues}
+                  handleBlur={handleBlur}
+                  handleUserDetailsKeyDown={handleUserDetailsKeyDown}
+                  handleChangeUserActualInput={handleChangeUserActualInput}
+                  replaceTextWithInput={replaceTextWithInput}
+                  handleDeleteListItem={handleDeleteListItem}
+                  handleChangeRatingExistingListItem={
+                    handleChangeRatingExistingListItem
                   }
-                  variant="contained"
-                >
-                  -
-                </Button>
+                  handleChangeAddNewListItem={handleChangeAddNewListItem}
+                  handleChangeRatingNewListItem={handleChangeRatingNewListItem}
+                  handleAddNewItemList={handleAddNewItemList}
+                />
               </div>
             );
           })}
 
-          <div className={styles.skillsUI}>
-            <InputForm
-              key={"addSkill"}
-              type="text"
-              name={"addSkill"}
-              value={userProfileValues.newSkill.name}
-              placeholder={"New skill"}
-              className={styles.control}
-              onChange={(event) =>
-                handleChangeAddNewListItem(event, "newSkill")
-              }
-            />
-            <RadioGroupRating
-              rate={3}
-              handleChangeRatingSkill={handleChangeRatingNewSkill}
-              index={0}
-            />
-            <Button
-              onClick={(event) =>
-                handleAddNewItemList(event, "newSkill", "skills")
-              }
-              variant="contained"
-            >
-              +
-            </Button>
-          </div>
-          {/* //////////////////////////////////  LANGUAGES ////////////////////////////////// */}
-          <h3>Languages</h3>
-          {userProfileValues.languages.map((language, index) => {
-            return (
-              <div
-                key={index}
-                className={styles.skillsUI}
-                style={{ backgroundColor: "yellowgreen" }}
-              >
-                {userProfileValues.languages[index].isEditing ? (
-                  <InputForm
-                    key={language.name}
-                    type="text"
-                    name={language.name}
-                    value={language.name}
-                    className={styles.control}
-                    autoFocus
-                    onBlur={() =>
-                      dispatch({ inputType: "languages", listItemIndex: index })
-                    }
-                    onKeyDown={(event) =>
-                      handleUserDetailsKeyDown(event, "languages", index)
-                    }
-                    onChange={(event) =>
-                      handleChangeUserActualInput(event, "languages", index)
-                    }
-                  />
-                ) : (
-                  <span
-                    onClick={() => replaceTextWithInput("languages", index)}
-                    key={language.name}
-                  >
-                    {language.name}
-                  </span>
-                )}
-                <RadioGroupRating
-                  rate={language.level}
-                  handleChangeRatingSkill={handleChangeRatingExistingLanguage}
-                  index={index}
-                />
-                <Button
-                  onClick={(event) =>
-                    handleDeleteListItem(event, language.name, "languages")
-                  }
-                  variant="contained"
-                >
-                  -
-                </Button>
-              </div>
-            );
-          })}
-          <div className={styles.addRecordContainer}>
-            <InputForm
-              key={"addLanguage"}
-              type="text"
-              name={"addLanguage"}
-              onChange={(event) =>
-                handleChangeAddNewListItem(event, "newLanguage")
-              }
-              placeholder={"Language level"}
-              value={userProfileValues.newLanguage.name}
-              className={styles.control}
-              autoFocus
-            />
-            <RadioGroupRating
-              rate={3}
-              handleChangeRatingSkill={handleChangeRatingNewLanguage}
-              index={0}
-            />
-
-            <Button
-              onClick={(event) =>
-                handleAddNewItemList(event, "newLanguage", "languages")
-              }
-              variant="contained"
-            >
-              +
-            </Button>
-          </div>
           {/* //////////////////////////////////  HOBBIES ////////////////////////////////// */}
 
           <h3>Hobbies</h3>
@@ -511,7 +370,6 @@ export default function CVForm() {
           </div>
         </div>
       </div>
-
       <div className={(styles.section, styles.education)}>
         Education
         <br />

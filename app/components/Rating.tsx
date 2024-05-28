@@ -48,7 +48,8 @@ function IconContainer(props: IconContainerProps) {
 
 export default function RadioGroupRating({
   rate,
-  handleChangeRatingSkill,
+  handleChangeRatingListItem,
+  categoryList,
   index,
 }) {
   const [rating, setRating] = React.useState(rate);
@@ -58,20 +59,19 @@ export default function RadioGroupRating({
       sx={{ border: 2, display: "flex", alignItems: "center" }}
       max={5}
       name="highlight-selected-only"
-      value={rating}
+      value={rate}
       IconContainerComponent={IconContainer}
       getLabelText={(value: number) => customIcons[value].label}
       highlightSelectedOnly
       onChange={(event, num) => {
-        console.log(typeof event.target.value);
+        console.log(typeof event.target.value, event.target.value);
         setRating(event.target.value);
-        handleChangeRatingSkill(Number(event.target.value), index);
+        handleChangeRatingListItem(
+          Number(event.target.value),
+          categoryList,
+          index
+        );
       }}
-      // onClick={(event, num) => {
-      //   console.log(typeof event.target.value);
-      //   setRating(event.target.value);
-      //   handleChangeRatingSkill(Number(event.target.value), index);
-      // }}
     />
   );
 }
