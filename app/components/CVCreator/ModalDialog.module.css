@@ -1,0 +1,15 @@
+.datePicker {
+  background-color: green;
+  font-size: 1rem;
+  font-family: sans-serif;
+}
+
+.datePickerContainer {
+  background-color: inherit;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  color: rgb(184, 179, 179);
+  margin: 0rem;
+  column-gap: 1rem;
+}

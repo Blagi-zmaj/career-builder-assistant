@@ -6,12 +6,17 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import DatePicker from "../DatePicker";
+import DatePicker from "../DatePickerMaterialUI";
+import styles from "./ModalDialog.module.css";
 
 import { Box } from "@mui/material";
 
-export default function FormDialog() {
+export default function FormDialog({ type, handleAddNewItemListFromModal }) {
   const [open, setOpen] = React.useState(false);
+  const [dates, setDates] = React.useState([
+    new Date().toJSON().slice(0, 10),
+    new Date().toJSON().slice(0, 10),
+  ]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,7 +29,7 @@ export default function FormDialog() {
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
+        +
       </Button>
       <Dialog
         open={open}
@@ -34,40 +39,86 @@ export default function FormDialog() {
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
+            // console.log(formData.getAll())
             const formJson = Object.fromEntries((formData as any).entries());
-            const email = formJson.email;
-            console.log(email);
+
+            //////////////////
+            formJson.type = type;
+            // formJson.isEditing = false;
+            /////////////////
+            console.log(formJson);
+            handleAddNewItemListFromModal(formJson);
+            console.log("Add new item list");
             handleClose();
           },
         }}
       >
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>
+          {type === "work"
+            ? "Write your work details"
+            : "Write your education details"}
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
+          <DialogContentText>Fill all inputs to add details.</DialogContentText>
           <TextField
             autoFocus
             required
             margin="dense"
-            id="jobTitle"
-            name="jobTitle"
-            label="Job title"
+            id="institution"
+            name="institution"
+            label="Institution"
             type="text"
             fullWidth
             variant="standard"
           />
-          {/* Date pickers */}
-          <DatePicker />
-          {/* <Box> */}
           <TextField
             autoFocus
             required
             margin="dense"
-            id="jobDescription"
-            name="jobDescription"
-            label="Job description"
+            id={type === "work" ? "position" : "subject"}
+            name={type === "work" ? "position" : "subject"}
+            label={type === "work" ? "Job position" : "Study subject"}
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+
+          <div className={styles.datePickerContainer}>
+            <label htmlFor="startDate">Start date:</label>
+            <label htmlFor="endDate">End date:</label>
+
+            <input
+              className={styles.datePicker}
+              type="date"
+              id="startDate"
+              name="startDate"
+              value={dates[0]}
+              onChange={() => {
+                setDates((prevValues) => {
+                  return [event?.target.value, prevValues[1]];
+                });
+              }}
+            />
+
+            <input
+              type="date"
+              id="endDate"
+              name="endDate"
+              value={dates[1]}
+              onChange={() => {
+                setDates((prevValues) => {
+                  return [prevValues[0], event?.target.value];
+                });
+              }}
+            />
+          </div>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id={type === "work" ? "description" : "subjectDescription"}
+            name={type === "work" ? "description" : "subjectDescription"}
+            label={type === "work" ? "Job description" : "Subject description"}
             type="text"
             fullWidth
             variant="standard"
@@ -78,7 +129,7 @@ export default function FormDialog() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Subscribe</Button>
+          <Button type="submit">Add</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

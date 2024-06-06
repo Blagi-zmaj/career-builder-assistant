@@ -1,0 +1,31 @@
+/* .section {
+  --sectionMargin: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: aquamarine;
+  margin: var(--sectionMargin);
+  align-items: stretch;
+  justify-content: stretch;
+} */
+
+.section {
+  --sectionMargin: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: aquamarine;
+  margin: var(--sectionMargin);
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.control {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #758a8a;
+  background-color: #869999;
+  color: #142020;
+}

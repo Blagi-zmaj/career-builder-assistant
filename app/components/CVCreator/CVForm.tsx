@@ -10,6 +10,8 @@ import setIsEditingItem, {
   setIsEditingItemInSet,
 } from "./CVCreatorUtils/helpers";
 import UserDetailsList from "./UserDetailsList";
+import Section from "./Section/Section";
+import DatePicker from "./DatePicker";
 
 ///////////////////////////////////////////
 
@@ -23,6 +25,9 @@ export default function CVForm() {
     github: "Blagi-zmaj.github.com",
     linkedin: "daniel.konieczny.linkedin.com",
   });
+
+  const startDateRef = useRef();
+  const endDateRef = useRef();
 
   const [userProfileValues, setUserProfileValues] = useState({
     newSkill: { name: "", level: 3, isEditing: false },
@@ -41,8 +46,32 @@ export default function CVForm() {
       { name: "Googlowanie", isEditing: false },
       { name: "Wypasanie owiec", isEditing: false },
     ],
-    education: [{ title: "", startDate: "", endDate: "", description: "" }],
-    experience: [{ title: "", startDate: "", endDate: "", description: "" }],
+    summary: { description: "Quick summary about user", isEditing: false },
+    education: [
+      { institution: "", startDate: "", endDate: "", description: "" },
+    ],
+    experience: [
+      {
+        institution: { value: "Billennium", isEditing: false },
+        position: { value: "Frontend developer", isEditing: false },
+        startDate: { value: "2021-09-22", isEditing: false },
+        endDate: { value: "2025-03-30", isEditing: false },
+        description: {
+          value: "Manage code, code refactor etc.",
+          isEditing: false,
+        },
+      },
+      {
+        institution: { value: "Google", isEditing: false },
+        position: { value: "Python developer", isEditing: true },
+        startDate: { value: "2021-02-14", isEditing: false },
+        endDate: { value: "2028-05-15", isEditing: true },
+        description: {
+          value: "Process AI!",
+          isEditing: false,
+        },
+      },
+    ],
   });
 
   const isEditingStates = {
@@ -56,15 +85,26 @@ export default function CVForm() {
     isEditingSkills: false,
     isEditingLanguages: false,
     isEditingHobbies: false,
+    isEditingExperience: false,
+    isEditingEducation: false,
   };
 
   // console.log(
   //   `=====================================================================`
   // );
-  console.table(inputValues);
-  console.table(userProfileValues.skills);
-  console.table(userProfileValues.languages);
-  console.table(userProfileValues.hobbies);
+  // console.table(inputValues);
+  console.log(
+    userProfileValues.experience[0].startDate,
+    userProfileValues.experience[0].endDate
+  );
+  console.log(
+    userProfileValues.experience[1].startDate,
+    userProfileValues.experience[1].endDate
+  );
+  // console.log(userProfileValues.summary);
+  // console.table(userProfileValues.skills);
+  // console.table(userProfileValues.languages);
+  // console.table(userProfileValues.hobbies);
   // console.log(
   //   userProfileValues.newSkill,
   //   userProfileValues.newLanguage,
@@ -75,6 +115,18 @@ export default function CVForm() {
   // );
 
   const reducer = function (state, action) {
+    if (action.inputType === "experience") {
+      console.log(`You are in ${action.inputType} action.inputType`);
+      setUserProfileValues(
+        setIsEditingItemInSet(
+          userProfileValues,
+          action.listItemIndex,
+          "experience"
+        )
+      );
+      return { ...state, isEditingExperience: !state.isEditingExperience };
+    }
+
     if (action.inputType === "skills") {
       setUserProfileValues(
         setIsEditingItemInSet(userProfileValues, action.listItemIndex, "skills")
@@ -134,13 +186,10 @@ export default function CVForm() {
   };
 
   const handleChangeUserActualInput = function (event, identifier, index) {
-    console.log(userProfileValues.skills);
-    console.log(identifier);
     const updatedDetail = {
       ...userProfileValues[identifier][index],
       name: event.target.value,
     };
-    console.log(updatedDetail);
 
     setUserProfileValues((prevValues) => {
       return {
@@ -155,14 +204,9 @@ export default function CVForm() {
   };
 
   const handleDeleteListItem = function (event, skillName, identifier) {
-    console.log(`Delete item ${skillName}`);
-    console.log(skillName);
-
     const updatedList = userProfileValues[identifier].filter((el) => {
       return el.name !== skillName;
     });
-
-    console.log(updatedList);
 
     setUserProfileValues((prevValues) => {
       return { ...prevValues, [identifier]: updatedList };
@@ -174,12 +218,12 @@ export default function CVForm() {
       return {
         ...prevValues,
         [listName]: [...prevValues[listName], prevValues[identifier]],
+        [identifier]: { ...prevValues[identifier], name: "" },
       };
     });
   };
 
   const handleChangeAddNewListItem = function (event, identifier) {
-    console.log(identifier);
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
@@ -196,7 +240,6 @@ export default function CVForm() {
     identifier,
     index
   ) {
-    console.log(`Rating `, rate, index, identifier);
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
@@ -210,7 +253,6 @@ export default function CVForm() {
   };
 
   const handleChangeRatingNewListItem = function (rate, identifier, index = 0) {
-    console.log(`Rating `, rate, identifier);
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
@@ -223,6 +265,188 @@ export default function CVForm() {
     dispatch({
       inputType: categoryList,
       listItemIndex: listIndex,
+    });
+  };
+
+  const handleSummaryEditingStatus = function () {
+    setUserProfileValues((prevValues) => {
+      return {
+        ...prevValues,
+        summary: {
+          ...prevValues.summary,
+          isEditing: !prevValues.summary.isEditing,
+        },
+      };
+    });
+  };
+
+  const handleOnChangeSummary = function (event) {
+    setUserProfileValues((prevValues) => {
+      return {
+        ...prevValues,
+        summary: { ...prevValues.summary, description: event.target.value },
+      };
+    });
+  };
+
+  const handleSummaryKeyDown = function (event) {
+    if (event.key === "Enter") {
+      handleSummaryEditingStatus();
+    }
+  };
+
+  const handleAddNewItemListFromModal = function (data) {
+    const objWithIsEditing = {
+      institution: { value: data.institution, isEditing: false },
+      position: { value: data.position, isEditing: false },
+      startDate: { value: data.startDate, isEditing: false },
+      endDate: { value: data.endDate, isEditing: false },
+      description: {
+        value: data.description,
+        isEditing: false,
+      },
+    };
+
+    if (data.type === "work") {
+      setUserProfileValues((prevValues) => {
+        return {
+          ...prevValues,
+          experience: [...prevValues.experience, objWithIsEditing],
+        };
+      });
+    } else {
+    }
+  };
+
+  const handleReplaceTextWithInput = function (
+    listName,
+    workIndex,
+    identifier
+  ) {
+    console.log(userProfileValues.experience[workIndex][identifier]);
+    const updatedListItemStatus = {
+      ...userProfileValues.experience[workIndex],
+      [identifier]: {
+        ...userProfileValues.experience[workIndex][identifier],
+        isEditing:
+          !userProfileValues.experience[workIndex][identifier].isEditing,
+      },
+    };
+
+    setUserProfileValues((prevValues) => {
+      return {
+        ...prevValues,
+        experience: [
+          ...prevValues.experience.slice(0, workIndex),
+          updatedListItemStatus,
+          ...prevValues.experience.slice(workIndex + 1),
+        ],
+      };
+    });
+  };
+
+  const handleChangeUserListItem = function (
+    event,
+    listName,
+    workIndex,
+    identifier
+  ) {
+    // console.log(listName, workIndex, identifier); // experience 0 startDate
+
+    const updatedItem = {
+      ...userProfileValues.experience[workIndex],
+      [identifier]: {
+        ...userProfileValues.experience[workIndex][identifier],
+        value: event.target.value,
+      },
+    };
+
+    console.log(updatedItem);
+
+    setUserProfileValues((prevValues) => {
+      return {
+        ...prevValues,
+        experience: [
+          ...prevValues.experience.slice(0, workIndex),
+          updatedItem,
+          ...prevValues.experience.slice(workIndex + 1),
+        ],
+      };
+    });
+  };
+
+  const handleKeyDownUser = function (event, listName, workIndex, identifier) {
+    // console.log(listName, workIndex, identifier); // experience 0 startDate
+    if (event.key === "Enter") {
+      console.log(`clicked enter`);
+      const updatedEditState = {
+        ...userProfileValues.experience[workIndex],
+        [identifier]: {
+          ...userProfileValues.experience[workIndex][identifier],
+          isEditing:
+            !userProfileValues.experience[workIndex][identifier].isEditing,
+        },
+      };
+
+      setUserProfileValues((prevValues) => {
+        return {
+          ...prevValues,
+          experience: [
+            ...prevValues.experience.slice(0, workIndex),
+            updatedEditState,
+            ...prevValues.experience.slice(workIndex + 1),
+          ],
+        };
+      });
+    }
+  };
+
+  const handleBlurUser = function (event, listName, workIndex, identifier) {
+    const updatedEditState = {
+      ...userProfileValues.experience[workIndex],
+      [identifier]: {
+        ...userProfileValues.experience[workIndex][identifier],
+        isEditing:
+          !userProfileValues.experience[workIndex][identifier].isEditing,
+      },
+    };
+
+    setUserProfileValues((prevValues) => {
+      return {
+        ...prevValues,
+        experience: [
+          ...prevValues.experience.slice(0, workIndex),
+          updatedEditState,
+          ...prevValues.experience.slice(workIndex + 1),
+        ],
+      };
+    });
+  };
+
+  const handleUpdateDate = function (
+    date,
+    type,
+    index,
+    identifier = "experience"
+  ) {
+    console.log(date, type, index, identifier);
+
+    const updatedRecord = {
+      ...userProfileValues.experience[index],
+      [type]: { ...userProfileValues.experience[index][type], value: date },
+    };
+
+    console.log(updatedRecord);
+
+    setUserProfileValues((prevValues) => {
+      return {
+        ...prevValues,
+        experience: [
+          ...prevValues.experience.slice(0, index),
+          updatedRecord,
+          ...prevValues.experience.slice(index + 1),
+        ],
+      };
     });
   };
 
@@ -370,13 +594,103 @@ export default function CVForm() {
           </div>
         </div>
       </div>
-      <div className={(styles.section, styles.education)}>
-        Education
-        <br />
-        <br />
-        <Modal />
+      <div className={(styles.section, styles.summary)}>
+        {userProfileValues.summary.isEditing ? (
+          <InputForm
+            key="summaryInput"
+            type="text"
+            name="summary"
+            value={userProfileValues.summary.description}
+            className={styles.control}
+            autoFocus
+            onBlur={handleSummaryEditingStatus}
+            onKeyDown={handleSummaryKeyDown}
+            onChange={handleOnChangeSummary}
+          />
+        ) : (
+          <span onClick={handleSummaryEditingStatus} key="summary">
+            {userProfileValues.summary.description}
+          </span>
+        )}
       </div>
-      <div className={(styles.section, styles.experience)}>Experience</div>
+      <div className={(styles.section, styles.education)}>
+        {userProfileValues.experience.map((work, workIndex) => {
+          return Object.entries(work).map((el, elIndex) => {
+            return el[0] === "startDate" || el[0] === "endDate" ? (
+              el[0] === "startDate" ? (
+                <div key={elIndex} className={styles.datesContainer}>
+                  <DatePicker
+                    date={work.startDate.value}
+                    id={"start" + elIndex}
+                    index={workIndex}
+                    type={"startDate"}
+                    isEditing={work.startDate.isEditing}
+                    updateDate={handleUpdateDate}
+                  />
+                  <div>-</div>
+                  <DatePicker
+                    date={work.endDate.value}
+                    id={"end" + elIndex}
+                    index={workIndex}
+                    type={"endDate"}
+                    updateDate={handleUpdateDate}
+                  />
+                </div>
+              ) : null
+            ) : (
+              <span key={elIndex}>
+                {el[1].isEditing ? (
+                  <InputForm
+                    key={el[0]}
+                    type="text"
+                    name={el[0]}
+                    value={el[1].value}
+                    className={styles.control}
+                    autoFocus
+                    onBlur={() =>
+                      handleBlurUser(event, "experience", workIndex, el[0])
+                    }
+                    onKeyDown={(event) =>
+                      handleKeyDownUser(event, "experience", workIndex, el[0])
+                    }
+                    onChange={() =>
+                      handleChangeUserListItem(
+                        event,
+                        "experience",
+                        workIndex,
+                        el[0]
+                      )
+                    }
+                  />
+                ) : (
+                  <div>
+                    <span
+                      onClick={() =>
+                        handleReplaceTextWithInput(
+                          "experience",
+                          workIndex,
+                          el[0]
+                        )
+                      }
+                      className={styles.record}
+                    >
+                      {el[1].value}
+                    </span>
+                  </div>
+                )}
+              </span>
+            );
+          });
+        })}
+        <Modal
+          type={"work"}
+          handleAddNewItemListFromModal={handleAddNewItemListFromModal}
+        />
+      </div>
+      <div className={(styles.section, styles.experience)}>
+        Education
+        {/* <Modal /> */}
+      </div>
     </form>
   );
 }
