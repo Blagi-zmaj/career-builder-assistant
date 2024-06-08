@@ -5,10 +5,10 @@ export default function DatePicker({
   id,
   type,
   index,
-  isEditing,
+  // isEditing,
   updateDate,
 }) {
-  console.log(date);
+  // console.log(date);
 
   //   const [startDate, setStartDate] = useState(date);
   const [isEditingState, setIsEditingState] = useState(false);
@@ -34,6 +34,7 @@ export default function DatePicker({
             setIsEditingState((prev) => !prev);
             return updateDate(event.target.value, type, index);
           }}
+          onBlur={() => setIsEditingState((prev) => !prev)}
         />
       ) : (
         <span
@@ -44,23 +45,6 @@ export default function DatePicker({
           {date}
         </span>
       )}
-      {/* <input
-        ref={datePickerRef}
-        type="date"
-        name="datePicker"
-        id={id}
-        value={date}
-        onChange={(event) => updateDate(event.target.value, type, index)}
-      />
-      <span
-        onClick={() => {
-          // datePickerRef?.current?.showPicker();
-          datePickerRef?.current.focus();
-          datePickerRef?.current?.showPicker();
-        }}
-      >
-        {date}
-      </span> */}
     </div>
   );
 }

@@ -12,6 +12,10 @@ import setIsEditingItem, {
 import UserDetailsList from "./UserDetailsList";
 import Section from "./Section/Section";
 import DatePicker from "./DatePicker";
+import WorkIcon from "@mui/icons-material/Work";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import InfoIcon from "@mui/icons-material/Info";
+import { TextField } from "@mui/material";
 
 ///////////////////////////////////////////
 
@@ -63,9 +67,9 @@ export default function CVForm() {
       },
       {
         institution: { value: "Google", isEditing: false },
-        position: { value: "Python developer", isEditing: true },
+        position: { value: "Python developer", isEditing: false },
         startDate: { value: "2021-02-14", isEditing: false },
-        endDate: { value: "2028-05-15", isEditing: true },
+        endDate: { value: "2028-05-15", isEditing: false },
         description: {
           value: "Process AI!",
           isEditing: false,
@@ -93,15 +97,15 @@ export default function CVForm() {
   //   `=====================================================================`
   // );
   // console.table(inputValues);
-  console.log(
-    userProfileValues.experience[0].startDate,
-    userProfileValues.experience[0].endDate
-  );
-  console.log(
-    userProfileValues.experience[1].startDate,
-    userProfileValues.experience[1].endDate
-  );
-  // console.log(userProfileValues.summary);
+  // console.log(
+  //   userProfileValues.experience[0].startDate,
+  //   userProfileValues.experience[0].endDate
+  // );
+  // console.log(
+  //   userProfileValues.experience[1].startDate,
+  //   userProfileValues.experience[1].endDate
+  // );
+  console.log(userProfileValues.summary);
   // console.table(userProfileValues.skills);
   // console.table(userProfileValues.languages);
   // console.table(userProfileValues.hobbies);
@@ -290,7 +294,14 @@ export default function CVForm() {
   };
 
   const handleSummaryKeyDown = function (event) {
-    if (event.key === "Enter") {
+    // if (event.key === "Enter") {
+    //   handleSummaryEditingStatus();
+    // }
+
+    if (event.shiftKey && event.key === "Enter") {
+      console.log(`Shift & Enter`);
+    } else if (event.key === "Enter") {
+      console.log(`Enter`);
       handleSummaryEditingStatus();
     }
   };
@@ -595,6 +606,10 @@ export default function CVForm() {
         </div>
       </div>
       <div className={(styles.section, styles.summary)}>
+        <span className={styles.sectionTitle}>
+          <InfoIcon fontSize="large" />
+          Summary
+        </span>
         {userProfileValues.summary.isEditing ? (
           <InputForm
             key="summaryInput"
@@ -604,93 +619,110 @@ export default function CVForm() {
             className={styles.control}
             autoFocus
             onBlur={handleSummaryEditingStatus}
-            onKeyDown={handleSummaryKeyDown}
             onChange={handleOnChangeSummary}
+            handleKeyEnterAndShift={handleSummaryKeyDown}
+            isTextArea={true}
           />
         ) : (
-          <span onClick={handleSummaryEditingStatus} key="summary">
+          <span
+            onClick={handleSummaryEditingStatus}
+            key="summary"
+            className={styles.recordContainer}
+          >
             {userProfileValues.summary.description}
           </span>
         )}
       </div>
-      <div className={(styles.section, styles.education)}>
+      <div className={(styles.section, styles.experience)}>
+        <span className={styles.sectionTitle}>
+          <WorkIcon />
+          Experience
+        </span>
         {userProfileValues.experience.map((work, workIndex) => {
-          return Object.entries(work).map((el, elIndex) => {
-            return el[0] === "startDate" || el[0] === "endDate" ? (
-              el[0] === "startDate" ? (
-                <div key={elIndex} className={styles.datesContainer}>
-                  <DatePicker
-                    date={work.startDate.value}
-                    id={"start" + elIndex}
-                    index={workIndex}
-                    type={"startDate"}
-                    isEditing={work.startDate.isEditing}
-                    updateDate={handleUpdateDate}
-                  />
-                  <div>-</div>
-                  <DatePicker
-                    date={work.endDate.value}
-                    id={"end" + elIndex}
-                    index={workIndex}
-                    type={"endDate"}
-                    updateDate={handleUpdateDate}
-                  />
-                </div>
-              ) : null
-            ) : (
-              <span key={elIndex}>
-                {el[1].isEditing ? (
-                  <InputForm
-                    key={el[0]}
-                    type="text"
-                    name={el[0]}
-                    value={el[1].value}
-                    className={styles.control}
-                    autoFocus
-                    onBlur={() =>
-                      handleBlurUser(event, "experience", workIndex, el[0])
-                    }
-                    onKeyDown={(event) =>
-                      handleKeyDownUser(event, "experience", workIndex, el[0])
-                    }
-                    onChange={() =>
-                      handleChangeUserListItem(
-                        event,
-                        "experience",
-                        workIndex,
-                        el[0]
-                      )
-                    }
-                  />
+          return (
+            <div key={workIndex} className={styles.recordContainer}>
+              {Object.entries(work).map((el, elIndex) => {
+                return el[0] === "startDate" || el[0] === "endDate" ? (
+                  el[0] === "startDate" ? (
+                    <div key={elIndex} className={styles.datesContainer}>
+                      <CalendarMonthIcon />
+                      <DatePicker
+                        date={work.startDate.value}
+                        id={"start" + elIndex}
+                        index={workIndex}
+                        type={"startDate"}
+                        isEditing={work.startDate.isEditing}
+                        updateDate={handleUpdateDate}
+                      />
+                      <div>-</div>
+                      <DatePicker
+                        date={work.endDate.value}
+                        id={"end" + elIndex}
+                        index={workIndex}
+                        type={"endDate"}
+                        updateDate={handleUpdateDate}
+                      />
+                    </div>
+                  ) : null
                 ) : (
-                  <div>
-                    <span
-                      onClick={() =>
-                        handleReplaceTextWithInput(
-                          "experience",
-                          workIndex,
-                          el[0]
-                        )
-                      }
-                      className={styles.record}
-                    >
-                      {el[1].value}
-                    </span>
-                  </div>
-                )}
-              </span>
-            );
-          });
+                  <span key={elIndex}>
+                    {el[1].isEditing ? (
+                      <InputForm
+                        key={el[0]}
+                        type="text"
+                        name={el[0]}
+                        value={el[1].value}
+                        className={styles.control}
+                        autoFocus
+                        isTextArea={el[0] === "description" ? true : false}
+                        onBlur={() =>
+                          handleBlurUser(event, "experience", workIndex, el[0])
+                        }
+                        onKeyDown={(event) =>
+                          handleKeyDownUser(
+                            event,
+                            "experience",
+                            workIndex,
+                            el[0]
+                          )
+                        }
+                        onChange={() =>
+                          handleChangeUserListItem(
+                            event,
+                            "experience",
+                            workIndex,
+                            el[0]
+                          )
+                        }
+                      />
+                    ) : (
+                      <div style={{ margin: "0.75rem 0" }}>
+                        <span
+                          onClick={() =>
+                            handleReplaceTextWithInput(
+                              "experience",
+                              workIndex,
+                              el[0]
+                            )
+                          }
+                          className={styles.record}
+                        >
+                          {el[1].value}
+                        </span>
+                      </div>
+                    )}
+                  </span>
+                );
+              })}
+            </div>
+          );
         })}
         <Modal
           type={"work"}
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
       </div>
-      <div className={(styles.section, styles.experience)}>
-        Education
-        {/* <Modal /> */}
-      </div>
+      <div className={(styles.section, styles.education)}>Education</div>
     </form>
   );
 }
