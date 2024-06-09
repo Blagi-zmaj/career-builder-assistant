@@ -32,6 +32,7 @@ export default function InputForm({
           name={name}
           value={value}
           placeholder={placeholder}
+          onKeyDown={handleKeyEnterAndShift}
           {...props}
         />
       )}

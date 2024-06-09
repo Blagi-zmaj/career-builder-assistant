@@ -16,6 +16,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import InfoIcon from "@mui/icons-material/Info";
 import { TextField } from "@mui/material";
+import SchoolIcon from "@mui/icons-material/School";
 
 ///////////////////////////////////////////
 
@@ -52,7 +53,16 @@ export default function CVForm() {
     ],
     summary: { description: "Quick summary about user", isEditing: false },
     education: [
-      { institution: "", startDate: "", endDate: "", description: "" },
+      {
+        institution: { value: "Uniwersytet Sląski", isEditing: false },
+        position: { value: "History", isEditing: false },
+        startDate: { value: "2022-09-22", isEditing: false },
+        endDate: { value: "2023-03-30", isEditing: false },
+        description: {
+          value: "Bachelor Degree",
+          isEditing: false,
+        },
+      },
     ],
     experience: [
       {
@@ -97,15 +107,62 @@ export default function CVForm() {
   //   `=====================================================================`
   // );
   // console.table(inputValues);
+
+  // name: "Daniel",
+  // surname: "Konieczny",
+  // address: "Jaworzno",
+  // email: "d@debugger.com",
+  // phone: "111-111-111",
+  // github: "Blagi-zmaj.github.com",
+  // linkedin: "daniel.konieczny.linkedin.com",
+
+  console.log(
+    `
+    name ${inputValues.name}
+    surname ${inputValues.surname}
+    address ${inputValues.address}
+    email ${inputValues.email}
+    phone ${inputValues.phone}
+    github ${inputValues.github}
+    linkedin ${inputValues.linkedin}
+    `
+  );
+  console.log("==================Skills================");
+  userProfileValues.skills.forEach((el) => {
+    console.log(`${el.name} ${el.level}`);
+  });
+  console.log("==================Languages================");
+  userProfileValues.languages.forEach((el) => {
+    console.log(`${el.name} ${el.level}`);
+  });
+  console.log("==================Hobbies================");
+  userProfileValues.hobbies.forEach((el) => {
+    console.log(`${el.name}`);
+  });
+  // console.log("Summary: " + userProfileValues.summary.description);
+  // console.log("==================Experience================");
+  // userProfileValues.experience.map((element, index) => {
+  //   const experienceEntries = Object.entries(element);
+  //   experienceEntries.map((record) => {
+  //     console.log(`${record[0]}: ${record[1].value}`);
+  //   });
+  // });
+
+  // console.log("==================Education================");
+  // userProfileValues.education.map((element, index) => {
+  //   const experienceEntries = Object.entries(element);
+  //   experienceEntries.map((record) => {
+  //     console.log(`${record[0]}: ${record[1].value}`);
+  //   });
+  // });
+
   // console.log(
   //   userProfileValues.experience[0].startDate,
   //   userProfileValues.experience[0].endDate
   // );
-  // console.log(
-  //   userProfileValues.experience[1].startDate,
-  //   userProfileValues.experience[1].endDate
-  // );
-  console.log(userProfileValues.summary);
+  // console.log(userProfileValues.experience);
+  // console.log(userProfileValues.education);
+  // console.log(userProfileValues);
   // console.table(userProfileValues.skills);
   // console.table(userProfileValues.languages);
   // console.table(userProfileValues.hobbies);
@@ -307,6 +364,9 @@ export default function CVForm() {
   };
 
   const handleAddNewItemListFromModal = function (data) {
+    console.log(data.type);
+    console.log(data);
+
     const objWithIsEditing = {
       institution: { value: data.institution, isEditing: false },
       position: { value: data.position, isEditing: false },
@@ -318,6 +378,19 @@ export default function CVForm() {
       },
     };
 
+    // {
+    //   institution: { value: "Uniwersytet Sląski", isEditing: false },
+    //   position: { value: "History", isEditing: false },
+    //   startDate: { value: "2022-09-22", isEditing: false },
+    //   endDate: { value: "2023-03-30", isEditing: false },
+    //   description: {
+    //     value: "Bachelor Degree",
+    //     isEditing: false,
+    //   },
+    // },
+
+    console.log(objWithIsEditing);
+
     if (data.type === "work") {
       setUserProfileValues((prevValues) => {
         return {
@@ -326,6 +399,12 @@ export default function CVForm() {
         };
       });
     } else {
+      setUserProfileValues((prevValues) => {
+        return {
+          ...prevValues,
+          education: [...prevValues.education, objWithIsEditing],
+        };
+      });
     }
   };
 
@@ -334,23 +413,23 @@ export default function CVForm() {
     workIndex,
     identifier
   ) {
-    console.log(userProfileValues.experience[workIndex][identifier]);
+    console.log(userProfileValues[listName][workIndex][identifier]);
     const updatedListItemStatus = {
-      ...userProfileValues.experience[workIndex],
+      ...userProfileValues[listName][workIndex],
       [identifier]: {
-        ...userProfileValues.experience[workIndex][identifier],
+        ...userProfileValues[listName][workIndex][identifier],
         isEditing:
-          !userProfileValues.experience[workIndex][identifier].isEditing,
+          !userProfileValues[listName][workIndex][identifier].isEditing,
       },
     };
 
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        experience: [
-          ...prevValues.experience.slice(0, workIndex),
+        [listName]: [
+          ...prevValues[listName].slice(0, workIndex),
           updatedListItemStatus,
-          ...prevValues.experience.slice(workIndex + 1),
+          ...prevValues[listName].slice(workIndex + 1),
         ],
       };
     });
@@ -365,9 +444,9 @@ export default function CVForm() {
     // console.log(listName, workIndex, identifier); // experience 0 startDate
 
     const updatedItem = {
-      ...userProfileValues.experience[workIndex],
+      ...userProfileValues[listName][workIndex],
       [identifier]: {
-        ...userProfileValues.experience[workIndex][identifier],
+        ...userProfileValues[listName][workIndex][identifier],
         value: event.target.value,
       },
     };
@@ -377,10 +456,10 @@ export default function CVForm() {
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        experience: [
-          ...prevValues.experience.slice(0, workIndex),
+        [listName]: [
+          ...prevValues[listName].slice(0, workIndex),
           updatedItem,
-          ...prevValues.experience.slice(workIndex + 1),
+          ...prevValues[listName].slice(workIndex + 1),
         ],
       };
     });
@@ -391,21 +470,55 @@ export default function CVForm() {
     if (event.key === "Enter") {
       console.log(`clicked enter`);
       const updatedEditState = {
-        ...userProfileValues.experience[workIndex],
+        ...userProfileValues[listName][workIndex],
         [identifier]: {
-          ...userProfileValues.experience[workIndex][identifier],
+          ...userProfileValues[listName][workIndex][identifier],
           isEditing:
-            !userProfileValues.experience[workIndex][identifier].isEditing,
+            !userProfileValues[listName][workIndex][identifier].isEditing,
         },
       };
 
       setUserProfileValues((prevValues) => {
         return {
           ...prevValues,
-          experience: [
-            ...prevValues.experience.slice(0, workIndex),
+          [listName]: [
+            ...prevValues[listName].slice(0, workIndex),
             updatedEditState,
-            ...prevValues.experience.slice(workIndex + 1),
+            ...prevValues[listName].slice(workIndex + 1),
+          ],
+        };
+      });
+    }
+  };
+
+  const handleKeyEnterAndShift = function (
+    event,
+    listName,
+    workIndex,
+    identifier
+  ) {
+    console.log(listName, workIndex, identifier); // education 0 startDate
+
+    if (event.shiftKey && event.key === "Enter") {
+      console.log(`Shift & Enter`);
+    } else if (event.key === "Enter") {
+      console.log(`clicked enter`);
+      const updatedEditState = {
+        ...userProfileValues[listName][workIndex],
+        [identifier]: {
+          ...userProfileValues[listName][workIndex][identifier],
+          isEditing:
+            !userProfileValues[listName][workIndex][identifier].isEditing,
+        },
+      };
+
+      setUserProfileValues((prevValues) => {
+        return {
+          ...prevValues,
+          [listName]: [
+            ...prevValues[listName].slice(0, workIndex),
+            updatedEditState,
+            ...prevValues[listName].slice(workIndex + 1),
           ],
         };
       });
@@ -414,37 +527,32 @@ export default function CVForm() {
 
   const handleBlurUser = function (event, listName, workIndex, identifier) {
     const updatedEditState = {
-      ...userProfileValues.experience[workIndex],
+      ...userProfileValues[listName][workIndex],
       [identifier]: {
-        ...userProfileValues.experience[workIndex][identifier],
+        ...userProfileValues[listName][workIndex][identifier],
         isEditing:
-          !userProfileValues.experience[workIndex][identifier].isEditing,
+          !userProfileValues[listName][workIndex][identifier].isEditing,
       },
     };
 
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        experience: [
-          ...prevValues.experience.slice(0, workIndex),
+        [listName]: [
+          ...prevValues[listName].slice(0, workIndex),
           updatedEditState,
-          ...prevValues.experience.slice(workIndex + 1),
+          ...prevValues[listName].slice(workIndex + 1),
         ],
       };
     });
   };
 
-  const handleUpdateDate = function (
-    date,
-    type,
-    index,
-    identifier = "experience"
-  ) {
+  const handleUpdateDate = function (date, type, index, identifier) {
     console.log(date, type, index, identifier);
 
     const updatedRecord = {
-      ...userProfileValues.experience[index],
-      [type]: { ...userProfileValues.experience[index][type], value: date },
+      ...userProfileValues[identifier][index],
+      [type]: { ...userProfileValues[identifier][index][type], value: date },
     };
 
     console.log(updatedRecord);
@@ -452,10 +560,10 @@ export default function CVForm() {
     setUserProfileValues((prevValues) => {
       return {
         ...prevValues,
-        experience: [
-          ...prevValues.experience.slice(0, index),
+        [identifier]: [
+          ...prevValues[identifier].slice(0, index),
           updatedRecord,
-          ...prevValues.experience.slice(index + 1),
+          ...prevValues[identifier].slice(index + 1),
         ],
       };
     });
@@ -514,7 +622,9 @@ export default function CVForm() {
           {["skills", "languages"].map((categoryList, indexCategory) => {
             return (
               <div key={categoryList}>
-                <h3>{categoryList}</h3>
+                <h3>{`${categoryList
+                  .slice(0, 1)
+                  .toUpperCase()}${categoryList.slice(1)}`}</h3>
                 <UserDetailsList
                   categoryList={categoryList}
                   userData={userProfileValues}
@@ -653,6 +763,7 @@ export default function CVForm() {
                         type={"startDate"}
                         isEditing={work.startDate.isEditing}
                         updateDate={handleUpdateDate}
+                        listName={"experience"}
                       />
                       <div>-</div>
                       <DatePicker
@@ -661,6 +772,7 @@ export default function CVForm() {
                         index={workIndex}
                         type={"endDate"}
                         updateDate={handleUpdateDate}
+                        listName={"experience"}
                       />
                     </div>
                   ) : null
@@ -679,7 +791,7 @@ export default function CVForm() {
                           handleBlurUser(event, "experience", workIndex, el[0])
                         }
                         onKeyDown={(event) =>
-                          handleKeyDownUser(
+                          handleKeyEnterAndShift(
                             event,
                             "experience",
                             workIndex,
@@ -722,7 +834,103 @@ export default function CVForm() {
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
       </div>
-      <div className={(styles.section, styles.education)}>Education</div>
+      <div className={(styles.section, styles.education)}>
+        <span className={styles.sectionTitle}>
+          <SchoolIcon />
+          Education
+        </span>
+        {/* ///////////////////// UPDATE BELOW FUNCTIONS ///////////////////////// */}
+        {userProfileValues.education.map((subject, subjectIndex) => {
+          return (
+            <div key={subjectIndex} className={styles.recordContainer}>
+              {Object.entries(subject).map((el, elIndex) => {
+                return el[0] === "startDate" || el[0] === "endDate" ? (
+                  el[0] === "startDate" ? (
+                    <div key={elIndex} className={styles.datesContainer}>
+                      <CalendarMonthIcon />
+                      <DatePicker
+                        date={subject.startDate.value}
+                        id={"start" + elIndex}
+                        index={subjectIndex}
+                        type={"startDate"}
+                        // isEditing={subject.startDate.isEditing}
+                        listName={"education"}
+                        updateDate={handleUpdateDate}
+                      />
+                      <div>-</div>
+                      <DatePicker
+                        date={subject.endDate.value}
+                        id={"end" + elIndex}
+                        index={subjectIndex}
+                        type={"endDate"}
+                        listName={"education"}
+                        updateDate={handleUpdateDate}
+                      />
+                    </div>
+                  ) : null
+                ) : (
+                  <span key={elIndex}>
+                    {el[1].isEditing ? (
+                      <InputForm
+                        key={el[0]}
+                        type="text"
+                        name={el[0]}
+                        value={el[1].value}
+                        className={styles.control}
+                        autoFocus
+                        isTextArea={el[0] === "description" ? true : false}
+                        onBlur={() =>
+                          handleBlurUser(
+                            event,
+                            "education",
+                            subjectIndex,
+                            el[0]
+                          )
+                        }
+                        handleKeyEnterAndShift={(event) =>
+                          handleKeyEnterAndShift(
+                            event,
+                            "education",
+                            subjectIndex,
+                            el[0]
+                          )
+                        }
+                        onChange={() =>
+                          handleChangeUserListItem(
+                            event,
+                            "education",
+                            subjectIndex,
+                            el[0]
+                          )
+                        }
+                      />
+                    ) : (
+                      <div style={{ margin: "0.75rem 0" }}>
+                        <span
+                          onClick={() =>
+                            handleReplaceTextWithInput(
+                              "education",
+                              subjectIndex,
+                              el[0]
+                            )
+                          }
+                          className={styles.record}
+                        >
+                          {el[1].value}
+                        </span>
+                      </div>
+                    )}
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
+        <Modal
+          type={"education"}
+          handleAddNewItemListFromModal={handleAddNewItemListFromModal}
+        />
+      </div>
     </form>
   );
 }

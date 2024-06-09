@@ -75,8 +75,11 @@ export default function FormDialog({ type, handleAddNewItemListFromModal }) {
             autoFocus
             required
             margin="dense"
-            id={type === "work" ? "position" : "subject"}
-            name={type === "work" ? "position" : "subject"}
+            // id={type === "work" ? "position" : "subject"}
+            // name={type === "work" ? "position" : "subject"}
+            // label={type === "work" ? "Job position" : "Study subject"}
+            id="position"
+            name="position"
             label={type === "work" ? "Job position" : "Study subject"}
             type="text"
             fullWidth
@@ -116,8 +119,11 @@ export default function FormDialog({ type, handleAddNewItemListFromModal }) {
             autoFocus
             required
             margin="dense"
-            id={type === "work" ? "description" : "subjectDescription"}
-            name={type === "work" ? "description" : "subjectDescription"}
+            // id={type === "work" ? "description" : "subjectDescription"}
+            // name={type === "work" ? "description" : "subjectDescription"}
+            // label={type === "work" ? "Job description" : "Subject description"}
+            id={"description"}
+            name={"description"}
             label={type === "work" ? "Job description" : "Subject description"}
             type="text"
             fullWidth

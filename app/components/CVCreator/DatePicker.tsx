@@ -6,6 +6,7 @@ export default function DatePicker({
   type,
   index,
   // isEditing,
+  listName,
   updateDate,
 }) {
   // console.log(date);
@@ -32,7 +33,7 @@ export default function DatePicker({
           value={date}
           onChange={(event) => {
             setIsEditingState((prev) => !prev);
-            return updateDate(event.target.value, type, index);
+            return updateDate(event.target.value, type, index, listName);
           }}
           onBlur={() => setIsEditingState((prev) => !prev)}
         />
