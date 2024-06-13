@@ -56,7 +56,12 @@ export default function RadioGroupRating({
 
   return (
     <StyledRating
-      sx={{ border: 2, display: "flex", alignItems: "center" }}
+      sx={{
+        border: 2,
+        display: "flex",
+        alignItems: "center",
+        justifySelf: "end",
+      }}
       max={5}
       name="highlight-selected-only"
       value={rate}

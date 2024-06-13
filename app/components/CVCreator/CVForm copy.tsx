@@ -10,11 +10,15 @@ import setIsEditingItem, {
   setIsEditingItemInSet,
 } from "./CVCreatorUtils/helpers";
 import UserDetailsList from "./UserDetailsList";
+import Section from "./Section/Section";
 import DatePicker from "./DatePicker";
 import WorkIcon from "@mui/icons-material/Work";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import InfoIcon from "@mui/icons-material/Info";
+import { TextField } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
+
+///////////////////////////////////////////
 
 export default function CVForm() {
   const [inputValues, setInputValues] = useState({
@@ -26,7 +30,10 @@ export default function CVForm() {
     github: "Blagi-zmaj.github.com",
     linkedin: "daniel.konieczny.linkedin.com",
   });
-  const [hideAllButtons, setHideButtons] = useState(false);
+
+  const startDateRef = useRef();
+  const endDateRef = useRef();
+
   const [userProfileValues, setUserProfileValues] = useState({
     newSkill: { name: "", level: 3, isEditing: false },
     newLanguage: { name: "", level: 3, isEditing: false },
@@ -116,6 +123,19 @@ export default function CVForm() {
     isEditingEducation: false,
   };
 
+  // console.log(
+  //   `=====================================================================`
+  // );
+  // console.table(inputValues);
+
+  // name: "Daniel",
+  // surname: "Konieczny",
+  // address: "Jaworzno",
+  // email: "d@debugger.com",
+  // phone: "111-111-111",
+  // github: "Blagi-zmaj.github.com",
+  // linkedin: "daniel.konieczny.linkedin.com",
+
   console.log(
     `
     name ${inputValues.name}
@@ -139,7 +159,7 @@ export default function CVForm() {
   userProfileValues.hobbies.forEach((el) => {
     console.log(`${el.name}`);
   });
-  console.log("Summary: " + userProfileValues.summary.description);
+  // console.log("Summary: " + userProfileValues.summary.description);
   // console.log("==================Experience================");
   // userProfileValues.experience.map((element, index) => {
   //   const experienceEntries = Object.entries(element);
@@ -287,6 +307,7 @@ export default function CVForm() {
   const handleDeleteListRecord = function (event, listName, identifier) {
     console.log(listName, identifier);
     const filteredData = userProfileValues[listName].filter((record) => {
+      // console.log(record.institution.value);
       return record.institution.value !== identifier;
     });
     console.log(filteredData);
@@ -363,6 +384,10 @@ export default function CVForm() {
   };
 
   const handleSummaryKeyDown = function (event) {
+    // if (event.key === "Enter") {
+    //   handleSummaryEditingStatus();
+    // }
+
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
@@ -385,6 +410,18 @@ export default function CVForm() {
         isEditing: false,
       },
     };
+
+    // {
+    //   institution: { value: "Uniwersytet Sląski", isEditing: false },
+    //   position: { value: "History", isEditing: false },
+    //   startDate: { value: "2022-09-22", isEditing: false },
+    //   endDate: { value: "2023-03-30", isEditing: false },
+    //   description: {
+    //     value: "Bachelor Degree",
+    //     isEditing: false,
+    //   },
+    // },
+
     console.log(objWithIsEditing);
 
     if (data.type === "work") {
@@ -615,17 +652,9 @@ export default function CVForm() {
             );
           })}
 
-          <button
-            type="button"
-            onClick={() => setHideButtons((prev) => !prev)}
-            style={{ fontSize: "2rem" }}
-          >
-            {hideAllButtons ? "Show" : "Hide"} all buttons
-          </button>
-
           {["skills", "languages"].map((categoryList, indexCategory) => {
             return (
-              <div key={categoryList} style={{ width: "100%" }}>
+              <div key={categoryList}>
                 <h3>{`${categoryList
                   .slice(0, 1)
                   .toUpperCase()}${categoryList.slice(1)}`}</h3>
@@ -643,17 +672,19 @@ export default function CVForm() {
                   handleChangeAddNewListItem={handleChangeAddNewListItem}
                   handleChangeRatingNewListItem={handleChangeRatingNewListItem}
                   handleAddNewItemList={handleAddNewItemList}
-                  hideAllButtons={hideAllButtons}
                 />
               </div>
             );
           })}
+
+          {/* //////////////////////////////////  HOBBIES ////////////////////////////////// */}
+
           <h3>Hobbies</h3>
           {userProfileValues.hobbies.map((hobby, index) => {
             return (
               <div
                 key={index}
-                className={styles.hobbiesUI}
+                className={styles.skillsUI}
                 style={{ backgroundColor: "yellowgreen" }}
               >
                 {userProfileValues.hobbies[index].isEditing ? (
@@ -680,7 +711,7 @@ export default function CVForm() {
                     onClick={() => replaceTextWithInput("hobbies", index)}
                     key={hobby.name}
                   >
-                    {hobby.name ? hobby.name : `<empty> ${index}`}
+                    {hobby.name}
                   </span>
                 )}
                 <Button
@@ -688,18 +719,13 @@ export default function CVForm() {
                     handleDeleteListItem(event, hobby.name, "hobbies")
                   }
                   variant="contained"
-                  className={hideAllButtons ? styles.hiddenButton : null}
                 >
                   -
                 </Button>
               </div>
             );
           })}
-          <div
-            className={
-              hideAllButtons ? styles.hideComponent : styles.hobbiesBox
-            }
-          >
+          <div className={styles.hobbiesBox}>
             <InputForm
               key={"addHobby"}
               type="text"
@@ -715,7 +741,6 @@ export default function CVForm() {
               onClick={(event) =>
                 handleAddNewItemList(event, "newHobby", "hobbies")
               }
-              className={hideAllButtons ? styles.hiddenButton : null}
               variant="contained"
             >
               +
@@ -742,16 +767,13 @@ export default function CVForm() {
             isTextArea={true}
           />
         ) : (
-          <div
+          <span
             onClick={handleSummaryEditingStatus}
             key="summary"
-            className={styles.record}
-            style={{ width: "100%" }}
+            className={styles.recordContainer}
           >
-            {userProfileValues.summary.description
-              ? userProfileValues.summary.description
-              : `Write somethin about yourself!`}
-          </div>
+            {userProfileValues.summary.description}
+          </span>
         )}
       </div>
       <div className={(styles.section, styles.experience)}>
@@ -763,8 +785,8 @@ export default function CVForm() {
           return (
             <div key={workIndex} className={styles.recordContainer}>
               <button
+                style={{ position: "absolute", right: 0 }}
                 type="button"
-                className={styles.deleteBtn}
                 onClick={(event) =>
                   handleDeleteListRecord(
                     event,
@@ -843,7 +865,7 @@ export default function CVForm() {
                           }
                           className={styles.record}
                         >
-                          {el[1].value ? el[1].value : `<empty>`} EXP
+                          {el[1].value}
                         </div>
                       </div>
                     )}
@@ -854,7 +876,6 @@ export default function CVForm() {
           );
         })}
         <Modal
-          hideAllButtons={hideAllButtons}
           type={"work"}
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
@@ -864,11 +885,12 @@ export default function CVForm() {
           <SchoolIcon />
           Education
         </span>
+        {/* ///////////////////// UPDATE BELOW FUNCTIONS ///////////////////////// */}
         {userProfileValues.education.map((subject, subjectIndex) => {
           return (
             <div key={subjectIndex} className={styles.recordContainer}>
               <button
-                className={styles.deleteBtn}
+                style={{ position: "absolute", right: 0 }}
                 type="button"
                 onClick={(event) =>
                   handleDeleteListRecord(
@@ -890,6 +912,7 @@ export default function CVForm() {
                         id={"start" + elIndex}
                         index={subjectIndex}
                         type={"startDate"}
+                        // isEditing={subject.startDate.isEditing}
                         listName={"education"}
                         updateDate={handleUpdateDate}
                       />
@@ -942,7 +965,7 @@ export default function CVForm() {
                       />
                     ) : (
                       <div style={{ margin: "0.75rem 0" }}>
-                        <div
+                        <span
                           onClick={() =>
                             handleReplaceTextWithInput(
                               "education",
@@ -952,8 +975,8 @@ export default function CVForm() {
                           }
                           className={styles.record}
                         >
-                          {el[1].value ? el[1].value : `<empty>`} EDU
-                        </div>
+                          {el[1].value}
+                        </span>
                       </div>
                     )}
                   </span>
@@ -963,7 +986,6 @@ export default function CVForm() {
           );
         })}
         <Modal
-          hideAllButtons={hideAllButtons}
           type={"education"}
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />

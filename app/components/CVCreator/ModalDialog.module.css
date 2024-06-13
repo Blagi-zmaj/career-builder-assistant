@@ -13,3 +13,7 @@
   margin: 0rem;
   column-gap: 1rem;
 }
+
+.modalHiddenButton {
+  display: none;
+}

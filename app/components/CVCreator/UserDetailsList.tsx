@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import InputForm from "./InputForm/InputForm";
 import RadioGroupRating from "../Rating";
 import styles from "./CVForm.module.css";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 export default function UserDetailsList({
   categoryList,
@@ -15,6 +16,7 @@ export default function UserDetailsList({
   handleChangeAddNewListItem,
   handleChangeRatingNewListItem,
   handleAddNewItemList,
+  hideAllButtons,
 }) {
   const listNameCapitalized = `${categoryList[0].toUpperCase()}${categoryList.slice(
     1,
@@ -30,7 +32,9 @@ export default function UserDetailsList({
         return (
           <div key={categoryList + listIndex}>
             <div
-              className={styles.skillsUI}
+              className={
+                hideAllButtons ? styles.skillsUIWithoutBtns : styles.skillsUI
+              }
               style={{ backgroundColor: "yellowgreen" }}
             >
               {listItem.isEditing ? (
@@ -54,7 +58,7 @@ export default function UserDetailsList({
                   onClick={() => replaceTextWithInput(categoryList, listIndex)}
                   key={listItem.name + 5}
                 >
-                  {listItem.name}
+                  {listItem.name ? listItem.name : `<empty> ${listIndex}`}
                 </span>
               )}
               <RadioGroupRating
@@ -68,6 +72,7 @@ export default function UserDetailsList({
                   handleDeleteListItem(event, listItem.name, categoryList)
                 }
                 variant="contained"
+                className={hideAllButtons ? styles.hiddenButton : null}
               >
                 -
               </Button>
@@ -75,7 +80,7 @@ export default function UserDetailsList({
           </div>
         );
       })}
-      <div className={styles.skillsUI}>
+      <div className={hideAllButtons ? styles.hideComponent : styles.skillsUI}>
         <InputForm
           key={addListName}
           type="text"
@@ -101,6 +106,7 @@ export default function UserDetailsList({
             handleAddNewItemList(event, newListName, categoryList)
           }
           variant="contained"
+          className={hideAllButtons ? styles.hiddenButton : null}
         >
           +
         </Button>

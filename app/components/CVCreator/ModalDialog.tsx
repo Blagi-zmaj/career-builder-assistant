@@ -11,7 +11,11 @@ import styles from "./ModalDialog.module.css";
 
 import { Box } from "@mui/material";
 
-export default function FormDialog({ type, handleAddNewItemListFromModal }) {
+export default function FormDialog({
+  type,
+  handleAddNewItemListFromModal,
+  hideAllButtons,
+}) {
   const [open, setOpen] = React.useState(false);
   const [dates, setDates] = React.useState([
     new Date().toJSON().slice(0, 10),
@@ -28,7 +32,12 @@ export default function FormDialog({ type, handleAddNewItemListFromModal }) {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button
+        variant="outlined"
+        onClick={handleClickOpen}
+        className={hideAllButtons ? styles.modalHiddenButton : null}
+        // style={{ display: hideAllButtons ? "none" : "block" }}
+      >
         +
       </Button>
       <Dialog
