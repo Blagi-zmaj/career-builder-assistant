@@ -116,30 +116,38 @@ export default function CVForm() {
     isEditingEducation: false,
   };
 
-  console.log(
-    `
-    name ${inputValues.name}
-    surname ${inputValues.surname}
-    address ${inputValues.address}
-    email ${inputValues.email}
-    phone ${inputValues.phone}
-    github ${inputValues.github}
-    linkedin ${inputValues.linkedin}
-    `
-  );
-  console.log("==================Skills================");
-  userProfileValues.skills.forEach((el) => {
-    console.log(`${el.name} ${el.level}`);
-  });
-  console.log("==================Languages================");
-  userProfileValues.languages.forEach((el) => {
-    console.log(`${el.name} ${el.level}`);
-  });
-  console.log("==================Hobbies================");
-  userProfileValues.hobbies.forEach((el) => {
-    console.log(`${el.name}`);
-  });
-  console.log("Summary: " + userProfileValues.summary.description);
+  // console.log(
+  //   `
+  //   name ${inputValues.name}
+  //   surname ${inputValues.surname}
+  //   address ${inputValues.address}
+  //   email ${inputValues.email}
+  //   phone ${inputValues.phone}
+  //   github ${inputValues.github}
+  //   linkedin ${inputValues.linkedin}
+  //   `
+  // );
+
+  // console.log(
+  //   `
+  //   ${inputValues.name} ${inputValues.surname}
+  //   ${inputValues.address} ${inputValues.email} ${inputValues.phone}
+  //    ${inputValues.github} ${inputValues.linkedin}
+  //   `
+  // );
+  // console.log("==================Skills================");
+  // userProfileValues.skills.forEach((el) => {
+  //   console.log(`${el.name} ${el.level}`);
+  // });
+  // console.log("==================Languages================");
+  // userProfileValues.languages.forEach((el) => {
+  //   console.log(`${el.name} ${el.level}`);
+  // });
+  // console.log("==================Hobbies================");
+  // userProfileValues.hobbies.forEach((el) => {
+  //   console.log(`${el.name}`);
+  // });
+  // console.log("Summary: " + userProfileValues.summary.description);
   // console.log("==================Experience================");
   // userProfileValues.experience.map((element, index) => {
   //   const experienceEntries = Object.entries(element);
@@ -573,11 +581,9 @@ export default function CVForm() {
             key="image"
             alt="person"
             src={frog}
-            sizes="100vw"
             style={{
-              width: "50%",
+              width: "100%",
               height: "auto",
-              margin: "1rem auto",
             }}
           />
           {Object.entries(inputValues).map(([key, value], index) => {
@@ -605,7 +611,7 @@ export default function CVForm() {
               </div>
             ) : (
               <div className={styles.detailsBox} key={key}>
-                <label style={{ marginRight: "1rem" }} htmlFor={key}>
+                <label htmlFor={key}>
                   {`${key[0].toUpperCase()}${key.slice(1)}`}
                 </label>
                 <span onClick={() => replaceTextWithInput(key, index)}>
@@ -625,7 +631,7 @@ export default function CVForm() {
 
           {["skills", "languages"].map((categoryList, indexCategory) => {
             return (
-              <div key={categoryList} style={{ width: "100%" }}>
+              <div key={categoryList} className={styles.asideDataRowBox}>
                 <h3>{`${categoryList
                   .slice(0, 1)
                   .toUpperCase()}${categoryList.slice(1)}`}</h3>
@@ -688,7 +694,9 @@ export default function CVForm() {
                     handleDeleteListItem(event, hobby.name, "hobbies")
                   }
                   variant="contained"
-                  className={hideAllButtons ? styles.hiddenButton : null}
+                  className={
+                    hideAllButtons ? styles.hiddenButton : styles.hobbiesBtn
+                  }
                 >
                   -
                 </Button>
@@ -746,7 +754,6 @@ export default function CVForm() {
             onClick={handleSummaryEditingStatus}
             key="summary"
             className={styles.record}
-            style={{ width: "100%" }}
           >
             {userProfileValues.summary.description
               ? userProfileValues.summary.description

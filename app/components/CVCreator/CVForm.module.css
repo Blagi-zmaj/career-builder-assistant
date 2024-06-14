@@ -12,6 +12,10 @@
   border-radius: 8px;
 }
 
+.asideDataRowBox {
+  width: 100%;
+}
+
 .section {
   background-color: green;
 }
@@ -29,6 +33,7 @@
   align-items: start;
   margin: 0 2rem;
   background-color: goldenrod;
+  height: 100%;
 }
 
 .detailsBox {
@@ -71,9 +76,14 @@
 .hobbiesUI {
   display: grid;
   width: 100%;
-  grid-template-columns: 80% 20%;
+  /* grid-template-columns: 80% 20%; */
+  grid-template-columns: 3fr 2fr 1fr;
   background-color: silver;
   justify-items: stretch;
+}
+
+.hobbiesBtn {
+  grid-column: 3/4;
 }
 
 .skillsUI {
@@ -82,6 +92,7 @@
   grid-template-columns: 3fr 2fr 1fr;
   background-color: rgb(114, 60, 9);
   justify-items: stretch;
+  align-items: center;
   gap: 0.5rem;
 }
 
