@@ -57,7 +57,7 @@ export default function RadioGroupRating({
   return (
     <StyledRating
       sx={{
-        border: 2,
+        // border: 1,
         display: "flex",
         alignItems: "center",
         justifySelf: "end",

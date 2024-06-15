@@ -584,6 +584,7 @@ export default function CVForm() {
             style={{
               width: "100%",
               height: "auto",
+              marginBottom: "1rem",
             }}
           />
           {Object.entries(inputValues).map(([key, value], index) => {
@@ -614,20 +615,15 @@ export default function CVForm() {
                 <label htmlFor={key}>
                   {`${key[0].toUpperCase()}${key.slice(1)}`}
                 </label>
-                <span onClick={() => replaceTextWithInput(key, index)}>
+                <span
+                  onClick={() => replaceTextWithInput(key, index)}
+                  className={styles.wordWrapBreakWord}
+                >
                   {inputValues[key]}
                 </span>
               </div>
             );
           })}
-
-          <button
-            type="button"
-            onClick={() => setHideButtons((prev) => !prev)}
-            style={{ fontSize: "2rem" }}
-          >
-            {hideAllButtons ? "Show" : "Hide"} all buttons
-          </button>
 
           {["skills", "languages"].map((categoryList, indexCategory) => {
             return (
@@ -660,7 +656,7 @@ export default function CVForm() {
               <div
                 key={index}
                 className={styles.hobbiesUI}
-                style={{ backgroundColor: "yellowgreen" }}
+                // style={{ backgroundColor: "yellowgreen" }}
               >
                 {userProfileValues.hobbies[index].isEditing ? (
                   <InputForm
@@ -685,6 +681,7 @@ export default function CVForm() {
                   <span
                     onClick={() => replaceTextWithInput("hobbies", index)}
                     key={hobby.name}
+                    className={styles.wordWrapBreakWord}
                   >
                     {hobby.name ? hobby.name : `<empty> ${index}`}
                   </span>
@@ -723,14 +720,24 @@ export default function CVForm() {
               onClick={(event) =>
                 handleAddNewItemList(event, "newHobby", "hobbies")
               }
-              className={hideAllButtons ? styles.hiddenButton : null}
+              className={
+                hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
+              }
               variant="contained"
             >
               +
             </Button>
           </div>
+          <button
+            type="button"
+            onClick={() => setHideButtons((prev) => !prev)}
+            style={{ fontSize: "2rem" }}
+          >
+            {hideAllButtons ? "Show" : "Hide"} all buttons
+          </button>
         </div>
       </div>
+
       <div className={(styles.section, styles.summary)}>
         <span className={styles.sectionTitle}>
           <InfoIcon fontSize="large" />

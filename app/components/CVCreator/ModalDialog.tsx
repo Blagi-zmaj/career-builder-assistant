@@ -33,9 +33,11 @@ export default function FormDialog({
   return (
     <React.Fragment>
       <Button
-        variant="outlined"
+        variant="contained"
         onClick={handleClickOpen}
-        className={hideAllButtons ? styles.modalHiddenButton : null}
+        className={
+          hideAllButtons ? styles.modalHiddenButton : styles.addNewRecordModal
+        }
         // style={{ display: hideAllButtons ? "none" : "block" }}
       >
         +

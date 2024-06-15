@@ -35,7 +35,7 @@ export default function UserDetailsList({
               className={
                 hideAllButtons ? styles.skillsUIWithoutBtns : styles.skillsUI
               }
-              style={{ backgroundColor: "yellowgreen" }}
+              // style={{ backgroundColor: "yellowgreen" }}
             >
               {listItem.isEditing ? (
                 <InputForm
@@ -57,6 +57,7 @@ export default function UserDetailsList({
                 <span
                   onClick={() => replaceTextWithInput(categoryList, listIndex)}
                   key={listItem.name + 5}
+                  className={styles.wordWrapBreakWord}
                 >
                   {listItem.name ? listItem.name : `<empty> ${listIndex}`}
                 </span>
@@ -72,7 +73,9 @@ export default function UserDetailsList({
                   handleDeleteListItem(event, listItem.name, categoryList)
                 }
                 variant="contained"
-                className={hideAllButtons ? styles.hiddenButton : null}
+                className={
+                  hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
+                }
               >
                 -
               </Button>
@@ -106,7 +109,9 @@ export default function UserDetailsList({
             handleAddNewItemList(event, newListName, categoryList)
           }
           variant="contained"
-          className={hideAllButtons ? styles.hiddenButton : null}
+          className={
+            hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
+          }
         >
           +
         </Button>
