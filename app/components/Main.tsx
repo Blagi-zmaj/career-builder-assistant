@@ -15,7 +15,7 @@ export default function Main({ open }: { open: boolean }) {
         sx={{
           flexGrow: 1,
           p: 3,
-          ...(open && { display: { xs: "none", md: "block" } }),
+          ...(open && { display: { xs: "block", md: "block" } }),
         }}
       >
         <DrawerHeader />

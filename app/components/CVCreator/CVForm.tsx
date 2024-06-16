@@ -574,7 +574,7 @@ export default function CVForm() {
   };
 
   return (
-    <form action="" className={styles.form}>
+    <div action="" className={styles.form}>
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
           <Image
@@ -612,7 +612,7 @@ export default function CVForm() {
               </div>
             ) : (
               <div className={styles.detailsBox} key={key}>
-                <label htmlFor={key}>
+                <label htmlFor={key} style={{ margin: "8px" }}>
                   {`${key[0].toUpperCase()}${key.slice(1)}`}
                 </label>
                 <span
@@ -857,7 +857,7 @@ export default function CVForm() {
                           }
                           className={styles.record}
                         >
-                          {el[1].value ? el[1].value : `<empty>`} EXP
+                          {el[1].value ? el[1].value : `<empty>`}
                         </div>
                       </div>
                     )}
@@ -966,7 +966,7 @@ export default function CVForm() {
                           }
                           className={styles.record}
                         >
-                          {el[1].value ? el[1].value : `<empty>`} EDU
+                          {el[1].value ? el[1].value : `<empty>`}
                         </div>
                       </div>
                     )}
@@ -982,6 +982,6 @@ export default function CVForm() {
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
       </div>
-    </form>
+    </div>
   );
 }

@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Unstable_Grid2";
-import MiniDrawer from "./components/Drawer";
 import { StyledRoot } from "./util/StyledRoot";
 
 export const metadata: Metadata = {

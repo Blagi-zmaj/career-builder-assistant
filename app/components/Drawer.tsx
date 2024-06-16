@@ -28,6 +28,7 @@ import {
 import Main from "./Main";
 
 export default function MiniDrawer({ children }) {
+  const drawerWidth = 240;
   const pathname = usePathname();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -146,7 +147,6 @@ export default function MiniDrawer({ children }) {
           flexGrow: 1,
           p: 3,
           ...(open && { display: { xs: "none", md: "block" } }),
-          // display: { xs: "none", md: "block" },
         }}
       >
         {children}
