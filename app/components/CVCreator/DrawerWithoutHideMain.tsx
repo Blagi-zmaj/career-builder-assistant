@@ -106,7 +106,7 @@ export default function ResponsiveDrawer({ children }) {
               onClick={() => handleSelectItem(index)}
               sx={{
                 minHeight: 48,
-                justifyContent: open ? "initial" : "center",
+                justifyContent: mobileOpen ? "initial" : "center",
                 px: 2.5,
               }}
             >
@@ -139,7 +139,8 @@ export default function ResponsiveDrawer({ children }) {
             primary={mobileOpen ? "Specialization" : ""}
             sx={{ color: "white" }}
           />
-          {collapse ? <ExpandLess /> : <ExpandMore />}
+          {/* {collapse ? <ExpandLess /> : <ExpandMore />} */}
+          {mobileOpen ? collapse ? <ExpandLess /> : <ExpandMore /> : null}
         </ListItemButton>
         <Collapse in={collapse} timeout="auto" unmountOnExit>
           <List component="div" key="specialization_list" disablePadding>
@@ -240,16 +241,16 @@ export default function ResponsiveDrawer({ children }) {
           {drawer}
         </Drawer>
       </Box>
-      <Box
+      <div
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          // p: 3,
           //   ...(open && { display: { xs: "none", md: "block" } }),
         }}
       >
         {children}
-      </Box>
+      </div>
     </Box>
   );
 }

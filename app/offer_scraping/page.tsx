@@ -3,6 +3,7 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import Drawer from "../components/Drawer";
 import { usePathname } from "next/navigation";
+import ImageUpload from "../components/ImageUpload";
 
 export default function Specialization({
   params,
@@ -15,7 +16,7 @@ export default function Specialization({
 
   return (
     <>
-      <Drawer />
+      <ImageUpload />
     </>
   );
 }

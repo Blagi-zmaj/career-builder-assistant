@@ -15,8 +15,12 @@ import WorkIcon from "@mui/icons-material/Work";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import InfoIcon from "@mui/icons-material/Info";
 import SchoolIcon from "@mui/icons-material/School";
+import ImageUpload from "../ImageUpload";
 
 export default function CVForm() {
+  const [file, setFile] = useState(null);
+  const [fileURL, setFileURL] = useState(frog);
+
   const [inputValues, setInputValues] = useState({
     name: "Daniel",
     surname: "Konieczny",
@@ -573,20 +577,93 @@ export default function CVForm() {
     });
   };
 
+  const [showFileInput, setShowFileInput] = useState(false);
+
+  const handleFileChange = (e) => {
+    console.log(`handleFileChange `);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const fileURL = URL.createObjectURL(selectedFile).slice(5);
+      console.log(fileURL);
+      setFileURL(fileURL);
+    }
+  };
+
+  /////////////////////////////////////////////////////
+
+  const [imageSrc, setImageSrc] = useState(frog);
+  const [imageFile, setImageFile] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+      setImageFile(file);
+    }
+  };
+
   return (
     <div action="" className={styles.form}>
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
-          <Image
-            key="image"
-            alt="person"
-            src={frog}
-            style={{
-              width: "100%",
-              height: "auto",
-              marginBottom: "1rem",
-            }}
-          />
+          {showFileInput ? (
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onMouseEnter={() => {
+                setShowFileInput(true);
+              }}
+              onMouseLeave={() => setShowFileInput(false)}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ position: "absolute" }}
+              />
+
+              <div>
+                <Image
+                  alt="visible"
+                  src={imageSrc}
+                  width={500}
+                  height={300}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    marginBottom: "1rem",
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <Image
+              key="image_2"
+              alt="person_2"
+              src={imageSrc}
+              width={500}
+              height={500}
+              style={{
+                width: "100%",
+                height: "auto",
+                marginBottom: "1rem",
+              }}
+              onMouseEnter={() => {
+                setShowFileInput(true);
+              }}
+              onMouseLeave={() => setShowFileInput(false)}
+            />
+          )}
+
           {Object.entries(inputValues).map(([key, value], index) => {
             if (key === "hobbies" || key === "languages" || key === "skills")
               return;
@@ -594,8 +671,9 @@ export default function CVForm() {
             return isEditingInput[
               `isEditing${key[0].toUpperCase()}${key.slice(1)}`
             ] ? (
+              // return true ? (
               <div className={styles.detailsBox} key={key}>
-                <label htmlFor={key}>
+                <label htmlFor={key} style={{ alignSelf: "center" }}>
                   {`${key[0].toUpperCase()}${key.slice(1)}`}
                 </label>
                 <InputForm

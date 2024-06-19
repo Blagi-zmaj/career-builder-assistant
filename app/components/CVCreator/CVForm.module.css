@@ -1,8 +1,8 @@
 .form {
-  margin-top: 3rem;
+  /* margin-top: 5rem; */
   /* background: linear-gradient(180deg, #3621ac, #1d4949); */
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 0.5fr 2fr 2fr;
   grid-template-areas:
@@ -11,6 +11,7 @@
     "aside education education";
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
+  margin: 5rem 2rem;
 }
 
 .addNewRecordForm {
@@ -59,7 +60,7 @@
 .detailsBox {
   display: grid;
   width: 100%;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: 30% 70%;
   /* background-color: silver; */
   justify-items: stretch;
 }
@@ -171,9 +172,10 @@
   position: relative;
   /* background-color: gold; */
   /* border: 1px solid black; */
-  margin: 0.5rem 0;
+  margin: 0.5rem 0rem;
   font-size: inherit;
   width: 100%;
+  padding: 0.5rem;
   -webkit-box-shadow: 0px 3px 13px 0px rgba(102, 179, 255, 1);
   -moz-box-shadow: 0px 3px 13px 0px rgba(102, 179, 255, 1);
   box-shadow: 0px 0px 13px 0px rgba(102, 179, 255, 1);
@@ -198,10 +200,10 @@
 
 .record {
   /* border: 1px solid black; */
-  width: 100%;
+  width: 90%;
   white-space: pre-wrap;
   min-height: 2rem;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
 
 .experience {
@@ -210,7 +212,7 @@
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.5rem;
   -webkit-box-shadow: 0px 3px 13px 0px rgba(255, 255, 255, 1);
   -moz-box-shadow: 0px 3px 13px 0px rgba(255, 255, 255, 1);
   box-shadow: 0px 3px 13px 0px rgba(255, 255, 255, 1);
@@ -224,7 +226,7 @@
 .control {
   display: block;
   width: 100%;
-  height: 2rem;
+  min-height: 2.5rem;
   margin: 0.75rem 0;
   font-size: 1.15rem;
   border-radius: 4px;
@@ -264,5 +266,9 @@
     align-items: start;
     margin: 0 1rem;
     background-color: greenyellow;
+  }
+
+  .form {
+    width: calc(100vw);
   }
 }
