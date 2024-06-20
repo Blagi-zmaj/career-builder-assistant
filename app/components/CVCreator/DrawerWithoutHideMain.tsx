@@ -204,7 +204,7 @@ export default function ResponsiveDrawer({ children }) {
       <Navigation handleDrawerOpen={handleDrawerToggle} />
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 1 } }}
+        sx={{ width: { sm: "5rem" } }}
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
