@@ -1,7 +1,14 @@
 import styles from "./CVForm.module.css";
 import Image from "next/image";
 import frog from "../../../public/cv_creator.jpg";
-import { useState, useRef, useEffect, useReducer, act } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useReducer,
+  useContext,
+  act,
+} from "react";
 import InputForm from "./InputForm/InputForm";
 import Button from "@mui/material/Button";
 import Modal from "./ModalDialog";
@@ -16,6 +23,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import InfoIcon from "@mui/icons-material/Info";
 import SchoolIcon from "@mui/icons-material/School";
 import ImageUpload from "../ImageUpload";
+import html2pdf from "html2pdf.js";
+import { NavAndDrawerContext } from "@/app/util/context";
 
 export default function CVForm() {
   const [file, setFile] = useState(null);
@@ -104,6 +113,15 @@ export default function CVForm() {
       },
     ],
   });
+
+  const { showNavAndDrawer, toggleShowNavAndDrawer } =
+    useContext(NavAndDrawerContext);
+
+  useEffect(() => {
+    if (hideAllButtons) {
+      window.print();
+    }
+  }, [hideAllButtons]);
 
   const isEditingStates = {
     isEditingName: false,
@@ -607,8 +625,30 @@ export default function CVForm() {
     }
   };
 
+  const handleToggleButtons = () => {
+    setHideButtons((prev) => {
+      return !prev;
+    });
+    toggleShowNavAndDrawer();
+    // var element = document.getElementById("form");
+    // var opt = {
+    //   margin: 1,
+    //   filename: "myfile.pdf",
+    //   image: { type: "jpeg", quality: 0.98 },
+    //   html2canvas: { scale: 1 },
+    //   jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+    // };
+
+    // New Promise-based usage:
+    // html2pdf().set(opt).from(element).save();
+    // html2pdf().from(element).save();
+
+    // Old monolithic-style usage:
+    // html2pdf(element, opt);
+  };
+
   return (
-    <div action="" className={styles.form}>
+    <div action="" className={styles.form} id="form">
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
           {showFileInput ? (
@@ -651,7 +691,7 @@ export default function CVForm() {
               alt="person_2"
               src={imageSrc}
               width={500}
-              height={500}
+              height={300}
               style={{
                 width: "100%",
                 height: "auto",
@@ -808,7 +848,7 @@ export default function CVForm() {
           </div>
           <button
             type="button"
-            onClick={() => setHideButtons((prev) => !prev)}
+            onClick={handleToggleButtons}
             style={{ fontSize: "2rem" }}
           >
             {hideAllButtons ? "Show" : "Hide"} all buttons
@@ -817,34 +857,37 @@ export default function CVForm() {
       </div>
 
       <div className={(styles.section, styles.summary)}>
-        <span className={styles.sectionTitle}>
-          <InfoIcon fontSize="large" />
-          Summary
-        </span>
-        {userProfileValues.summary.isEditing ? (
-          <InputForm
-            key="summaryInput"
-            type="text"
-            name="summary"
-            value={userProfileValues.summary.description}
-            className={styles.control}
-            autoFocus
-            onBlur={handleSummaryEditingStatus}
-            onChange={handleOnChangeSummary}
-            handleKeyEnterAndShift={handleSummaryKeyDown}
-            isTextArea={true}
-          />
-        ) : (
-          <div
-            onClick={handleSummaryEditingStatus}
-            key="summary"
-            className={styles.record}
-          >
-            {userProfileValues.summary.description
-              ? userProfileValues.summary.description
-              : `Write somethin about yourself!`}
-          </div>
-        )}
+        <div className={styles.recordContainer}>
+          <span className={styles.sectionTitle}>
+            <InfoIcon fontSize="large" />
+            Summary
+          </span>
+
+          {userProfileValues.summary.isEditing ? (
+            <InputForm
+              key="summaryInput"
+              type="text"
+              name="summary"
+              value={userProfileValues.summary.description}
+              className={styles.control}
+              autoFocus
+              onBlur={handleSummaryEditingStatus}
+              onChange={handleOnChangeSummary}
+              handleKeyEnterAndShift={handleSummaryKeyDown}
+              isTextArea={true}
+            />
+          ) : (
+            <div
+              onClick={handleSummaryEditingStatus}
+              key="summary"
+              className={styles.record}
+            >
+              {userProfileValues.summary.description
+                ? userProfileValues.summary.description
+                : `Write somethin about yourself!`}
+            </div>
+          )}
+        </div>
       </div>
       <div className={(styles.section, styles.experience)}>
         <span className={styles.sectionTitle}>

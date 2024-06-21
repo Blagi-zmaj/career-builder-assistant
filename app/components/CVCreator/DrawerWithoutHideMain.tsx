@@ -51,12 +51,21 @@ import {
 import Navigation from "../Navigation";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import StarsSharpIcon from "@mui/icons-material/StarsSharp";
+import { useContext } from "react";
+import { NavAndDrawerContext } from "@/app/util/context";
+// import { ThemeContext } from "@/app/util/context";
 const drawerWidth = 300;
 
 export default function ResponsiveDrawer({ children }) {
   //   const { window } = props;
+
+  // const { theme, toggleTheme } = React.useContext(ThemeContext);
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+
+  const { showNavAndDrawer, toggleShowNavAndDrawer } =
+    useContext(NavAndDrawerContext);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -204,7 +213,11 @@ export default function ResponsiveDrawer({ children }) {
       <Navigation handleDrawerOpen={handleDrawerToggle} />
       <Box
         component="nav"
-        sx={{ width: { sm: "5rem" } }}
+        sx={{
+          width: { sm: "5rem" },
+          // visibility: theme === "light" ? "hidden" : "visible",
+          visibility: showNavAndDrawer === true ? "hidden" : "visible",
+        }}
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import * as React from "react";
 import { StyledRoot } from "./util/StyledRoot";
+// import { ThemeProvider } from "./util/context";
+import { NavAndDrawerProvider } from "./util/context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={"1"}>
-        <StyledRoot>{children}</StyledRoot>
+        <NavAndDrawerProvider>
+          {/* <ThemeProvider> */}
+          <StyledRoot>{children}</StyledRoot>
+          {/* </ThemeProvider> */}
+        </NavAndDrawerProvider>
       </body>
     </html>
   );
