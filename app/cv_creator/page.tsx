@@ -1,7 +1,7 @@
 "use client";
 import Drawer from "../components/Drawer";
 import { usePathname } from "next/navigation";
-import ResponsiveDrawer from "../components/CVCreator/DrawerWithoutHideMain";
+import ResponsiveDrawer from "../components/DrawerWithoutHideMain";
 import CVCreator from "../components/CVCreator/CVCreator";
 
 export default function Specialization({

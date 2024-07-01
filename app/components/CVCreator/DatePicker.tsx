@@ -5,13 +5,9 @@ export default function DatePicker({
   id,
   type,
   index,
-  // isEditing,
   listName,
   updateDate,
 }) {
-  // console.log(date);
-
-  //   const [startDate, setStartDate] = useState(date);
   const [isEditingState, setIsEditingState] = useState(false);
 
   const datePickerRef = useRef();

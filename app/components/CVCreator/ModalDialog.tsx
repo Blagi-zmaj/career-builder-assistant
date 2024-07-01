@@ -6,10 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import DatePicker from "../DatePickerMaterialUI";
 import styles from "./ModalDialog.module.css";
-
-import { Box } from "@mui/material";
 
 export default function FormDialog({
   type,
@@ -38,7 +35,6 @@ export default function FormDialog({
         className={
           hideAllButtons ? styles.modalHiddenButton : styles.addNewRecordModal
         }
-        // style={{ display: hideAllButtons ? "none" : "block" }}
       >
         +
       </Button>
@@ -50,13 +46,8 @@ export default function FormDialog({
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
-            // console.log(formData.getAll())
             const formJson = Object.fromEntries((formData as any).entries());
-
-            //////////////////
             formJson.type = type;
-            // formJson.isEditing = false;
-            /////////////////
             console.log(formJson);
             handleAddNewItemListFromModal(formJson);
             console.log("Add new item list");
@@ -86,9 +77,6 @@ export default function FormDialog({
             autoFocus
             required
             margin="dense"
-            // id={type === "work" ? "position" : "subject"}
-            // name={type === "work" ? "position" : "subject"}
-            // label={type === "work" ? "Job position" : "Study subject"}
             id="position"
             name="position"
             label={type === "work" ? "Job position" : "Study subject"}
@@ -130,9 +118,6 @@ export default function FormDialog({
             autoFocus
             required
             margin="dense"
-            // id={type === "work" ? "description" : "subjectDescription"}
-            // name={type === "work" ? "description" : "subjectDescription"}
-            // label={type === "work" ? "Job description" : "Subject description"}
             id={"description"}
             name={"description"}
             label={type === "work" ? "Job description" : "Subject description"}
@@ -141,8 +126,6 @@ export default function FormDialog({
             variant="standard"
             multiline
           />
-          {/* <Checkbox />{" "}
-          </Box> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

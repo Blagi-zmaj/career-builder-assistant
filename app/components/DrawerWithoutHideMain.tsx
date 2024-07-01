@@ -1,62 +1,31 @@
 import * as React from "react";
-// import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
-import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-
-// import * as React from "react";
-// import { Box } from "@mui/material";
-// import { Toolbar } from "@mui/material/";
-// import IconButton from "@mui/material/IconButton";
-// import MenuIcon from "@mui/icons-material/Menu";
-// import MailIcon from "@mui/icons-material/Mail";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import { Avatar, Collapse } from "@mui/material";
-import CustomBreadcrumbs from "../Breadcrumbs";
+import { Collapse } from "@mui/material";
 import { usePathname } from "next/navigation";
-
-import {
-  AppBar,
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-} from "../../util/helpers";
-
-import {
-  drawerTabs,
-  pagesUrls,
-  DrawerHeader,
-  // Drawer,
-  dynamicUrls,
-  icons,
-} from "../../util/helpers";
-import Navigation from "../Navigation";
+import { drawerTabs, pagesUrls, dynamicUrls, icons } from "../util/helpers";
+import Navigation from "./Navigation";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import StarsSharpIcon from "@mui/icons-material/StarsSharp";
+import { useContext } from "react";
+import { NavAndDrawerContext } from "@/app/util/context";
+
 const drawerWidth = 300;
 
 export default function ResponsiveDrawer({ children }) {
-  //   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+
+  const { showNavAndDrawer, toggleShowNavAndDrawer } =
+    useContext(NavAndDrawerContext);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -106,7 +75,7 @@ export default function ResponsiveDrawer({ children }) {
               onClick={() => handleSelectItem(index)}
               sx={{
                 minHeight: 48,
-                justifyContent: open ? "initial" : "center",
+                justifyContent: mobileOpen ? "initial" : "center",
                 px: 2.5,
               }}
             >
@@ -139,7 +108,7 @@ export default function ResponsiveDrawer({ children }) {
             primary={mobileOpen ? "Specialization" : ""}
             sx={{ color: "white" }}
           />
-          {collapse ? <ExpandLess /> : <ExpandMore />}
+          {mobileOpen ? collapse ? <ExpandLess /> : <ExpandMore /> : null}
         </ListItemButton>
         <Collapse in={collapse} timeout="auto" unmountOnExit>
           <List component="div" key="specialization_list" disablePadding>
@@ -164,34 +133,6 @@ export default function ResponsiveDrawer({ children }) {
           </List>
         </Collapse>
       </List>
-
-      {/* ////////////////////////////////////////////// */}
-
-      {/* <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </div>
   );
 
@@ -203,18 +144,19 @@ export default function ResponsiveDrawer({ children }) {
       <Navigation handleDrawerOpen={handleDrawerToggle} />
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 1 } }}
+        sx={{
+          width: { sm: "5rem" },
+          visibility: showNavAndDrawer === true ? "hidden" : "visible",
+        }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
-          // container={container}
           variant="temporary"
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
@@ -240,16 +182,14 @@ export default function ResponsiveDrawer({ children }) {
           {drawer}
         </Drawer>
       </Box>
-      <Box
+      <div
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          //   ...(open && { display: { xs: "none", md: "block" } }),
         }}
       >
         {children}
-      </Box>
+      </div>
     </Box>
   );
 }

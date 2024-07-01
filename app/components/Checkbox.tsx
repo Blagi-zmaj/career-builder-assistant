@@ -6,7 +6,6 @@ export default function ControlledCheckbox({ handleDisableEndDate }) {
   const [checked, setChecked] = React.useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("Checkbox clicked");
     setChecked(event.target.checked);
   };
 

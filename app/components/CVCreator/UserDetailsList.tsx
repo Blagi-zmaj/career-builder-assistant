@@ -2,7 +2,6 @@ import { Button } from "@mui/material";
 import InputForm from "./InputForm/InputForm";
 import RadioGroupRating from "../Rating";
 import styles from "./CVForm.module.css";
-import { alignProperty } from "@mui/material/styles/cssUtils";
 
 export default function UserDetailsList({
   categoryList,
@@ -35,7 +34,6 @@ export default function UserDetailsList({
               className={
                 hideAllButtons ? styles.skillsUIWithoutBtns : styles.skillsUI
               }
-              // style={{ backgroundColor: "yellowgreen" }}
             >
               {listItem.isEditing ? (
                 <InputForm

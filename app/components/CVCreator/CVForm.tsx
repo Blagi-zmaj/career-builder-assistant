@@ -1,14 +1,7 @@
 import styles from "./CVForm.module.css";
 import Image from "next/image";
 import frog from "../../../public/cv_creator.jpg";
-import {
-  useState,
-  useRef,
-  useEffect,
-  useReducer,
-  useContext,
-  act,
-} from "react";
+import { useState, useEffect, useReducer, useContext } from "react";
 import InputForm from "./InputForm/InputForm";
 import Button from "@mui/material/Button";
 import Modal from "./ModalDialog";
@@ -22,8 +15,6 @@ import WorkIcon from "@mui/icons-material/Work";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import InfoIcon from "@mui/icons-material/Info";
 import SchoolIcon from "@mui/icons-material/School";
-import ImageUpload from "../ImageUpload";
-import html2pdf from "html2pdf.js";
 import { NavAndDrawerContext } from "@/app/util/context";
 
 export default function CVForm() {
@@ -138,6 +129,70 @@ export default function CVForm() {
     isEditingEducation: false,
   };
 
+  const reducer = function (state, action) {
+    if (action.inputType === "experience") {
+      console.log(`You are in ${action.inputType} action.inputType`);
+      setUserProfileValues(
+        setIsEditingItemInSet(
+          userProfileValues,
+          action.listItemIndex,
+          "experience"
+        )
+      );
+      return { ...state, isEditingExperience: !state.isEditingExperience };
+    }
+
+    if (action.inputType === "skills") {
+      setUserProfileValues(
+        setIsEditingItemInSet(userProfileValues, action.listItemIndex, "skills")
+      );
+      return { ...state, isEditingSkills: !state.isEditingSkills };
+    }
+
+    if (action.inputType === "languages") {
+      setUserProfileValues(
+        setIsEditingItemInSet(
+          userProfileValues,
+          action.listItemIndex,
+          "languages"
+        )
+      );
+      return { ...state, isEditingLanguages: !state.isEditingLanguages };
+    }
+
+    if (action.inputType === "hobbies") {
+      setUserProfileValues(
+        setIsEditingItemInSet(
+          userProfileValues,
+          action.listItemIndex,
+          "hobbies"
+        )
+      );
+      return { ...state, isEditingHobbies: !state.isEditingHobbies };
+    }
+    return setIsEditingItem(state, action.inputType);
+  };
+
+  const [isEditingInput, dispatch] = useReducer(reducer, isEditingStates);
+
+  const handleInputChange = function (identifier, event) {
+    setInputValues((prevValues) => {
+      return { ...prevValues, [identifier]: event.target.value };
+    });
+  };
+
+  const handleKeyDown = function (event, inputName) {
+    if (event.key === "Enter") {
+      dispatch({ inputType: inputName });
+    }
+  };
+
+  const handleUserDetailsKeyDown = function (event, inputName, index) {
+    if (event.key === "Enter") {
+      dispatch({ inputType: inputName, listItemIndex: index });
+    }
+  };
+
   // console.log(
   //   `
   //   name ${inputValues.name}
@@ -204,70 +259,6 @@ export default function CVForm() {
   // console.log(
   //   `=====================================================================`
   // );
-
-  const reducer = function (state, action) {
-    if (action.inputType === "experience") {
-      console.log(`You are in ${action.inputType} action.inputType`);
-      setUserProfileValues(
-        setIsEditingItemInSet(
-          userProfileValues,
-          action.listItemIndex,
-          "experience"
-        )
-      );
-      return { ...state, isEditingExperience: !state.isEditingExperience };
-    }
-
-    if (action.inputType === "skills") {
-      setUserProfileValues(
-        setIsEditingItemInSet(userProfileValues, action.listItemIndex, "skills")
-      );
-      return { ...state, isEditingSkills: !state.isEditingSkills };
-    }
-
-    if (action.inputType === "languages") {
-      setUserProfileValues(
-        setIsEditingItemInSet(
-          userProfileValues,
-          action.listItemIndex,
-          "languages"
-        )
-      );
-      return { ...state, isEditingLanguages: !state.isEditingLanguages };
-    }
-
-    if (action.inputType === "hobbies") {
-      setUserProfileValues(
-        setIsEditingItemInSet(
-          userProfileValues,
-          action.listItemIndex,
-          "hobbies"
-        )
-      );
-      return { ...state, isEditingHobbies: !state.isEditingHobbies };
-    }
-    return setIsEditingItem(state, action.inputType);
-  };
-
-  const [isEditingInput, dispatch] = useReducer(reducer, isEditingStates);
-
-  const handleInputChange = function (identifier, event) {
-    setInputValues((prevValues) => {
-      return { ...prevValues, [identifier]: event.target.value };
-    });
-  };
-
-  const handleKeyDown = function (event, inputName) {
-    if (event.key === "Enter") {
-      dispatch({ inputType: inputName });
-    }
-  };
-
-  const handleUserDetailsKeyDown = function (event, inputName, index) {
-    if (event.key === "Enter") {
-      dispatch({ inputType: inputName, listItemIndex: index });
-    }
-  };
 
   const replaceTextWithInput = function (
     inputName: string,
@@ -630,25 +621,10 @@ export default function CVForm() {
       return !prev;
     });
     toggleShowNavAndDrawer();
-    // var element = document.getElementById("form");
-    // var opt = {
-    //   margin: 1,
-    //   filename: "myfile.pdf",
-    //   image: { type: "jpeg", quality: 0.98 },
-    //   html2canvas: { scale: 1 },
-    //   jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
-    // };
-
-    // New Promise-based usage:
-    // html2pdf().set(opt).from(element).save();
-    // html2pdf().from(element).save();
-
-    // Old monolithic-style usage:
-    // html2pdf(element, opt);
   };
 
   return (
-    <div action="" className={styles.form} id="form">
+    <div className={styles.form} id="form">
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
           {showFileInput ? (

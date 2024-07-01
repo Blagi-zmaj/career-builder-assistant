@@ -1,6 +1,5 @@
 import * as React from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -9,12 +8,10 @@ import Checkbox from "./Checkbox";
 
 export default function DatePickerValue({ actualDates, handleUpdateDates }) {
   const [startDateValue, setStartDateValue] = React.useState<Dayjs | null>(
-    // dayjs(new Date().toJSON().slice(0, 10))
     dayjs(actualDates[0])
   );
 
   const [endDateValue, setEndDateValue] = React.useState<Dayjs | null>(
-    // dayjs(new Date().toJSON().slice(0, 10))
     dayjs(actualDates[1])
   );
 
@@ -26,10 +23,8 @@ export default function DatePickerValue({ actualDates, handleUpdateDates }) {
   };
 
   function convertToLocaleDateTime(dateString) {
-    // Parse the date string to a Date object in UTC
     const date = new Date(dateString + "T00:00:00Z");
 
-    // Convert the Date object to a local timezone string
     const options = {
       year: "numeric",
       month: "2-digit",
@@ -47,17 +42,9 @@ export default function DatePickerValue({ actualDates, handleUpdateDates }) {
     return localDateTimeString;
   }
 
-  // Example usage
   const dateStr = "2025-05-30";
   const localDateTime = convertToLocaleDateTime(dateStr);
   console.log("Local Date-Time:", localDateTime);
-
-  // function convertUTCDateToLocalDate(date) {
-  //   const newDate = new Date(
-  //     date.getTime() - date.getTimezoneOffset() * 60 * 1000
-  //   );
-  //   return newDate;
-  // }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

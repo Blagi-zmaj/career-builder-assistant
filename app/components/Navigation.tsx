@@ -21,7 +21,6 @@ import {
   SearchIconWrapper,
   StyledInputBase,
 } from "../util/helpers";
-// import { ThemeContext } from "../util/context";
 import { useContext } from "react";
 import { NavAndDrawerContext } from "../util/context";
 
@@ -34,7 +33,6 @@ export default function Navigation({
     useContext(NavAndDrawerContext);
 
   const pathname = usePathname();
-  // console.log(`Navigation` + pathname);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -135,14 +133,11 @@ export default function Navigation({
     </Menu>
   );
 
-  // const { theme, toggleTheme } = React.useContext(ThemeContext);
-
   return (
     <>
       <AppBar
         position="fixed"
         open={open}
-        // sx={{ visibility: theme === "light" ? "hidden" : "visible" }}
         sx={{ visibility: showNavAndDrawer === true ? "hidden" : "visible" }}
       >
         <Toolbar>

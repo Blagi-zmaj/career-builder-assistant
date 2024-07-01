@@ -23,7 +23,6 @@ export default function InputForm({
           value={value}
           placeholder={placeholder}
           onKeyDown={handleKeyEnterAndShift}
-          // onKeyDown={handleKeyDown}
           {...props}
         />
       ) : (

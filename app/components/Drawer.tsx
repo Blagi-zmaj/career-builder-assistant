@@ -140,7 +140,6 @@ export default function MiniDrawer({ children }) {
           </Collapse>
         </List>
       </Drawer>
-      {/* <Main open={open} /> */}
       <Box
         component="main"
         sx={{
