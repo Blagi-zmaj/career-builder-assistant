@@ -8,6 +8,8 @@ import Modal from "./ModalDialog";
 import * as React from "react";
 import setIsEditingItem, {
   setIsEditingItemInSet,
+  userContactData,
+  userProfileData,
 } from "./CVCreatorUtils/helpers";
 import UserDetailsList from "./UserDetailsList";
 import DatePicker from "./DatePicker";
@@ -16,94 +18,13 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import InfoIcon from "@mui/icons-material/Info";
 import SchoolIcon from "@mui/icons-material/School";
 import { NavAndDrawerContext } from "@/app/util/context";
+import PhotoUpload from "./PhotoUpload/PhotoUpload";
+import UserContactDataSection from "./UserContactSection/UserContactDataSection";
 
 export default function CVForm() {
-  const [file, setFile] = useState(null);
-  const [fileURL, setFileURL] = useState(frog);
-
-  const [inputValues, setInputValues] = useState({
-    name: "Daniel",
-    surname: "Konieczny",
-    address: "Jaworzno",
-    email: "d@debugger.com",
-    phone: "111-111-111",
-    github: "Blagi-zmaj.github.com",
-    linkedin: "daniel.konieczny.linkedin.com",
-  });
+  const [inputValues, setInputValues] = useState(userContactData);
   const [hideAllButtons, setHideButtons] = useState(false);
-  const [userProfileValues, setUserProfileValues] = useState({
-    newSkill: { name: "", level: 3, isEditing: false },
-    newLanguage: { name: "", level: 3, isEditing: false },
-    newHobby: { name: "", isEditing: false },
-    skills: [
-      { name: "Machine", level: 1, isEditing: false },
-      { name: "Deep", level: 2, isEditing: false },
-      { name: "Data", level: 4, isEditing: false },
-    ],
-    languages: [
-      { name: "English", level: 2, isEditing: false },
-      { name: "French", level: 3, isEditing: false },
-    ],
-    hobbies: [
-      { name: "Googlowanie", isEditing: false },
-      { name: "Wypasanie owiec", isEditing: false },
-    ],
-    summary: { description: "Quick summary about user", isEditing: false },
-    education: [
-      {
-        institution: { value: "Uniwersytet Sląski", isEditing: false },
-        position: { value: "History", isEditing: false },
-        startDate: { value: "2022-09-22", isEditing: false },
-        endDate: { value: "2023-03-30", isEditing: false },
-        description: {
-          value: "Bachelor Degree",
-          isEditing: false,
-        },
-      },
-      {
-        institution: { value: "Liceum ogólnokształcące", isEditing: false },
-        position: { value: "Dziennikarstwo", isEditing: false },
-        startDate: { value: "2012-03-12", isEditing: false },
-        endDate: { value: "2014-05-20", isEditing: false },
-        description: {
-          value: "Brak",
-          isEditing: false,
-        },
-      },
-    ],
-    experience: [
-      {
-        institution: { value: "Billennium", isEditing: false },
-        position: { value: "Frontend developer", isEditing: false },
-        startDate: { value: "2021-09-22", isEditing: false },
-        endDate: { value: "2025-03-30", isEditing: false },
-        description: {
-          value: "Manage code, code refactor etc.",
-          isEditing: false,
-        },
-      },
-      {
-        institution: { value: "Google", isEditing: false },
-        position: { value: "Python developer", isEditing: false },
-        startDate: { value: "2021-02-14", isEditing: false },
-        endDate: { value: "2028-05-15", isEditing: false },
-        description: {
-          value: "Process AI!",
-          isEditing: false,
-        },
-      },
-      {
-        institution: { value: "Amazon", isEditing: false },
-        position: { value: "AI developer", isEditing: false },
-        startDate: { value: "2024-04-23", isEditing: false },
-        endDate: { value: "2026-11-03", isEditing: false },
-        description: {
-          value: "Project AI!",
-          isEditing: false,
-        },
-      },
-    ],
-  });
+  const [userProfileValues, setUserProfileValues] = useState(userProfileData);
 
   const { showNavAndDrawer, toggleShowNavAndDrawer } =
     useContext(NavAndDrawerContext);
@@ -175,17 +96,17 @@ export default function CVForm() {
 
   const [isEditingInput, dispatch] = useReducer(reducer, isEditingStates);
 
-  const handleInputChange = function (identifier, event) {
-    setInputValues((prevValues) => {
-      return { ...prevValues, [identifier]: event.target.value };
-    });
-  };
+  // const handleInputChange = function (identifier, event) {
+  //   setInputValues((prevValues) => {
+  //     return { ...prevValues, [identifier]: event.target.value };
+  //   });
+  // };
 
-  const handleKeyDown = function (event, inputName) {
-    if (event.key === "Enter") {
-      dispatch({ inputType: inputName });
-    }
-  };
+  // const handleKeyDown = function (event, inputName) {
+  //   if (event.key === "Enter") {
+  //     dispatch({ inputType: inputName });
+  //   }
+  // };
 
   const handleUserDetailsKeyDown = function (event, inputName, index) {
     if (event.key === "Enter") {
@@ -586,36 +507,6 @@ export default function CVForm() {
     });
   };
 
-  const [showFileInput, setShowFileInput] = useState(false);
-
-  const handleFileChange = (e) => {
-    console.log(`handleFileChange `);
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      const fileURL = URL.createObjectURL(selectedFile).slice(5);
-      console.log(fileURL);
-      setFileURL(fileURL);
-    }
-  };
-
-  /////////////////////////////////////////////////////
-
-  const [imageSrc, setImageSrc] = useState(frog);
-  const [imageFile, setImageFile] = useState(null);
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrc(reader.result);
-      };
-      reader.readAsDataURL(file);
-      setImageFile(file);
-    }
-  };
-
   const handleToggleButtons = () => {
     setHideButtons((prev) => {
       return !prev;
@@ -623,71 +514,21 @@ export default function CVForm() {
     toggleShowNavAndDrawer();
   };
 
+  console.log("Render: CVForm");
+
   return (
     <div className={styles.form} id="form">
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
-          {showFileInput ? (
-            <div
-              style={{
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onMouseEnter={() => {
-                setShowFileInput(true);
-              }}
-              onMouseLeave={() => setShowFileInput(false)}
-            >
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ position: "absolute" }}
-              />
-
-              <div>
-                <Image
-                  alt="visible"
-                  src={imageSrc}
-                  width={500}
-                  height={300}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    marginBottom: "1rem",
-                  }}
-                />
-              </div>
-            </div>
-          ) : (
-            <Image
-              key="image_2"
-              alt="person_2"
-              src={imageSrc}
-              width={500}
-              height={300}
-              style={{
-                width: "100%",
-                height: "auto",
-                marginBottom: "1rem",
-              }}
-              onMouseEnter={() => {
-                setShowFileInput(true);
-              }}
-              onMouseLeave={() => setShowFileInput(false)}
-            />
-          )}
-
-          {Object.entries(inputValues).map(([key, value], index) => {
+          <PhotoUpload />
+          <UserContactDataSection />
+          {/* {Object.entries(inputValues).map(([key, value], index) => {
             if (key === "hobbies" || key === "languages" || key === "skills")
               return;
-
+            console.log(key, value);
             return isEditingInput[
               `isEditing${key[0].toUpperCase()}${key.slice(1)}`
             ] ? (
-              // return true ? (
               <div className={styles.detailsBox} key={key}>
                 <label htmlFor={key} style={{ alignSelf: "center" }}>
                   {`${key[0].toUpperCase()}${key.slice(1)}`}
@@ -717,7 +558,9 @@ export default function CVForm() {
                 </span>
               </div>
             );
-          })}
+          })} */}
+
+          {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
 
           {["skills", "languages"].map((categoryList, indexCategory) => {
             return (

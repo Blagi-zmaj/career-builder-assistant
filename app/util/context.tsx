@@ -1,27 +1,6 @@
 "use client";
 import { createContext, useState } from "react";
 
-// export const ThemeContext = createContext({
-//   theme: "light",
-//   toggleTheme: () => {},
-// });
-
-// export const ThemeProvider = ({
-//   children,
-// }: Readonly<{ children: React.ReactNode }>) => {
-//   const [theme, setTheme] = useState("light");
-
-//   const toggleTheme = () => {
-//     setTheme((prev) => (prev === "light" ? "black" : "light"));
-//   };
-
-//   return (
-//     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-//       {children}
-//     </ThemeContext.Provider>
-//   );
-// };
-
 export const NavAndDrawerContext = createContext({
   showNavAndDrawer: true,
   toggleShowNavAndDrawer: () => {},

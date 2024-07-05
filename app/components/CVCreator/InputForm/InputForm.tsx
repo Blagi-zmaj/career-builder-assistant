@@ -1,3 +1,14 @@
+interface InputFormProps {
+  name: string;
+  value: string;
+  placeholder?: string;
+  isTextArea?: boolean;
+  handleKeyEnterAndShift: (
+    event: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+  [key: string]: any; // For additional props
+}
+
 export default function InputForm({
   name,
   value,
