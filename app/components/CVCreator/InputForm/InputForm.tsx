@@ -1,12 +1,34 @@
+import React from "react";
+
+// interface InputFormProps {
+//   name: string;
+//   value: string;
+//   placeholder?: string;
+//   isTextArea?: boolean;
+//   handleKeyEnterAndShift: (
+//     event: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
+//   ) => void;
+//   [key: string]: any; // For additional props
+// }
+
 interface InputFormProps {
   name: string;
   value: string;
   placeholder?: string;
   isTextArea?: boolean;
-  handleKeyEnterAndShift: (
-    event: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
+  handleKeyEnterAndShift?: (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  [key: string]: any; // For additional props
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onBlur?: () => void;
+  onKeyDown?: (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  autoFocus?: boolean;
+  className?: string;
+  type?: string;
 }
 
 export default function InputForm({
@@ -16,8 +38,8 @@ export default function InputForm({
   isTextArea,
   handleKeyEnterAndShift,
   ...props
-}) {
-  const handleKeyDown = function (event) {
+}: InputFormProps) {
+  const handleKeyDown = function (event: React.KeyboardEvent) {
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {

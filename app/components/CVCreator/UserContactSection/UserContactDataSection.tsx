@@ -1,22 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { userContactData, isEditingStates } from "../CVCreatorUtils/helpers";
 import InputForm from "../InputForm/InputForm";
 import styles from "./UserContactDataSection.module.css";
-
-// type editingStatusArr = {
-//   isEditingName: boolean,
-//   isEditingSurname: boolean,
-//   isEditingAddress: boolean,
-//   isEditingEmail: boolean,
-//   isEditingPhone: boolean,
-//   isEditingGithub: boolean,
-//   isEditingLinkedin: boolean,
-//   isEditingSkills: boolean,
-//   isEditingLanguages: boolean,
-//   isEditingHobbies: boolean,
-//   isEditingExperience: boolean,
-//   isEditingEducation: boolean,
-// }
 
 type IsEditingStates = {
   [key: string]: boolean;
@@ -36,33 +21,54 @@ export default function UserContactDataSection() {
   const [userContact, setUserContact] = useState<UserContact>(userContactData);
   const [isEditingInput, setIsEditingInput] =
     useState<IsEditingStates>(isEditingStates);
-  console.log(userContact);
 
   const handleInputChange = function (
     identifier: string,
-    event: React.MouseEvent
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
-    // setUserContact((prevValues) => {
-    //   return { ...prevValues, [identifier]: event.target.value };
-    // });
+    setUserContact((prevValues) => {
+      return {
+        ...prevValues,
+        [identifier]: event.target.value,
+      };
+    });
   };
 
-  const handleKeyDown = function (event, inputName) {
+  const handleKeyDown = function (
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    inputName: string
+  ) {
     if (event.key === "Enter") {
-      dispatch({ inputType: inputName });
+      setIsEditingInput((prevValues) => {
+        return {
+          ...prevValues,
+          [`isEditing${inputName[0].toUpperCase()}${inputName.slice(1)}`]:
+            false,
+        };
+      });
     }
   };
 
-  const replaceTextWithInput = function (
-    inputName: string,
-    listItemIndex: number = 0
-  ) {
-    dispatch({ inputType: inputName, listItemIndex: listItemIndex });
+  const replaceTextWithInput = function (inputName: string) {
+    setIsEditingInput((prevValues) => {
+      return {
+        ...prevValues,
+        [`isEditing${inputName[0].toUpperCase()}${inputName.slice(1)}`]: true,
+      };
+    });
+  };
+
+  const handleOnBlur = function (inputName: string) {
+    setIsEditingInput((prevValues) => {
+      return {
+        ...prevValues,
+        [`isEditing${inputName[0].toUpperCase()}${inputName.slice(1)}`]: false,
+      };
+    });
   };
 
   return Object.entries(userContact).map(([key, value], index) => {
     if (key === "hobbies" || key === "languages" || key === "skills") return;
-
     return isEditingInput[`isEditing${key[0].toUpperCase()}${key.slice(1)}`] ? (
       <div className={styles.detailsBox} key={key}>
         <label htmlFor={key} style={{ alignSelf: "center" }}>
@@ -72,16 +78,16 @@ export default function UserContactDataSection() {
           key={key}
           type="text"
           name={key}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleInputChange(key, event)
-          }
+          onChange={(
+            event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => handleInputChange(key, event)}
           value={value}
           className={styles.control}
-          onBlur={() => dispatch({ inputType: key })}
+          onBlur={() => handleOnBlur(key)}
           autoFocus
-          onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) =>
-            handleKeyDown(event, key)
-          }
+          onKeyDown={(
+            event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => handleKeyDown(event, key)}
         />
       </div>
     ) : (
@@ -90,7 +96,7 @@ export default function UserContactDataSection() {
           {`${key[0].toUpperCase()}${key.slice(1)}`}
         </label>
         <span
-          onClick={() => replaceTextWithInput(key, index)}
+          onClick={() => replaceTextWithInput(key)}
           className={styles.wordWrapBreakWord}
         >
           {value}
