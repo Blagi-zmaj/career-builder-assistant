@@ -62,10 +62,14 @@ type UserProfile = {
 };
 
 export default function HobbiesSection() {
+  const {
+    showNavAndDrawer,
+    toggleShowNavAndDrawer,
+    toggleShowButtons,
+    showButtons,
+  } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
-  const [hideAllButtons, setHideButtons] = useState(false);
-  const { showNavAndDrawer, toggleShowNavAndDrawer } =
-    useContext(NavAndDrawerContext);
+  const [hideAllButtons, setHideButtons] = useState(showButtons);
 
   const handleUserDetailsKeyDown = function (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -189,6 +193,7 @@ export default function HobbiesSection() {
       return !prev;
     });
     toggleShowNavAndDrawer();
+    toggleShowButtons();
   };
 
   const handleChangeAddNewListItem = function (

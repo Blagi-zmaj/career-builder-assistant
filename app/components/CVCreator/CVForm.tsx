@@ -23,13 +23,17 @@ import UserContactDataSection from "./UserContactSection/UserContactDataSection"
 import HobbiesSection from "./HobbiesSection/HobbiesSection";
 
 export default function CVForm() {
+  const {
+    showNavAndDrawer,
+    toggleShowNavAndDrawer,
+    toggleShowButtons,
+    showButtons,
+  } = useContext(NavAndDrawerContext);
+  console.log(`CV Form ${showButtons}`);
   const [inputValues, setInputValues] = useState(userContactData);
   const [hideAllButtons, setHideButtons] = useState(false);
   const [userProfileValues, setUserProfileValues] = useState(userProfileData);
-
-  const { showNavAndDrawer, toggleShowNavAndDrawer } =
-    useContext(NavAndDrawerContext);
-
+  console.log(`CV Form hideAllButtons: ${hideAllButtons}`);
   useEffect(() => {
     if (hideAllButtons) {
       window.print();
@@ -583,7 +587,7 @@ export default function CVForm() {
                   handleChangeAddNewListItem={handleChangeAddNewListItem}
                   handleChangeRatingNewListItem={handleChangeRatingNewListItem}
                   handleAddNewItemList={handleAddNewItemList}
-                  hideAllButtons={hideAllButtons}
+                  hideAllButtons={showButtons}
                 />
               </div>
             );
@@ -810,7 +814,7 @@ export default function CVForm() {
           );
         })}
         <Modal
-          hideAllButtons={hideAllButtons}
+          hideAllButtons={showButtons}
           type={"work"}
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
@@ -919,7 +923,7 @@ export default function CVForm() {
           );
         })}
         <Modal
-          hideAllButtons={hideAllButtons}
+          hideAllButtons={showButtons}
           type={"education"}
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
