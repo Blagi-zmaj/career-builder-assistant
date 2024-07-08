@@ -20,6 +20,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import { NavAndDrawerContext } from "@/app/util/context";
 import PhotoUpload from "./PhotoUpload/PhotoUpload";
 import UserContactDataSection from "./UserContactSection/UserContactDataSection";
+import HobbiesSection from "./HobbiesSection/HobbiesSection";
 
 export default function CVForm() {
   const [inputValues, setInputValues] = useState(userContactData);
@@ -125,7 +126,7 @@ export default function CVForm() {
   //   linkedin ${inputValues.linkedin}
   //   `
   // );
-
+  // console.log(userProfileValues);
   // console.log(
   //   `
   //   ${inputValues.name} ${inputValues.surname}
@@ -587,7 +588,8 @@ export default function CVForm() {
               </div>
             );
           })}
-          <h3>Hobbies</h3>
+          <HobbiesSection />
+          {/* <h3>Hobbies</h3>
           {userProfileValues.hobbies.map((hobby, index) => {
             return (
               <div
@@ -671,7 +673,7 @@ export default function CVForm() {
             style={{ fontSize: "2rem" }}
           >
             {hideAllButtons ? "Show" : "Hide"} all buttons
-          </button>
+          </button> */}
         </div>
       </div>
 

@@ -23,6 +23,10 @@ export const isEditingStates = {
   isEditingEducation: false,
 };
 
+// export const userProfileData = {
+//   newSkill: { name: "", level: 3, isEditing: false },
+// };
+
 export const userProfileData = {
   newSkill: { name: "", level: 3, isEditing: false },
   newLanguage: { name: "", level: 3, isEditing: false },

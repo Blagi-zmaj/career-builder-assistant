@@ -22,7 +22,7 @@ interface InputFormProps {
   onChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  onBlur?: () => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
