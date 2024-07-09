@@ -221,7 +221,6 @@
   box-shadow: 0px 0px 30px 0px rgba(24, 59, 240, 1);
 }
 
-/* DELETE BELOW AFTER CREATE SECTION COMPONENT and migrate code!!! */
 .section {
   --sectionMargin: 2rem;
   display: flex;

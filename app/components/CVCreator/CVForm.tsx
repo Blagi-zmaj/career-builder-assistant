@@ -21,6 +21,8 @@ import { NavAndDrawerContext } from "@/app/util/context";
 import PhotoUpload from "./PhotoUpload/PhotoUpload";
 import UserContactDataSection from "./UserContactSection/UserContactDataSection";
 import HobbiesSection from "./HobbiesSection/HobbiesSection";
+import SkillsAndLanguagesSection from "./SkillsAndLanguages/SkillsAndLanguagesSection";
+import SummarySection from "./SummarySection/SummarySection";
 
 export default function CVForm() {
   const {
@@ -101,23 +103,11 @@ export default function CVForm() {
 
   const [isEditingInput, dispatch] = useReducer(reducer, isEditingStates);
 
-  // const handleInputChange = function (identifier, event) {
-  //   setInputValues((prevValues) => {
-  //     return { ...prevValues, [identifier]: event.target.value };
-  //   });
-  // };
-
-  // const handleKeyDown = function (event, inputName) {
+  // const handleUserDetailsKeyDown = function (event, inputName, index) {
   //   if (event.key === "Enter") {
-  //     dispatch({ inputType: inputName });
+  //     dispatch({ inputType: inputName, listItemIndex: index });
   //   }
   // };
-
-  const handleUserDetailsKeyDown = function (event, inputName, index) {
-    if (event.key === "Enter") {
-      dispatch({ inputType: inputName, listItemIndex: index });
-    }
-  };
 
   // console.log(
   //   `
@@ -186,51 +176,6 @@ export default function CVForm() {
   //   `=====================================================================`
   // );
 
-  const replaceTextWithInput = function (
-    inputName: string,
-    listItemIndex: number = 0
-  ) {
-    dispatch({ inputType: inputName, listItemIndex: listItemIndex });
-  };
-
-  const handleChangeUserActualInput = function (event, identifier, index) {
-    const updatedDetail = {
-      ...userProfileValues[identifier][index],
-      name: event.target.value,
-    };
-
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues[identifier].slice(0, index),
-          updatedDetail,
-          ...prevValues[identifier].slice(index + 1),
-        ],
-      };
-    });
-  };
-
-  const handleDeleteListItem = function (event, skillName, identifier) {
-    const updatedList = userProfileValues[identifier].filter((el) => {
-      return el.name !== skillName;
-    });
-
-    setUserProfileValues((prevValues) => {
-      return { ...prevValues, [identifier]: updatedList };
-    });
-  };
-
-  const handleAddNewItemList = function (event, identifier, listName) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [listName]: [...prevValues[listName], prevValues[identifier]],
-        [identifier]: { ...prevValues[identifier], name: "" },
-      };
-    });
-  };
-
   const handleDeleteListRecord = function (event, listName, identifier) {
     console.log(listName, identifier);
     const filteredData = userProfileValues[listName].filter((record) => {
@@ -241,81 +186,6 @@ export default function CVForm() {
     setUserProfileValues((prevValues) => {
       return { ...prevValues, [listName]: filteredData };
     });
-  };
-
-  const handleChangeAddNewListItem = function (event, identifier) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: {
-          ...prevValues[identifier],
-          name: event.target.value,
-        },
-      };
-    });
-  };
-
-  const handleChangeRatingExistingListItem = function (
-    rate,
-    identifier,
-    index
-  ) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues[identifier].slice(0, index),
-          { ...prevValues[identifier][index], level: rate },
-          ...prevValues[identifier].slice(index + 1),
-        ],
-      };
-    });
-  };
-
-  const handleChangeRatingNewListItem = function (rate, identifier, index = 0) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: { ...prevValues[identifier], level: rate },
-      };
-    });
-  };
-
-  const handleBlur = function (categoryList, listIndex) {
-    dispatch({
-      inputType: categoryList,
-      listItemIndex: listIndex,
-    });
-  };
-
-  const handleSummaryEditingStatus = function () {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        summary: {
-          ...prevValues.summary,
-          isEditing: !prevValues.summary.isEditing,
-        },
-      };
-    });
-  };
-
-  const handleOnChangeSummary = function (event) {
-    setUserProfileValues((prevValues) => {
-      return {
-        ...prevValues,
-        summary: { ...prevValues.summary, description: event.target.value },
-      };
-    });
-  };
-
-  const handleSummaryKeyDown = function (event) {
-    if (event.shiftKey && event.key === "Enter") {
-      console.log(`Shift & Enter`);
-    } else if (event.key === "Enter") {
-      console.log(`Enter`);
-      handleSummaryEditingStatus();
-    }
   };
 
   const handleAddNewItemListFromModal = function (data) {
@@ -408,32 +278,6 @@ export default function CVForm() {
     });
   };
 
-  const handleKeyDownUser = function (event, listName, workIndex, identifier) {
-    // console.log(listName, workIndex, identifier); // experience 0 startDate
-    if (event.key === "Enter") {
-      console.log(`clicked enter`);
-      const updatedEditState = {
-        ...userProfileValues[listName][workIndex],
-        [identifier]: {
-          ...userProfileValues[listName][workIndex][identifier],
-          isEditing:
-            !userProfileValues[listName][workIndex][identifier].isEditing,
-        },
-      };
-
-      setUserProfileValues((prevValues) => {
-        return {
-          ...prevValues,
-          [listName]: [
-            ...prevValues[listName].slice(0, workIndex),
-            updatedEditState,
-            ...prevValues[listName].slice(workIndex + 1),
-          ],
-        };
-      });
-    }
-  };
-
   const handleKeyEnterAndShift = function (
     event,
     listName,
@@ -512,13 +356,6 @@ export default function CVForm() {
     });
   };
 
-  const handleToggleButtons = () => {
-    setHideButtons((prev) => {
-      return !prev;
-    });
-    toggleShowNavAndDrawer();
-  };
-
   console.log("Render: CVForm");
 
   return (
@@ -527,193 +364,12 @@ export default function CVForm() {
         <div className={(styles.section, styles.aboutDetails)}>
           <PhotoUpload />
           <UserContactDataSection />
-          {/* {Object.entries(inputValues).map(([key, value], index) => {
-            if (key === "hobbies" || key === "languages" || key === "skills")
-              return;
-            console.log(key, value);
-            return isEditingInput[
-              `isEditing${key[0].toUpperCase()}${key.slice(1)}`
-            ] ? (
-              <div className={styles.detailsBox} key={key}>
-                <label htmlFor={key} style={{ alignSelf: "center" }}>
-                  {`${key[0].toUpperCase()}${key.slice(1)}`}
-                </label>
-                <InputForm
-                  key={key}
-                  type="text"
-                  name={key}
-                  onChange={(event) => handleInputChange(key, event)}
-                  value={inputValues[key]}
-                  className={styles.control}
-                  onBlur={() => dispatch({ inputType: key })}
-                  autoFocus
-                  onKeyDown={(event) => handleKeyDown(event, key)}
-                />
-              </div>
-            ) : (
-              <div className={styles.detailsBox} key={key}>
-                <label htmlFor={key} style={{ margin: "8px" }}>
-                  {`${key[0].toUpperCase()}${key.slice(1)}`}
-                </label>
-                <span
-                  onClick={() => replaceTextWithInput(key, index)}
-                  className={styles.wordWrapBreakWord}
-                >
-                  {inputValues[key]}
-                </span>
-              </div>
-            );
-          })} */}
-
-          {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-
-          {["skills", "languages"].map((categoryList, indexCategory) => {
-            return (
-              <div key={categoryList} className={styles.asideDataRowBox}>
-                <h3>{`${categoryList
-                  .slice(0, 1)
-                  .toUpperCase()}${categoryList.slice(1)}`}</h3>
-                <UserDetailsList
-                  categoryList={categoryList}
-                  userData={userProfileValues}
-                  handleBlur={handleBlur}
-                  handleUserDetailsKeyDown={handleUserDetailsKeyDown}
-                  handleChangeUserActualInput={handleChangeUserActualInput}
-                  replaceTextWithInput={replaceTextWithInput}
-                  handleDeleteListItem={handleDeleteListItem}
-                  handleChangeRatingExistingListItem={
-                    handleChangeRatingExistingListItem
-                  }
-                  handleChangeAddNewListItem={handleChangeAddNewListItem}
-                  handleChangeRatingNewListItem={handleChangeRatingNewListItem}
-                  handleAddNewItemList={handleAddNewItemList}
-                  hideAllButtons={showButtons}
-                />
-              </div>
-            );
-          })}
+          <SkillsAndLanguagesSection />
           <HobbiesSection />
-          {/* <h3>Hobbies</h3>
-          {userProfileValues.hobbies.map((hobby, index) => {
-            return (
-              <div
-                key={index}
-                className={styles.hobbiesUI}
-                // style={{ backgroundColor: "yellowgreen" }}
-              >
-                {userProfileValues.hobbies[index].isEditing ? (
-                  <InputForm
-                    key={hobby.name}
-                    type="text"
-                    name={hobby.name}
-                    value={hobby.name}
-                    className={styles.control}
-                    placeholder={"New hobby"}
-                    autoFocus
-                    onBlur={() =>
-                      dispatch({ inputType: "hobbies", listItemIndex: index })
-                    }
-                    onKeyDown={(event) =>
-                      handleUserDetailsKeyDown(event, "hobbies", index)
-                    }
-                    onChange={(event) =>
-                      handleChangeUserActualInput(event, "hobbies", index)
-                    }
-                  />
-                ) : (
-                  <span
-                    onClick={() => replaceTextWithInput("hobbies", index)}
-                    key={hobby.name}
-                    className={styles.wordWrapBreakWord}
-                  >
-                    {hobby.name ? hobby.name : `<empty> ${index}`}
-                  </span>
-                )}
-                <Button
-                  onClick={(event) =>
-                    handleDeleteListItem(event, hobby.name, "hobbies")
-                  }
-                  variant="contained"
-                  className={
-                    hideAllButtons ? styles.hiddenButton : styles.hobbiesBtn
-                  }
-                >
-                  -
-                </Button>
-              </div>
-            );
-          })}
-          <div
-            className={
-              hideAllButtons ? styles.hideComponent : styles.hobbiesBox
-            }
-          >
-            <InputForm
-              key={"addHobby"}
-              type="text"
-              name={"addHobby"}
-              value={userProfileValues.newHobby.name}
-              className={styles.control}
-              onChange={(event) =>
-                handleChangeAddNewListItem(event, "newHobby")
-              }
-            />
-
-            <Button
-              onClick={(event) =>
-                handleAddNewItemList(event, "newHobby", "hobbies")
-              }
-              className={
-                hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
-              }
-              variant="contained"
-            >
-              +
-            </Button>
-          </div>
-          <button
-            type="button"
-            onClick={handleToggleButtons}
-            style={{ fontSize: "2rem" }}
-          >
-            {hideAllButtons ? "Show" : "Hide"} all buttons
-          </button> */}
         </div>
       </div>
 
-      <div className={(styles.section, styles.summary)}>
-        <div className={styles.recordContainer}>
-          <span className={styles.sectionTitle}>
-            <InfoIcon fontSize="large" />
-            Summary
-          </span>
-
-          {userProfileValues.summary.isEditing ? (
-            <InputForm
-              key="summaryInput"
-              type="text"
-              name="summary"
-              value={userProfileValues.summary.description}
-              className={styles.control}
-              autoFocus
-              onBlur={handleSummaryEditingStatus}
-              onChange={handleOnChangeSummary}
-              handleKeyEnterAndShift={handleSummaryKeyDown}
-              isTextArea={true}
-            />
-          ) : (
-            <div
-              onClick={handleSummaryEditingStatus}
-              key="summary"
-              className={styles.record}
-            >
-              {userProfileValues.summary.description
-                ? userProfileValues.summary.description
-                : `Write somethin about yourself!`}
-            </div>
-          )}
-        </div>
-      </div>
+      <SummarySection />
       <div className={(styles.section, styles.experience)}>
         <span className={styles.sectionTitle}>
           <WorkIcon />

@@ -1,10 +1,8 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { ChangeEvent, MouseEvent, useContext, useState } from "react";
+import UserDetailsList from "../UserDetailsList";
+import styles from "./SkillsAndLanguages.module.css";
 import { NavAndDrawerContext } from "@/app/util/context";
 import { userProfileData } from "../CVCreatorUtils/helpers";
-import styles from "./HobbiesSection.module.css";
-import InputForm from "../InputForm/InputForm";
-import { Button } from "@mui/material";
-
 type Skill = {
   name: string;
   level: number;
@@ -61,15 +59,29 @@ type UserProfile = {
   experience: Experience[];
 };
 
-export default function HobbiesSection() {
-  const {
-    showNavAndDrawer,
-    toggleShowNavAndDrawer,
-    toggleShowButtons,
-    showButtons,
-  } = useContext(NavAndDrawerContext);
+export default function SkillsAndLanguagesSection() {
+  const { showButtons } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
-  const [hideAllButtons, setHideButtons] = useState(showButtons);
+
+  const handleBlur = function (categoryList: string, listIndex: number) {
+    console.log(`handleBlur`);
+    console.log(categoryList, listIndex);
+    setUserContact((prevValues) => {
+      const newData = {
+        ...prevValues,
+        [categoryList]: [
+          ...prevValues[categoryList].slice(0, listIndex),
+          {
+            ...prevValues[categoryList][listIndex],
+            isEditing: !prevValues[categoryList][listIndex].isEditing,
+          },
+          ...prevValues[categoryList].slice(listIndex + 1),
+        ],
+      };
+      console.log(newData);
+      return newData;
+    });
+  };
 
   const handleUserDetailsKeyDown = function (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -93,28 +105,6 @@ export default function HobbiesSection() {
         return newData;
       });
     }
-  };
-
-  const handleOnBlur = function (
-    event: React.FocusEvent<HTMLInputElement>,
-    inputName: string,
-    index: number
-  ) {
-    setUserContact((prevValues) => {
-      const newData = {
-        ...prevValues,
-        [inputName]: [
-          ...prevValues[inputName].slice(0, index),
-          {
-            ...prevValues[inputName][index],
-            isEditing: !prevValues[inputName][index].isEditing,
-          },
-          ...prevValues[inputName].slice(index + 1),
-        ],
-      };
-      console.log(newData);
-      return newData;
-    });
   };
 
   const handleChangeUserActualInput = function (
@@ -161,11 +151,11 @@ export default function HobbiesSection() {
   };
 
   const handleDeleteListItem = function (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: MouseEvent<HTMLButtonElement>,
     skillName: string,
     identifier: string
   ) {
-    const updatedList = userContact[identifier].filter((el: Hobby) => {
+    const updatedList = userContact[identifier].filter((el) => {
       return el.name !== skillName;
     });
 
@@ -174,26 +164,22 @@ export default function HobbiesSection() {
     });
   };
 
-  const handleAddNewItemList = function (
-    event: React.MouseEvent<HTMLButtonElement>,
+  const handleChangeRatingExistingListItem = function (
+    rate: number,
     identifier: string,
-    listName: string
+    index: number
   ) {
+    // console.log(typeof rate, typeof identifier, typeof index);
     setUserContact((prevValues) => {
       return {
         ...prevValues,
-        [listName]: [...prevValues[listName], prevValues[identifier]],
-        [identifier]: { ...prevValues[identifier], name: "" },
+        [identifier]: [
+          ...prevValues[identifier].slice(0, index),
+          { ...prevValues[identifier][index], level: rate },
+          ...prevValues[identifier].slice(index + 1),
+        ],
       };
     });
-  };
-
-  const handleToggleButtons = () => {
-    setHideButtons((prev) => {
-      return !prev;
-    });
-    toggleShowNavAndDrawer();
-    toggleShowButtons();
   };
 
   const handleChangeAddNewListItem = function (
@@ -211,84 +197,60 @@ export default function HobbiesSection() {
     });
   };
 
+  const handleChangeRatingNewListItem = function (
+    rate: number,
+    identifier: string,
+    index: number = 0
+  ) {
+    setUserContact((prevValues) => {
+      return {
+        ...prevValues,
+        [identifier]: { ...prevValues[identifier], level: rate },
+      };
+    });
+  };
+
+  const handleAddNewItemList = function (
+    event: MouseEvent<HTMLButtonElement>,
+    identifier: string,
+    listName: string
+  ) {
+    setUserContact((prevValues) => {
+      return {
+        ...prevValues,
+        [listName]: [...prevValues[listName], prevValues[identifier]],
+        [identifier]: { ...prevValues[identifier], name: "" },
+      };
+    });
+  };
+
   return (
     <>
-      <h3>Hobbies</h3>
-      {userContact.hobbies.map((hobby, index) => {
+      {["skills", "languages"].map((categoryList, indexCategory) => {
         return (
-          <div key={index} className={styles.hobbiesUI}>
-            {hobby.isEditing ? (
-              <InputForm
-                key={hobby.name}
-                type="text"
-                name={hobby.name}
-                value={hobby.name}
-                className={styles.control}
-                placeholder={"New hobby"}
-                autoFocus
-                onBlur={(event) => handleOnBlur(event, "hobbies", index)}
-                onKeyDown={(event) =>
-                  handleUserDetailsKeyDown(event, "hobbies", index)
-                }
-                onChange={(event) =>
-                  handleChangeUserActualInput(event, "hobbies", index)
-                }
-              />
-            ) : (
-              <span
-                onClick={() => replaceTextWithInput("hobbies", index)}
-                key={hobby.name}
-                className={styles.wordWrapBreakWord}
-              >
-                {hobby.name ? hobby.name : `<empty> ${index}`}
-              </span>
-            )}
-            <Button
-              onClick={(event) =>
-                handleDeleteListItem(event, hobby.name, "hobbies")
+          <div key={categoryList} className={styles.asideDataRowBox}>
+            <h3>{`${categoryList.slice(0, 1).toUpperCase()}${categoryList.slice(
+              1
+            )}`}</h3>
+            <UserDetailsList
+              categoryList={categoryList}
+              userData={userContact}
+              handleBlur={handleBlur}
+              handleUserDetailsKeyDown={handleUserDetailsKeyDown}
+              handleChangeUserActualInput={handleChangeUserActualInput}
+              replaceTextWithInput={replaceTextWithInput}
+              handleDeleteListItem={handleDeleteListItem}
+              handleChangeRatingExistingListItem={
+                handleChangeRatingExistingListItem
               }
-              variant="contained"
-              className={
-                hideAllButtons ? styles.hiddenButton : styles.hobbiesBtn
-              }
-            >
-              -
-            </Button>
+              handleChangeAddNewListItem={handleChangeAddNewListItem}
+              handleChangeRatingNewListItem={handleChangeRatingNewListItem}
+              handleAddNewItemList={handleAddNewItemList}
+              hideAllButtons={showButtons}
+            />
           </div>
         );
       })}
-      <div
-        className={hideAllButtons ? styles.hideComponent : styles.hobbiesBox}
-      >
-        <InputForm
-          key={"addHobby"}
-          type="text"
-          name={"addHobby"}
-          placeholder="Hobby"
-          value={userContact.newHobby.name}
-          className={styles.control}
-          onChange={(event) => handleChangeAddNewListItem(event, "newHobby")}
-        />
-
-        <Button
-          onClick={(event) =>
-            handleAddNewItemList(event, "newHobby", "hobbies")
-          }
-          className={
-            hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
-          }
-          variant="contained"
-        >
-          +
-        </Button>
-      </div>
-      <button
-        type="button"
-        onClick={handleToggleButtons}
-        style={{ fontSize: "2rem" }}
-      >
-        {hideAllButtons ? "Show" : "Hide"} all buttons
-      </button>
     </>
   );
 }
