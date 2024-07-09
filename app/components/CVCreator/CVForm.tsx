@@ -23,6 +23,7 @@ import UserContactDataSection from "./UserContactSection/UserContactDataSection"
 import HobbiesSection from "./HobbiesSection/HobbiesSection";
 import SkillsAndLanguagesSection from "./SkillsAndLanguages/SkillsAndLanguagesSection";
 import SummarySection from "./SummarySection/SummarySection";
+import JobExperienceSection from "./JobExperienceSection/JobExperienceSection";
 
 export default function CVForm() {
   const {
@@ -370,7 +371,8 @@ export default function CVForm() {
       </div>
 
       <SummarySection />
-      <div className={(styles.section, styles.experience)}>
+      <JobExperienceSection />
+      {/* <div className={(styles.section, styles.experience)}>
         <span className={styles.sectionTitle}>
           <WorkIcon />
           Experience
@@ -474,7 +476,7 @@ export default function CVForm() {
           type={"work"}
           handleAddNewItemListFromModal={handleAddNewItemListFromModal}
         />
-      </div>
+      </div> */}
       <div className={(styles.section, styles.education)}>
         <span className={styles.sectionTitle}>
           <SchoolIcon />
