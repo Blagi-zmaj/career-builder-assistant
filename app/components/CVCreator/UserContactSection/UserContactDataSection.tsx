@@ -21,6 +21,7 @@ export default function UserContactDataSection() {
   const [userContact, setUserContact] = useState<UserContact>(userContactData);
   const [isEditingInput, setIsEditingInput] =
     useState<IsEditingStates>(isEditingStates);
+
   const handleInputChange = function (
     identifier: string,
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

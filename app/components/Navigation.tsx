@@ -14,7 +14,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Avatar } from "@mui/material";
 import CustomBreadcrumbs from "./Breadcrumbs";
 import { usePathname } from "next/navigation";
-
+import PrintIcon from "@mui/icons-material/Print";
+import Tooltip from "@mui/material/Tooltip";
 import {
   AppBar,
   Search,
@@ -29,17 +30,31 @@ export default function Navigation({
 }: {
   handleDrawerOpen: () => void;
 }) {
-  const { showNavAndDrawer, toggleShowNavAndDrawer } =
-    useContext(NavAndDrawerContext);
+  const {
+    showNavAndDrawer,
+    toggleShowNavAndDrawer,
+    toggleShowButtons,
+    showButtons,
+  } = useContext(NavAndDrawerContext);
 
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
+  const [hideAllButtons, setHideButtons] = React.useState(showButtons);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleToggleButtons = () => {
+    console.log(`Print from Navigation`);
+    setHideButtons((prev) => {
+      return !prev;
+    });
+    toggleShowNavAndDrawer();
+    toggleShowButtons();
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -161,6 +176,18 @@ export default function Navigation({
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+          <Tooltip title="Print CV">
+            <IconButton
+              size="large"
+              aria-label="Print CV"
+              color="inherit"
+              onClick={handleToggleButtons}
+            >
+              <Badge badgeContent={1} color="error">
+                <PrintIcon />
+              </Badge>
+            </IconButton>
+          </Tooltip>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

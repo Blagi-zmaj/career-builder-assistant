@@ -41,26 +41,22 @@ export default function CVForm() {
   useEffect(() => {
     if (hideAllButtons) {
       window.print();
+      toggleShowButtons();
+      toggleShowNavAndDrawer();
     }
-  }, [hideAllButtons]);
+  }, [hideAllButtons, toggleShowButtons, toggleShowNavAndDrawer]);
 
-  // const handleUserDetailsKeyDown = function (event, inputName, index) {
-  //   if (event.key === "Enter") {
-  //     dispatch({ inputType: inputName, listItemIndex: index });
-  //   }
-  // };
-
-  // console.log(
-  //   `
-  //   name ${inputValues.name}
-  //   surname ${inputValues.surname}
-  //   address ${inputValues.address}
-  //   email ${inputValues.email}
-  //   phone ${inputValues.phone}
-  //   github ${inputValues.github}
-  //   linkedin ${inputValues.linkedin}
-  //   `
-  // );
+  console.log(
+    `
+    name ${inputValues.name}
+    surname ${inputValues.surname}
+    address ${inputValues.address}
+    email ${inputValues.email}
+    phone ${inputValues.phone}
+    github ${inputValues.github}
+    linkedin ${inputValues.linkedin}
+    `
+  );
   // console.log(userProfileValues);
   // console.log(
   //   `

@@ -248,18 +248,14 @@ export default function HobbiesSection() {
                 handleDeleteListItem(event, hobby.name, "hobbies")
               }
               variant="contained"
-              className={
-                hideAllButtons ? styles.hiddenButton : styles.hobbiesBtn
-              }
+              className={showButtons ? styles.hiddenButton : styles.hobbiesBtn}
             >
               -
             </Button>
           </div>
         );
       })}
-      <div
-        className={hideAllButtons ? styles.hideComponent : styles.hobbiesBox}
-      >
+      <div className={showButtons ? styles.hideComponent : styles.hobbiesBox}>
         <InputForm
           key={"addHobby"}
           type="text"
@@ -275,7 +271,7 @@ export default function HobbiesSection() {
             handleAddNewItemList(event, "newHobby", "hobbies")
           }
           className={
-            hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
+            showButtons ? styles.hiddenButton : styles.addNewRecordForm
           }
           variant="contained"
         >
@@ -287,7 +283,7 @@ export default function HobbiesSection() {
         onClick={handleToggleButtons}
         style={{ fontSize: "2rem" }}
       >
-        {hideAllButtons ? "Show" : "Hide"} all buttons
+        {showButtons ? "Show" : "Hide"} all buttons
       </button>
     </>
   );
