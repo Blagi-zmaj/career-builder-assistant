@@ -1,0 +1,16 @@
+.changeImageBtn {
+  display: block;
+  position: absolute;
+  width: 30%;
+  min-height: 5rem;
+  margin: 0.75rem 0;
+  font-size: 1.15rem;
+  border-radius: 4px;
+  color: #fff;
+  background-color: black;
+  -webkit-box-shadow: 0px 0px 30px 0px rgba(24, 59, 240, 1);
+  -moz-box-shadow: 0px 0px 30px 0px rgba(24, 59, 240, 1);
+  box-shadow: 0px 0px 30px 0px rgba(24, 59, 240, 1);
+  opacity: 1;
+  z-index: 1;
+}

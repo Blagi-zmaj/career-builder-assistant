@@ -33,11 +33,11 @@ export default function CVForm() {
     toggleShowButtons,
     showButtons,
   } = useContext(NavAndDrawerContext);
-  console.log(`CV Form ${showButtons}`);
+  // console.log(`CV Form ${showButtons}`);
   const [inputValues, setInputValues] = useState(userContactData);
   const [hideAllButtons, setHideButtons] = useState(false);
   const [userProfileValues, setUserProfileValues] = useState(userProfileData);
-  console.log(`CV Form hideAllButtons: ${hideAllButtons}`);
+  // console.log(`CV Form hideAllButtons: ${hideAllButtons}`);
   useEffect(() => {
     if (hideAllButtons) {
       window.print();
@@ -46,17 +46,17 @@ export default function CVForm() {
     }
   }, [hideAllButtons, toggleShowButtons, toggleShowNavAndDrawer]);
 
-  console.log(
-    `
-    name ${inputValues.name}
-    surname ${inputValues.surname}
-    address ${inputValues.address}
-    email ${inputValues.email}
-    phone ${inputValues.phone}
-    github ${inputValues.github}
-    linkedin ${inputValues.linkedin}
-    `
-  );
+  // console.log(
+  //   `
+  //   name ${inputValues.name}
+  //   surname ${inputValues.surname}
+  //   address ${inputValues.address}
+  //   email ${inputValues.email}
+  //   phone ${inputValues.phone}
+  //   github ${inputValues.github}
+  //   linkedin ${inputValues.linkedin}
+  //   `
+  // );
   // console.log(userProfileValues);
   // console.log(
   //   `

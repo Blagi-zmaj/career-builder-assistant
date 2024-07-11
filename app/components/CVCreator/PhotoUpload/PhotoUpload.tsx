@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import frog from "../../../../public/cv_creator.jpg";
+import styles from "./PhotoUpload.module.css";
 
 export default function PhotoUpload() {
   const [showFileInput, setShowFileInput] = useState(false);
   const [imageSrc, setImageSrc] = useState(frog);
   const [imageFile, setImageFile] = useState(null);
+  const profilePicture = useRef();
 
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -22,6 +24,12 @@ export default function PhotoUpload() {
     }
   };
 
+  const handleButtonClick = function () {
+    profilePicture.current.click();
+  };
+
+  // console.log(profilePicture.current);
+
   return showFileInput ? (
     <div
       style={{
@@ -32,6 +40,7 @@ export default function PhotoUpload() {
       }}
       onMouseEnter={() => {
         setShowFileInput(true);
+        //add function to show
       }}
       onMouseLeave={() => setShowFileInput(false)}
     >
@@ -39,8 +48,17 @@ export default function PhotoUpload() {
         type="file"
         accept="image/*"
         onChange={handleImageUpload}
-        style={{ position: "absolute" }}
+        style={{ position: "absolute", display: "none" }}
+        ref={profilePicture}
       />
+      <button
+        type="button"
+        onClick={handleButtonClick}
+        // style={{ position: "absolute" }}
+        className={styles.changeImageBtn}
+      >
+        Choose File
+      </button>
 
       <div>
         <Image
@@ -52,6 +70,7 @@ export default function PhotoUpload() {
             width: "100%",
             height: "auto",
             marginBottom: "1rem",
+            opacity: 0.2,
           }}
         />
       </div>
