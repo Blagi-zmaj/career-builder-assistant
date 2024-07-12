@@ -1,9 +1,11 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { useState, useContext, ChangeEvent, useEffect } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
 import { userProfileData } from "../CVCreatorUtils/helpers";
 import styles from "./HobbiesSection.module.css";
 import InputForm from "../InputForm/InputForm";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 type Skill = {
   name: string;
@@ -70,13 +72,70 @@ export default function HobbiesSection() {
   } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
   const [hideAllButtons, setHideButtons] = useState(showButtons);
+  const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
+  const [actualRecordUpdated, setActualRecordUpdated] = useState(-1); //name
+  const [showTooltip, setShowTooltip] = useState({
+    open: false,
+    text: "Empty record",
+  });
+  const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
+    open: false,
+    text: "Empty record",
+  });
+
+  useEffect(() => {
+    if (!userContact.newHobby.name) {
+      setIsDisabledAddBtn(true);
+      setShowTooltip((prevValues) => {
+        return { open: true, text: "Empty record" };
+      });
+    }
+
+    if (userContact.hobbies[actualRecordUpdated]?.name === "") {
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+    }
+  }, [userContact.newHobby.name, userContact.hobbies]);
+
+  function hasDuplicates(arr) {
+    const localArr = arr.map((el) => el.name.toLowerCase());
+    return new Set(localArr).size !== localArr.length;
+  }
 
   const handleUserDetailsKeyDown = function (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
     inputName: string,
     index: number
   ) {
+    // if (event.key === "Enter") {
+    //   setUserContact((prevValues) => {
+    //     const newData = {
+    //       ...prevValues,
+    //       [inputName]: [
+    //         ...prevValues[inputName].slice(0, index),
+    //         {
+    //           ...prevValues[inputName][index],
+    //           isEditing: !prevValues[inputName][index].isEditing,
+    //         },
+    //         ...prevValues[inputName].slice(index + 1),
+    //       ],
+    //     };
+    //     console.log(newData);
+    //     return newData;
+    //   });
+    // }
+
     if (event.key === "Enter") {
+      if (userContact.hobbies[actualRecordUpdated]?.name === "") {
+        setShowActualRecordTooltip({ open: true, text: "Empty record" });
+        return;
+      }
+
+      if (hasDuplicates(userContact.hobbies)) {
+        setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+        return;
+      }
+
+      console.log(`UPDATE keyenTER`);
       setUserContact((prevValues) => {
         const newData = {
           ...prevValues,
@@ -100,6 +159,52 @@ export default function HobbiesSection() {
     inputName: string,
     index: number
   ) {
+    if (userContact.hobbies[actualRecordUpdated]?.name === "") {
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+      setUserContact((prevValues) => {
+        const newData = {
+          ...prevValues,
+          [inputName]: [
+            ...prevValues[inputName].slice(0, index),
+            {
+              ...prevValues[inputName][index],
+              isEditing: !prevValues[inputName][index].isEditing,
+              name: "ADD OR DELETE!",
+            },
+            ...prevValues[inputName].slice(index + 1),
+          ],
+        };
+        console.log(newData);
+        return newData;
+      });
+
+      return;
+    }
+
+    console.log(hasDuplicates(userContact.hobbies));
+    if (hasDuplicates(userContact.hobbies)) {
+      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+      setUserContact((prevValues) => {
+        const newData = {
+          ...prevValues,
+          [inputName]: [
+            ...prevValues[inputName].slice(0, index),
+            {
+              ...prevValues[inputName][index],
+              isEditing: !prevValues[inputName][index].isEditing,
+              name: "CHANGE OR DELETE!",
+            },
+            ...prevValues[inputName].slice(index + 1),
+          ],
+        };
+        console.log(newData);
+        return newData;
+      });
+      return;
+    }
+
+    console.log(`UPDATE onBlur`);
+
     setUserContact((prevValues) => {
       const newData = {
         ...prevValues,
@@ -122,6 +227,23 @@ export default function HobbiesSection() {
     identifier: string,
     index: number
   ) {
+    setActualRecordUpdated(index);
+
+    const isInUserProperty = userContact.hobbies.filter((el) => {
+      return el.name.toLowerCase() === event.target.value.toLowerCase();
+    });
+
+    if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
+      console.log(`userContact[identifier] !== ""`);
+      setIsDisabledAddBtn(true);
+      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+    } else {
+      setIsDisabledAddBtn(false);
+      setShowActualRecordTooltip((prevValues) => {
+        return { ...prevValues, open: false };
+      });
+    }
+
     const updatedDetail = {
       ...userContact[identifier][index],
       name: event.target.value,
@@ -143,6 +265,14 @@ export default function HobbiesSection() {
     inputName: string,
     listItemIndex: number = 0
   ) {
+    //hide Tooltips on start
+    setShowTooltip((prevValues) => {
+      return { ...prevValues, open: false };
+    });
+    setShowActualRecordTooltip((prevValues) => {
+      return { ...prevValues, open: false };
+    });
+
     setUserContact((prevValues) => {
       const newData = {
         ...prevValues,
@@ -200,6 +330,21 @@ export default function HobbiesSection() {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     identifier: string
   ) {
+    const isInUserProperty = userContact.hobbies.filter((el) => {
+      return el.name.toLowerCase() === event.target.value.toLowerCase();
+    });
+
+    if (isInUserProperty.length > 0 && userContact[identifier] !== "") {
+      console.log(`userContact[identifier] !== ""`);
+      setIsDisabledAddBtn(true);
+      setShowTooltip({ open: true, text: "Duplicated record" });
+    } else {
+      setIsDisabledAddBtn(false);
+      setShowTooltip((prevValues) => {
+        return { ...prevValues, open: false };
+      });
+    }
+
     setUserContact((prevValues) => {
       return {
         ...prevValues,
@@ -218,22 +363,27 @@ export default function HobbiesSection() {
         return (
           <div key={index} className={styles.hobbiesUI}>
             {hobby.isEditing ? (
-              <InputForm
-                key={hobby.name}
-                type="text"
-                name={hobby.name}
-                value={hobby.name}
-                className={styles.control}
-                placeholder={"New hobby"}
-                autoFocus
-                onBlur={(event) => handleOnBlur(event, "hobbies", index)}
-                onKeyDown={(event) =>
-                  handleUserDetailsKeyDown(event, "hobbies", index)
-                }
-                onChange={(event) =>
-                  handleChangeUserActualInput(event, "hobbies", index)
-                }
-              />
+              <Tooltip
+                title={showActualRecordTooltip.text}
+                open={showActualRecordTooltip.open}
+              >
+                <InputForm
+                  key={hobby.name}
+                  type="text"
+                  name={hobby.name}
+                  value={hobby.name}
+                  className={styles.control}
+                  placeholder={"New hobby"}
+                  autoFocus
+                  onBlur={(event) => handleOnBlur(event, "hobbies", index)}
+                  onKeyDown={(event) =>
+                    handleUserDetailsKeyDown(event, "hobbies", index)
+                  }
+                  onChange={(event) =>
+                    handleChangeUserActualInput(event, "hobbies", index)
+                  }
+                />
+              </Tooltip>
             ) : (
               <span
                 onClick={() => replaceTextWithInput("hobbies", index)}
@@ -250,7 +400,7 @@ export default function HobbiesSection() {
               variant="contained"
               className={showButtons ? styles.hiddenButton : styles.hobbiesBtn}
             >
-              -
+              <RemoveIcon />
             </Button>
           </div>
         );
@@ -265,18 +415,20 @@ export default function HobbiesSection() {
           className={styles.control}
           onChange={(event) => handleChangeAddNewListItem(event, "newHobby")}
         />
-
-        <Button
-          onClick={(event) =>
-            handleAddNewItemList(event, "newHobby", "hobbies")
-          }
-          className={
-            showButtons ? styles.hiddenButton : styles.addNewRecordForm
-          }
-          variant="contained"
-        >
-          +
-        </Button>
+        <Tooltip title={showTooltip.text} open={showTooltip.open}>
+          <Button
+            onClick={(event) =>
+              handleAddNewItemList(event, "newHobby", "hobbies")
+            }
+            className={
+              showButtons ? styles.hiddenButton : styles.addNewRecordForm
+            }
+            variant="contained"
+            disabled={isDisabledAddBtn}
+          >
+            <AddIcon />
+          </Button>
+        </Tooltip>
       </div>
       <button
         type="button"

@@ -85,13 +85,27 @@ export default function UserDetailsList({
   )}`;
   const [userData, setUserData] = useState<UserProfile>(userProfileData);
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
-  const [showTooltip, setShowTooltip] = useState(false);
+  // const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltip, setShowTooltip] = useState({
+    open: false,
+    text: "Empty record",
+  });
   const listNameSingular = `${categoryList.slice(0, -1)}`;
   const newListName = `new${listNameCapitalized}`;
   const addListName = `add${listNameCapitalized}`;
   // console.log(`Render UserDetailsList`);
 
-  // useEffect(() => {});
+  useEffect(() => {
+    // console.log(`Value of new skill: ${userData[newListName].name}`);
+    if (!userData[newListName].name) {
+      // console.log(userData[newListName].name ? "Has value" : "Empty");
+
+      setIsDisabledAddBtn(true);
+      setShowTooltip((prevValues) => {
+        return { open: true, text: "Empty record" };
+      });
+    }
+  }, [userData[newListName].name]);
 
   const handleChangeRatingNewListItem = function (
     rate: number,
@@ -244,22 +258,19 @@ export default function UserDetailsList({
     identifier: string,
     categoryList: string
   ) {
-    // console.log(typeof event.target.value, identifier);
-    //check if element is in skillset
     const isInUserProperty = userData[categoryList].filter((el) => {
       return el.name.toLowerCase() === event.target.value.toLowerCase();
     });
 
-    // console.log(isInUserProperty, categoryList);
-
-    //add option to change state for: show tooltip and disable add button
     if (isInUserProperty.length > 0 && userData[identifier] !== "") {
       console.log(`userData[identifier] !== ""`);
       setIsDisabledAddBtn(true);
-      setShowTooltip(true);
+      setShowTooltip({ open: true, text: "Duplicated record" });
     } else {
       setIsDisabledAddBtn(false);
-      setShowTooltip(false);
+      setShowTooltip((prevValues) => {
+        return { ...prevValues, open: false };
+      });
     }
 
     setUserData((prevValues) => {
@@ -351,7 +362,7 @@ export default function UserDetailsList({
           categoryList={newListName}
           index={0}
         />
-        <Tooltip title="cannot add the same record" open={showTooltip}>
+        <Tooltip title={showTooltip.text} open={showTooltip.open}>
           <Button
             disabled={isDisabledAddBtn}
             onClick={(event) =>

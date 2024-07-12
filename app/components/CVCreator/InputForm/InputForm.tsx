@@ -1,73 +1,51 @@
-import React from "react";
-
-// interface InputFormProps {
-//   name: string;
-//   value: string;
-//   placeholder?: string;
-//   isTextArea?: boolean;
-//   handleKeyEnterAndShift: (
-//     event: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
-//   ) => void;
-//   [key: string]: any; // For additional props
-// }
+import React, { forwardRef } from "react";
 
 interface InputFormProps {
   name: string;
   value: string;
   placeholder?: string;
   isTextArea?: boolean;
-  handleKeyEnterAndShift?: (
-    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  onKeyDown?: (
-    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  autoFocus?: boolean;
-  className?: string;
-  type?: string;
+  handleKeyEnterAndShift: (event: React.KeyboardEvent) => void;
+  [x: string]: any;
 }
 
-export default function InputForm({
-  name,
-  value,
-  placeholder,
-  isTextArea,
-  handleKeyEnterAndShift,
-  ...props
-}: InputFormProps) {
-  const handleKeyDown = function (event: React.KeyboardEvent) {
-    if (event.shiftKey && event.key === "Enter") {
-      console.log(`Shift & Enter`);
-    } else if (event.key === "Enter") {
-      console.log(`Enter`);
-    }
-  };
+const InputForm = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  InputFormProps
+>(
+  (
+    { name, value, placeholder, isTextArea, handleKeyEnterAndShift, ...props },
+    ref
+  ) => {
+    return (
+      <>
+        {isTextArea ? (
+          <textarea
+            ref={ref as React.Ref<HTMLTextAreaElement>}
+            rows={3}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            onKeyDown={handleKeyEnterAndShift}
+            {...props}
+          />
+        ) : (
+          <input
+            ref={ref as React.Ref<HTMLInputElement>}
+            type="text"
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            onKeyDown={handleKeyEnterAndShift}
+            {...props}
+          />
+        )}
+      </>
+    );
+  }
+);
 
-  return (
-    <>
-      {isTextArea ? (
-        <textarea
-          rows={3}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          onKeyDown={handleKeyEnterAndShift}
-          {...props}
-        />
-      ) : (
-        <input
-          type="text"
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          onKeyDown={handleKeyEnterAndShift}
-          {...props}
-        />
-      )}
-    </>
-  );
-}
+// Add displayName for debugging purposes
+InputForm.displayName = "InputForm";
+
+export default InputForm;

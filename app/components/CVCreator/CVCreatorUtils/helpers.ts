@@ -41,8 +41,9 @@ export const userProfileData = {
     { name: "French", level: 3, isEditing: false },
   ],
   hobbies: [
-    { name: "Googlowanie", isEditing: false },
-    { name: "Wypasanie owiec", isEditing: false },
+    { name: "Nauka", isEditing: false },
+    { name: "Gry", isEditing: false },
+    { name: "Koty", isEditing: false },
   ],
   summary: { description: "Quick summary about user", isEditing: false },
   education: [
