@@ -63,43 +63,28 @@ type UserProfile = {
   experience: Experience[];
 };
 
-export default function UserDetailsList({
-  categoryList,
-  // // userData,
-  // handleBlur,
-  // handleUserDetailsKeyDown,
-  // handleChangeUserActualInput,
-  // replaceTextWithInput,
-  // handleDeleteListItem,
-  // handleChangeRatingExistingListItem,
-  // // handleChangeAddNewListItem,
-  // handleChangeRatingNewListItem,
-  // handleAddNewItemList,
-  hideAllButtons,
-  // isDisabledAddBtn,
-  // showTooltip,
-}) {
+export default function UserDetailsList({ categoryList, hideAllButtons }) {
   const listNameCapitalized = `${categoryList[0].toUpperCase()}${categoryList.slice(
     1,
     -1
   )}`;
   const [userData, setUserData] = useState<UserProfile>(userProfileData);
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
-  // const [showTooltip, setShowTooltip] = useState(false);
+  const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showTooltip, setShowTooltip] = useState({
     open: false,
     text: "Empty record",
   });
+  const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
+    open: true,
+    text: "Empty record",
+  });
+
   const listNameSingular = `${categoryList.slice(0, -1)}`;
   const newListName = `new${listNameCapitalized}`;
   const addListName = `add${listNameCapitalized}`;
-  // console.log(`Render UserDetailsList`);
-
   useEffect(() => {
-    // console.log(`Value of new skill: ${userData[newListName].name}`);
     if (!userData[newListName].name) {
-      // console.log(userData[newListName].name ? "Has value" : "Empty");
-
       setIsDisabledAddBtn(true);
       setShowTooltip((prevValues) => {
         return { open: true, text: "Empty record" };
@@ -134,7 +119,56 @@ export default function UserDetailsList({
     });
   };
 
+  function hasDuplicates(arr) {
+    const localArr = arr.map((el) => el.name.toLowerCase());
+    return new Set(localArr).size !== localArr.length;
+  }
+
   const handleBlur = function (categoryList: string, listIndex: number) {
+    if (userData[categoryList][actualRecordUpdated]?.name === "") {
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+      setUserData((prevValues) => {
+        const newData = {
+          ...prevValues,
+          [categoryList]: [
+            ...prevValues[categoryList].slice(0, listIndex),
+            {
+              ...prevValues[categoryList][listIndex],
+              isEditing: !prevValues[categoryList][listIndex].isEditing,
+              name: "ADD OR DELETE!",
+            },
+            ...prevValues[categoryList].slice(listIndex + 1),
+          ],
+        };
+        console.log(newData);
+        return newData;
+      });
+
+      return;
+    }
+
+    console.log(hasDuplicates(userData[categoryList]));
+    if (hasDuplicates(userData[categoryList])) {
+      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+      setUserData((prevValues) => {
+        const newData = {
+          ...prevValues,
+          [categoryList]: [
+            ...prevValues[categoryList].slice(0, listIndex),
+            {
+              ...prevValues[categoryList][listIndex],
+              isEditing: !prevValues[categoryList][listIndex].isEditing,
+              name: "CHANGE OR DELETE!",
+            },
+            ...prevValues[categoryList].slice(listIndex + 1),
+          ],
+        };
+        console.log(newData);
+        return newData;
+      });
+      return;
+    }
+
     console.log(`handleBlur`);
     console.log(categoryList, listIndex);
     setUserData((prevValues) => {
@@ -160,6 +194,16 @@ export default function UserDetailsList({
     index: number
   ) {
     if (event.key === "Enter") {
+      if (userData[inputName][actualRecordUpdated]?.name === "") {
+        setShowActualRecordTooltip({ open: true, text: "Empty record" });
+        return;
+      }
+
+      if (hasDuplicates(userData[inputName])) {
+        setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+        return;
+      }
+
       setUserData((prevValues) => {
         const newData = {
           ...prevValues,
@@ -183,6 +227,29 @@ export default function UserDetailsList({
     identifier: string,
     index: number
   ) {
+    console.log(event.target.value.toLowerCase());
+    if (!event.target.value) {
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+    } else {
+      setShowActualRecordTooltip({ open: false, text: "Empty record" });
+    }
+
+    const isInUserProperty = userData[identifier].filter((el) => {
+      return el.name.toLowerCase() === event.target.value.toLowerCase();
+    });
+
+    console.log(isInUserProperty);
+
+    if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
+      console.log(`userData[identifier] !== ""`);
+      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+    }
+    // else {
+    //   setShowActualRecordTooltip((prevValues) => {
+    //     return { ...prevValues, open: false };
+    //   });
+    // }
+
     const updatedDetail = {
       ...userData[identifier][index],
       name: event.target.value,
@@ -204,6 +271,12 @@ export default function UserDetailsList({
     inputName: string,
     listItemIndex: number = 0
   ) {
+    setActualRecordUpdated(listItemIndex);
+
+    setShowActualRecordTooltip((prevValues) => {
+      return { ...prevValues, open: false };
+    });
+
     setUserData((prevValues) => {
       const newData = {
         ...prevValues,
@@ -295,21 +368,30 @@ export default function UserDetailsList({
               }
             >
               {listItem.isEditing ? (
-                <InputForm
-                  key={listItem.name}
-                  type="text"
-                  name={listItem.name}
-                  value={listItem.name}
-                  className={styles.control}
-                  autoFocus
-                  onBlur={() => handleBlur(categoryList, listIndex)}
-                  onKeyDown={(event) =>
-                    handleUserDetailsKeyDown(event, categoryList, listIndex)
-                  }
-                  onChange={(event) =>
-                    handleChangeUserActualInput(event, categoryList, listIndex)
-                  }
-                />
+                <Tooltip
+                  title={showActualRecordTooltip.text}
+                  open={showActualRecordTooltip.open}
+                >
+                  <InputForm
+                    key={listItem.name}
+                    type="text"
+                    name={listItem.name}
+                    value={listItem.name}
+                    className={styles.control}
+                    autoFocus
+                    onBlur={() => handleBlur(categoryList, listIndex)}
+                    onKeyDown={(event) =>
+                      handleUserDetailsKeyDown(event, categoryList, listIndex)
+                    }
+                    onChange={(event) =>
+                      handleChangeUserActualInput(
+                        event,
+                        categoryList,
+                        listIndex
+                      )
+                    }
+                  />
+                </Tooltip>
               ) : (
                 <span
                   onClick={() => replaceTextWithInput(categoryList, listIndex)}
