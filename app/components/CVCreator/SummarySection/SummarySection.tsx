@@ -1,10 +1,11 @@
 import InputForm from "../InputForm/InputForm";
 import styles from "./SummarySection.module.css";
-import { useState, useContext, ChangeEvent } from "react";
+import { useState, useContext } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
-import { userProfileData } from "../CVCreatorUtils/helpers";
-import { Button } from "@mui/material";
+import { userContactData, userProfileData } from "../CVCreatorUtils/helpers";
 import InfoIcon from "@mui/icons-material/Info";
+import { Tooltip } from "@mui/material";
+
 type Skill = {
   name: string;
   level: number;
@@ -62,7 +63,6 @@ type UserProfile = {
 };
 
 export default function SummarySection() {
-  // return <h1>Summary SECTION Component</h1>;
   const {
     showNavAndDrawer,
     toggleShowNavAndDrawer,
@@ -71,6 +71,10 @@ export default function SummarySection() {
   } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
   const [hideAllButtons, setHideButtons] = useState(showButtons);
+  const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
+    open: false,
+    text: "Empty record",
+  });
 
   const handleSummaryEditingStatus = function () {
     setUserContact((prevValues) => {
@@ -82,9 +86,25 @@ export default function SummarySection() {
         },
       };
     });
+
+    if (!userContact.summary.description) {
+      setUserContact((prevValues) => {
+        return {
+          ...prevValues,
+          summary: { ...prevValues.summary, description: `Add summary` },
+        };
+      });
+    }
   };
 
   const handleOnChangeSummary = function (event) {
+    setShowActualRecordTooltip((prevValues) => {
+      return { ...prevValues, open: false };
+    });
+    if (!event.target.value) {
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+    }
+
     setUserContact((prevValues) => {
       return {
         ...prevValues,
@@ -97,8 +117,16 @@ export default function SummarySection() {
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
-      console.log(`Enter`);
       handleSummaryEditingStatus();
+
+      if (!userContact.summary.description) {
+        setUserContact((prevValues) => {
+          return {
+            ...prevValues,
+            summary: { ...prevValues.summary, description: `Add summary` },
+          };
+        });
+      }
     }
   };
 
@@ -111,18 +139,23 @@ export default function SummarySection() {
         </span>
 
         {userContact.summary.isEditing ? (
-          <InputForm
-            key="summaryInput"
-            type="text"
-            name="summary"
-            value={userContact.summary.description}
-            className={styles.control}
-            autoFocus
-            onBlur={handleSummaryEditingStatus}
-            onChange={handleOnChangeSummary}
-            handleKeyEnterAndShift={handleSummaryKeyDown}
-            isTextArea={true}
-          />
+          <Tooltip
+            title={showActualRecordTooltip.text}
+            open={showActualRecordTooltip.open}
+          >
+            <InputForm
+              key="summaryInput"
+              type="text"
+              name="summary"
+              value={userContact.summary.description}
+              className={styles.control}
+              autoFocus
+              onBlur={handleSummaryEditingStatus}
+              onChange={handleOnChangeSummary}
+              handleKeyEnterAndShift={handleSummaryKeyDown}
+              isTextArea={true}
+            />
+          </Tooltip>
         ) : (
           <div
             onClick={handleSummaryEditingStatus}
