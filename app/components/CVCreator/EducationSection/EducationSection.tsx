@@ -8,6 +8,7 @@ import DatePicker from "../DatePicker";
 import Modal from "../ModalDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SchoolIcon from "@mui/icons-material/School";
+import { Tooltip } from "@mui/material";
 
 type Skill = {
   name: string;
@@ -68,6 +69,11 @@ type UserProfile = {
 export default function EducationSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
+  const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
+  const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
+    open: false,
+    text: "Empty record",
+  });
 
   const handleDeleteListRecord = function (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -150,6 +156,19 @@ export default function EducationSection() {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
       console.log(`clicked enter`);
+
+      console.log(
+        userContact[listName][actualRecordUpdated][identifier].value,
+        listName,
+        actualRecordUpdated,
+        identifier
+      );
+
+      if (userContact[listName][actualRecordUpdated][identifier].value === "") {
+        setShowActualRecordTooltip({ open: true, text: "Empty record" });
+        return;
+      }
+
       const updatedEditState = {
         ...userContact[listName][workIndex],
         [identifier]: {
@@ -178,6 +197,15 @@ export default function EducationSection() {
     identifier: string
   ) {
     // console.log(listName, workIndex, identifier); // experience 0 startDate
+    setShowActualRecordTooltip((prevValues) => {
+      return { ...prevValues, open: false };
+    });
+
+    if (!event.target.value) {
+      console.log(event.target.value);
+      console.log("EMPTY");
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+    }
 
     const updatedItem = {
       ...userContact[listName][workIndex],
@@ -206,6 +234,18 @@ export default function EducationSection() {
     workIndex: number,
     identifier: string
   ) {
+    setActualRecordUpdated(workIndex);
+
+    setShowActualRecordTooltip((prevValues) => {
+      return { ...prevValues, open: false };
+    });
+
+    if (!userContact[listName][workIndex][identifier].value) {
+      console.log(actualRecordUpdated);
+      console.log("EMPTY");
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+    }
+
     console.log(userContact[listName][workIndex][identifier]);
     const updatedListItemStatus = {
       ...userContact[listName][workIndex],
@@ -309,34 +349,44 @@ export default function EducationSection() {
               ) : (
                 <span key={elIndex}>
                   {el[1].isEditing ? (
-                    <InputForm
-                      key={el[0]}
-                      type="text"
-                      name={el[0]}
-                      value={el[1].value}
-                      className={styles.control}
-                      autoFocus
-                      isTextArea={el[0] === "description" ? true : false}
-                      onBlur={() =>
-                        handleBlurUser(event, "education", subjectIndex, el[0])
-                      }
-                      handleKeyEnterAndShift={(event) =>
-                        handleKeyEnterAndShift(
-                          event,
-                          "education",
-                          subjectIndex,
-                          el[0]
-                        )
-                      }
-                      onChange={(event) =>
-                        handleChangeUserListItem(
-                          event,
-                          "education",
-                          subjectIndex,
-                          el[0]
-                        )
-                      }
-                    />
+                    <Tooltip
+                      title={showActualRecordTooltip.text}
+                      open={showActualRecordTooltip.open}
+                    >
+                      <InputForm
+                        key={el[0]}
+                        type="text"
+                        name={el[0]}
+                        value={el[1].value}
+                        className={styles.control}
+                        autoFocus
+                        isTextArea={el[0] === "description" ? true : false}
+                        onBlur={() =>
+                          handleBlurUser(
+                            event,
+                            "education",
+                            subjectIndex,
+                            el[0]
+                          )
+                        }
+                        handleKeyEnterAndShift={(event) =>
+                          handleKeyEnterAndShift(
+                            event,
+                            "education",
+                            subjectIndex,
+                            el[0]
+                          )
+                        }
+                        onChange={(event) =>
+                          handleChangeUserListItem(
+                            event,
+                            "education",
+                            subjectIndex,
+                            el[0]
+                          )
+                        }
+                      />
+                    </Tooltip>
                   ) : (
                     <div style={{ margin: "0.75rem 0" }}>
                       <div
@@ -349,7 +399,7 @@ export default function EducationSection() {
                         }
                         className={styles.record}
                       >
-                        {el[1].value ? el[1].value : `<empty>`}
+                        {el[1].value ? el[1].value : `Add ${el[0]}`}
                       </div>
                     </div>
                   )}

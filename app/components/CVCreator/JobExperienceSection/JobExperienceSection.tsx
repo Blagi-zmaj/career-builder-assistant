@@ -118,6 +118,15 @@ export default function JobExperienceSection() {
       return { ...prevValues, open: false };
     });
 
+    console.log(listName, actualRecordUpdated, identifier);
+    // console.log(userContact[listName][actualRecordUpdated][identifier].value);
+
+    if (!userContact[listName][workIndex][identifier].value) {
+      console.log(actualRecordUpdated);
+      console.log("EMPTY");
+      setShowActualRecordTooltip({ open: true, text: "Empty record" });
+    }
+
     console.log(userContact[listName][workIndex][identifier]);
     const updatedListItemStatus = {
       ...userContact[listName][workIndex],

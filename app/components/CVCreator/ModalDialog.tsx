@@ -103,6 +103,7 @@ export default function FormDialog({
             />
 
             <input
+              className={styles.datePicker}
               type="date"
               id="endDate"
               name="endDate"
