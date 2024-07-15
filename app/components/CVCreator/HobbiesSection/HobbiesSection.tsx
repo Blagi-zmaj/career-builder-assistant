@@ -94,7 +94,13 @@ export default function HobbiesSection() {
     if (userContact.hobbies[actualRecordUpdated]?.name === "") {
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     }
-  }, [userContact.newHobby.name, userContact.hobbies]);
+  }, [userContact.newHobby.name, userContact.hobbies, actualRecordUpdated]);
+
+  useEffect(() => {
+    setShowTooltip((prevValues) => {
+      return { open: false, text: "Empty record" };
+    });
+  }, []);
 
   function hasDuplicates(arr) {
     const localArr = arr.map((el) => el.name.toLowerCase());

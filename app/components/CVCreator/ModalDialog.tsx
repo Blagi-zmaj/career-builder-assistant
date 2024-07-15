@@ -97,7 +97,7 @@ export default function FormDialog({
               value={dates[0]}
               onChange={() => {
                 setDates((prevValues) => {
-                  return [event?.target.value, prevValues[1]];
+                  return [event?.target?.value, prevValues[1]];
                 });
               }}
             />

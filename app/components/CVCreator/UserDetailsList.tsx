@@ -92,6 +92,12 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     }
   }, [userData[newListName].name]);
 
+  useEffect(() => {
+    setShowTooltip((prevValues) => {
+      return { open: false, text: "Empty record" };
+    });
+  }, []);
+
   const handleChangeRatingNewListItem = function (
     rate: number,
     identifier: string,

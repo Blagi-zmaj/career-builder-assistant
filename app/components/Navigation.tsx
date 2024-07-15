@@ -54,6 +54,13 @@ export default function Navigation({
     });
     toggleShowNavAndDrawer();
     toggleShowButtons();
+    setTimeout(() => {
+      window.print();
+    }, 500);
+    setTimeout(() => {
+      toggleShowButtons();
+      toggleShowNavAndDrawer();
+    }, 2000);
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
