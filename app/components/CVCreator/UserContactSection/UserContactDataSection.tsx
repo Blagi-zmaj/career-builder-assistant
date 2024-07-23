@@ -26,7 +26,7 @@ export default function UserContactDataSection() {
     open: false,
     text: "Empty record",
   });
-  // name: "ADD OR DELETE!",
+
   const handleInputChange = function (
     identifier: string,
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -118,6 +118,7 @@ export default function UserContactDataSection() {
         <Tooltip title={showTooltip.text} open={showTooltip.open}>
           <InputForm
             key={key}
+            id={key}
             type="text"
             name={key}
             onChange={(

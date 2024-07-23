@@ -12,6 +12,12 @@
   margin: 5rem 2rem;
 }
 
+@media print {
+  .form {
+    gap: 0rem;
+  }
+}
+
 .addNewRecordForm {
   color: #fff;
   -webkit-box-shadow: 0px 0px 30px 0px rgba(24, 59, 240, 1);

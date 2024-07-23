@@ -9,7 +9,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
-import { Collapse } from "@mui/material";
+import { Collapse, Tooltip } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { drawerTabs, pagesUrls, dynamicUrls, icons } from "../util/helpers";
 import Navigation from "./Navigation";
@@ -23,7 +23,7 @@ const drawerWidth = 300;
 export default function ResponsiveDrawer({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-
+  // const [showTooltip, setShowTooltip] = React.useState(true);
   const { showNavAndDrawer, toggleShowNavAndDrawer } =
     useContext(NavAndDrawerContext);
 
@@ -69,6 +69,7 @@ export default function ResponsiveDrawer({ children }) {
             disablePadding
             sx={{ display: "block", color: "white" }}
           >
+            {/* <Tooltip title={text} open={showTooltip}> */}
             <ListItemButton
               href={pagesUrls[index]}
               selected={selectedIndex === index}
@@ -97,6 +98,7 @@ export default function ResponsiveDrawer({ children }) {
                 />
               ) : null}
             </ListItemButton>
+            {/* </Tooltip> */}
           </ListItem>
         ))}
         <Divider />

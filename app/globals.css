@@ -8,8 +8,9 @@ body {
 @media print {
   body {
     margin-top: 0rem; /* Set the margin */
-    margin: -2rem -1rem -2rem -3rem;
+    margin: -1rem -1rem -2rem -3rem;
   }
+
   .no-print {
     display: none; /* Hide elements with class 'no-print' */
   }

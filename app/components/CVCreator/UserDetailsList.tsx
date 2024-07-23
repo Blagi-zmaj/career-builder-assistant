@@ -233,7 +233,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     index: number
   ) {
-    console.log(event.target.value.toLowerCase());
+    // console.log(event.target.value.toLowerCase());
     if (!event.target.value) {
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     } else {
@@ -244,7 +244,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       return el.name.toLowerCase() === event.target.value.toLowerCase();
     });
 
-    console.log(isInUserProperty);
+    // console.log(isInUserProperty);
 
     if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
       console.log(`userData[identifier] !== ""`);
@@ -295,7 +295,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
           ...prevValues[inputName].slice(listItemIndex + 1),
         ],
       };
-      console.log(newData);
+      // console.log(newData);
       return newData;
     });
   };
@@ -379,6 +379,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
                   open={showActualRecordTooltip.open}
                 >
                   <InputForm
+                    id={listItem.name}
                     key={listItem.name}
                     type="text"
                     name={listItem.name}
@@ -421,6 +422,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
                 className={
                   hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
                 }
+                aria-label={listItem.name}
               >
                 <RemoveIcon />
               </Button>
@@ -430,6 +432,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       })}
       <div className={hideAllButtons ? styles.hideComponent : styles.skillsUI}>
         <InputForm
+          id={addListName}
           key={addListName}
           type="text"
           name={addListName}
@@ -460,6 +463,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
             className={
               hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
             }
+            aria-label="AddNewSkill"
           >
             <AddIcon />
           </Button>

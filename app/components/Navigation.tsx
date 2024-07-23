@@ -154,7 +154,7 @@ export default function Navigation({
       </MenuItem>
     </Menu>
   );
-
+  console.log(pathname);
   return (
     <>
       <AppBar
@@ -183,18 +183,20 @@ export default function Navigation({
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Tooltip title="Print CV">
-            <IconButton
-              size="large"
-              aria-label="Print CV"
-              color="inherit"
-              onClick={handleToggleButtons}
-            >
-              <Badge badgeContent={1} color="error">
-                <PrintIcon />
-              </Badge>
-            </IconButton>
-          </Tooltip>
+          {pathname === "/cv_creator" && (
+            <Tooltip title="Print CV">
+              <IconButton
+                size="large"
+                aria-label="Print CV"
+                color="inherit"
+                onClick={handleToggleButtons}
+              >
+                <Badge badgeContent={1} color="error">
+                  <PrintIcon />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+          )}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

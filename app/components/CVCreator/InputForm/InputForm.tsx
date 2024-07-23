@@ -14,13 +14,22 @@ const InputForm = forwardRef<
   InputFormProps
 >(
   (
-    { name, value, placeholder, isTextArea, handleKeyEnterAndShift, ...props },
+    {
+      name,
+      value,
+      placeholder,
+      isTextArea,
+      id,
+      handleKeyEnterAndShift,
+      ...props
+    },
     ref
   ) => {
     return (
       <>
         {isTextArea ? (
           <textarea
+            id={id}
             ref={ref as React.Ref<HTMLTextAreaElement>}
             rows={3}
             name={name}
@@ -31,6 +40,7 @@ const InputForm = forwardRef<
           />
         ) : (
           <input
+            id={id}
             ref={ref as React.Ref<HTMLInputElement>}
             type="text"
             name={name}
