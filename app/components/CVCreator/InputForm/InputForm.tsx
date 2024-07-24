@@ -25,6 +25,7 @@ const InputForm = forwardRef<
     },
     ref
   ) => {
+    // console.log(`Render InputForm`);
     return (
       <>
         {isTextArea ? (

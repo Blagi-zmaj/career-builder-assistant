@@ -146,14 +146,14 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
             ...prevValues[categoryList].slice(listIndex + 1),
           ],
         };
-        console.log(newData);
+        // console.log(newData);
         return newData;
       });
 
       return;
     }
 
-    console.log(hasDuplicates(userData[categoryList]));
+    // console.log(hasDuplicates(userData[categoryList]));
     if (hasDuplicates(userData[categoryList])) {
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
       setUserData((prevValues) => {
@@ -169,14 +169,14 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
             ...prevValues[categoryList].slice(listIndex + 1),
           ],
         };
-        console.log(newData);
+        // console.log(newData);
         return newData;
       });
       return;
     }
 
-    console.log(`handleBlur`);
-    console.log(categoryList, listIndex);
+    // console.log(`handleBlur`);
+    // console.log(categoryList, listIndex);
     setUserData((prevValues) => {
       const newData = {
         ...prevValues,
@@ -189,7 +189,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
           ...prevValues[categoryList].slice(listIndex + 1),
         ],
       };
-      console.log(newData);
+      // console.log(newData);
       return newData;
     });
   };
@@ -342,7 +342,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     });
 
     if (isInUserProperty.length > 0 && userData[identifier] !== "") {
-      console.log(`userData[identifier] !== ""`);
+      // console.log(`userData[identifier] !== ""`);
       setIsDisabledAddBtn(true);
       setShowTooltip({ open: true, text: "Duplicated record" });
     } else {

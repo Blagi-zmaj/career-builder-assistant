@@ -34,11 +34,7 @@ export default function UserContactDataSection() {
     setShowTooltip((prevValues) => {
       return { ...prevValues, open: false };
     });
-    console.log(identifier);
-    // if (!userContact[identifier]) {
     if (!event.target.value) {
-      console.log(event.target.value);
-      console.log("EMPTY");
       setShowTooltip({ open: true, text: "Empty record" });
     }
 
@@ -64,7 +60,6 @@ export default function UserContactDataSection() {
       });
 
       if (!userContact[inputName]) {
-        console.log(userContact[inputName], inputName);
         setUserContact((prevValues) => {
           return {
             ...prevValues,
