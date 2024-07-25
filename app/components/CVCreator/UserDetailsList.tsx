@@ -247,7 +247,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     // console.log(isInUserProperty);
 
     if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
-      console.log(`userData[identifier] !== ""`);
+      // console.log(`userData[identifier] !== ""`);
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
     }
     // else {
@@ -463,7 +463,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
             className={
               hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
             }
-            aria-label="AddNewSkill"
+            aria-label={`AddNew${listNameCapitalized}`}
           >
             <AddIcon />
           </Button>

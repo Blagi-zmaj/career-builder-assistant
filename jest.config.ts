@@ -3,6 +3,14 @@
 //  * https://jestjs.io/docs/configuration
 //  */
 
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "jsdom",
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/$1", // Adjust this to match your project's structure
+  },
+};
+
 // import type { Config } from "jest";
 // import nextJest from "next/jest.js";
 

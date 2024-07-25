@@ -4,286 +4,319 @@ import "@testing-library/jest-dom";
 import UserDetailsList from "../components/CVCreator/UserDetailsList";
 import { userProfileData } from "../components/CVCreator/CVCreatorUtils/helpers";
 
-describe("SkillsSection", () => {
-  const newSkillNames = ["Machine learning", "React PRO", "Deep learning"];
-  const userSkills = [...userProfileData.skills];
+const actualUserSkills = [...userProfileData.skills];
+const newSkillNames = ["Machine learning", "React PRO", "Deep learning"];
+const skillToChange = "Machine";
 
-  beforeEach(() => {
-    render(<UserDetailsList categoryList="skills" hideAllButtons={() => {}} />);
-  });
+const actualUserLanguages = [...userProfileData.languages];
+const newLanguageNames = ["Ukrainian", "Polish", "Norwegian"];
+const languageToChange = "English";
 
-  it("Renders component with initial values", () => {
-    // Check did show all skills (text in span)
-    userSkills.forEach((el, index) => {
-      const textSpanSkill = screen.getByText(el.name);
-      expect(textSpanSkill).toBeInTheDocument();
+const createTests = function (
+  actualUserAttributes,
+  newAttributesNames,
+  attributeToChange,
+  categoryListName
+) {
+  const listNameCapitalized = `${categoryListName[0].toUpperCase()}${categoryListName.slice(
+    1,
+    -1
+  )}`;
 
-      // Check did show all delete buttons for each existing skill
-      const button = screen.getByRole("button", {
-        name: new RegExp(`${el.name}`, `i`),
-      });
-      expect(button).toBeInTheDocument();
+  describe(`${categoryListName} section`, () => {
+    const userAttributes = [...actualUserAttributes];
+    const localNewAttributesNames = [...newAttributesNames];
+
+    beforeEach(() => {
+      render(
+        <UserDetailsList
+          categoryList={categoryListName}
+          hideAllButtons={() => {}}
+        />
+      );
     });
 
-    // Check did show button for add new skill
-    const AddNewSkillButton = screen.getByRole("button", {
-      name: /AddNewSkill/i,
+    it("Renders component with initial values", () => {
+      // Check did show all attributes (text in span)
+      userAttributes.forEach((el) => {
+        const textSpanRecord = screen.getByText(el.name);
+        expect(textSpanRecord).toBeInTheDocument();
+
+        // Check did show all delete buttons for each existing record
+        const button = screen.getByRole("button", {
+          name: new RegExp(`${el.name}`, `i`),
+        });
+        expect(button).toBeInTheDocument();
+      });
+
+      // Check did show button for add new record
+      const AddNewRecordButton = screen.getByRole("button", {
+        name: new RegExp(`addnew${listNameCapitalized}`, `i`),
+      });
+      expect(AddNewRecordButton).toBeInTheDocument();
+
+      // Check did show add new record input appear with empty value
+      const addNewRecordInput = screen.getByPlaceholderText(
+        new RegExp(`new ${listNameCapitalized}`, `i`)
+      );
+      expect(addNewRecordInput).toHaveValue("");
     });
-    expect(AddNewSkillButton).toBeInTheDocument();
 
-    // Check did show add new skill input appear with empty value
-    const addNewSkillInput = screen.getByPlaceholderText(/new skill/i);
-    expect(addNewSkillInput).toHaveValue("");
-  });
+    it("Simulates starting tooltip state - not show", () => {
+      const emptyMsgTooltip = screen.queryByText(/empty record/i);
+      expect(emptyMsgTooltip).not.toBeInTheDocument();
+    });
 
-  it("Simulates starting tooltip state - not show", () => {
-    const emptyMsgTooltip = screen.queryByText(/empty record/i);
-    expect(emptyMsgTooltip).not.toBeInTheDocument();
-  });
-
-  it("Simulates changing existing skill name", async () => {
-    const user = userEvent.setup();
-
-    const spanSkillText = screen.getByText("Machine");
-
-    await user.click(spanSkillText);
-
-    const inputSkill = screen.getByDisplayValue("Machine");
-
-    await user.clear(inputSkill);
-    await user.keyboard("Machine Learning");
-    await user.tab();
-    const updatedSkillSpan = screen.getByText("Machine Learning");
-
-    expect(updatedSkillSpan).toBeInTheDocument();
-  });
-
-  it("Simulates changing all existing skill name (tab to approve changes)", async () => {
-    const user = userEvent.setup();
-
-    for (let index = 0; index < userSkills.length; index++) {
-      const el = userSkills[index];
-      const skillNameText = screen.getByText(el.name);
-
-      await user.click(skillNameText);
-
-      const inputSkill = screen.getByDisplayValue(el.name);
-      await user.clear(inputSkill);
-      await user.keyboard(newSkillNames[index]);
+    it("Simulates changing existing attribute name", async () => {
+      const user = userEvent.setup();
+      const spanRecordText = screen.getByText(attributeToChange);
+      await user.click(spanRecordText);
+      const inputRecord = screen.getByDisplayValue(attributeToChange);
+      await user.clear(inputRecord);
+      await user.keyboard(newAttributesNames[0]);
       await user.tab();
+      const updatedRecordSpan = screen.getByText(newAttributesNames[0]);
+      expect(updatedRecordSpan).toBeInTheDocument();
+    });
 
-      const updatedSkillSpan = screen.getByText(newSkillNames[index]);
-
-      expect(updatedSkillSpan).toBeInTheDocument();
-    }
-  });
-
-  it("Simulates changing existing skill name to empty string", async () => {
-    for (let index = 0; index < userSkills.length; index++) {
+    it("Simulates changing all existing attribute name (tab to approve changes)", async () => {
       const user = userEvent.setup();
 
-      const el = userSkills[index];
-      const skillNameText = screen.getByText(el.name);
+      for (let index = 0; index < userAttributes.length; index++) {
+        const el = userAttributes[index];
+        const recordNameText = screen.getByText(el.name);
+        await user.click(recordNameText);
+        const inputRecord = screen.getByDisplayValue(el.name);
+        await user.clear(inputRecord);
+        await user.keyboard(localNewAttributesNames[index]);
+        await user.tab();
+        const updatedRecordSpan = screen.getByText(
+          localNewAttributesNames[index]
+        );
+        expect(updatedRecordSpan).toBeInTheDocument();
+      }
+    });
 
-      await user.click(skillNameText);
+    it("Simulates changing existing attribute name to empty string", async () => {
+      for (let index = 0; index < userAttributes.length; index++) {
+        const user = userEvent.setup();
+        const el = userAttributes[index];
+        const recordNameText = screen.getByText(el.name);
+        await user.click(recordNameText);
+        const recordInput = screen.getByDisplayValue(el.name);
+        await user.clear(recordInput);
 
-      const skillInput = screen.getByDisplayValue(el.name);
-      await user.clear(skillInput);
+        // check did tooltip shows with "empty record" message
+        const tooltip = screen.getByText(/empty record/i);
+        expect(tooltip).toBeInTheDocument();
+        expect(tooltip).toHaveTextContent(/empty record/i);
 
-      // check did tooltip shows with "empty record" message
-      const tooltip = screen.getByText(/empty record/i);
-      expect(tooltip).toBeInTheDocument();
-      expect(tooltip).toHaveTextContent(/empty record/i);
+        // check did in recordNameText show text "ADD OR DELETE!"
+        await user.tab();
+        const updatedRecordSpan = screen.getByText(/add or delete/i);
+        expect(updatedRecordSpan).toHaveTextContent(/add or delete/i);
 
-      // check did in skillNameText show text "ADD OR DELETE!"
-      await user.tab();
-      const updatedSkillSpan = screen.getByText(/add or delete/i);
-      expect(updatedSkillSpan).toHaveTextContent(/add or delete/i);
+        // write new value for empty element
+        await user.click(updatedRecordSpan);
+        await user.clear(screen.getByDisplayValue(/add or delete/i));
+        await user.keyboard(localNewAttributesNames[index]);
+        await user.tab();
 
-      // write new value for empty element
-      await user.click(updatedSkillSpan);
-      await user.clear(screen.getByDisplayValue(/add or delete/i));
-      await user.keyboard(newSkillNames[index]);
-      await user.tab();
+        expect(
+          screen.getByText(localNewAttributesNames[index])
+        ).toBeInTheDocument();
+      }
+    });
 
-      expect(screen.getByText(newSkillNames[index])).toBeInTheDocument();
-    }
-  });
+    it("Simulates changing existing record name to duplicated one and writing new value", async () => {
+      // start from index 1 to check duplicates
+      for (let index = 1; index < userAttributes.length; index++) {
+        const user = userEvent.setup();
 
-  it("Simulates changing existing skill name to duplicated one and writing new value", async () => {
-    // start from index 1 to check duplicates
-    for (let index = 1; index < userSkills.length; index++) {
+        const el = userAttributes[index];
+        const recordNameText = screen.getByText(el.name);
+
+        await user.click(recordNameText);
+
+        const recordInput = screen.getByDisplayValue(el.name);
+        await user.clear(recordInput);
+        await user.keyboard(userAttributes[0].name);
+
+        // check did tooltip shows with "duplicated record" message
+        const tooltip = screen.getByText(/duplicated record/i);
+        expect(tooltip).toBeInTheDocument();
+        expect(tooltip).toHaveTextContent(/duplicated record/i);
+
+        // check did in recordNameText show text "CHANGE OR DELETE!"
+        await user.tab();
+        const updatedRecordSpan = screen.getByText(/change or delete/i);
+        expect(updatedRecordSpan).toHaveTextContent(/change or delete/i);
+
+        // write new value for duplicated element
+        await user.click(updatedRecordSpan);
+        await user.clear(screen.getByDisplayValue(/change or delete/i));
+        await user.keyboard(localNewAttributesNames[index]);
+        await user.tab();
+
+        expect(
+          screen.getByText(localNewAttributesNames[index])
+        ).toBeInTheDocument();
+      }
+    });
+
+    it("Simulates deleting record", async () => {
       const user = userEvent.setup();
+      //Create copy od user attributes
+      let recordsList = [...userAttributes];
 
-      const el = userSkills[index];
-      const skillNameText = screen.getByText(el.name);
+      const tempDelElement = attributeToChange;
 
-      await user.click(skillNameText);
+      for (let i = 0; i < recordsList.length; i++) {
+        let deletedRecordName = recordsList[i].name;
 
-      const skillInput = screen.getByDisplayValue(el.name);
-      await user.clear(skillInput);
-      await user.keyboard(userSkills[0].name);
+        // Find button
+        const deletebutton = screen.getByRole("button", {
+          name: deletedRecordName,
+        });
 
-      // check did tooltip shows with "duplicated record" message
-      const tooltip = screen.getByText(/duplicated record/i);
-      expect(tooltip).toBeInTheDocument();
-      expect(tooltip).toHaveTextContent(/duplicated record/i);
+        // Check list of attributes before delete list item
+        recordsList.forEach((el) => {
+          expect(screen.getByText(el.name)).toBeInTheDocument();
+          expect(recordsList).toHaveLength(recordsList.length);
+        });
 
-      // check did in skillNameText show text "CHANGE OR DELETE!"
-      await user.tab();
-      const updatedSkillSpan = screen.getByText(/change or delete/i);
-      expect(updatedSkillSpan).toHaveTextContent(/change or delete/i);
+        // Click on delete button
+        await user.click(deletebutton);
+        recordsList = recordsList.filter((el) => {
+          return el.name !== deletedRecordName;
+        });
 
-      // write new value for duplicated element
-      await user.click(updatedSkillSpan);
-      await user.clear(screen.getByDisplayValue(/change or delete/i));
-      await user.keyboard(newSkillNames[index]);
-      await user.tab();
+        // Check list of attributes after delete list item
+        recordsList.forEach((el) => {
+          expect(screen.getByText(el.name)).toBeInTheDocument();
+        });
+        expect(recordsList).toHaveLength(recordsList.length);
 
-      expect(screen.getByText(newSkillNames[index])).toBeInTheDocument();
-    }
-  });
+        // Check content of rest elements (confirm that correct element was deleted)
+        recordsList.forEach((el) => {
+          if (tempDelElement === el.name) {
+            throw new Error(`ELEMENT ${deletedRecordName} SHOULD BE DELETED!`);
+          }
+        });
+      }
+    });
 
-  it("Simulates deleting record", async () => {
-    const user = userEvent.setup();
-    //Create copy od userSkills
-    let skillList = [...userSkills];
+    it("Simulates adding new record", async () => {
+      const user = userEvent.setup();
+      let updatedRecordList = [...userAttributes];
+      const newRecordsList = [
+        { name: newAttributesNames[0], level: 1, isEditing: false },
+        { name: newAttributesNames[1], level: 2, isEditing: false },
+        { name: newAttributesNames[2], level: 4, isEditing: false },
+      ];
 
-    const tempDelElement = "Machine";
+      for (let i = 0; i < userAttributes.length; i++) {
+        let newRecord = newRecordsList[i];
 
-    for (let i = 0; i < skillList.length; i++) {
-      let deletedSkillName = skillList[i].name;
+        // Check did all attributes are visible
+        updatedRecordList.forEach((el) => {
+          expect(screen.getByText(el.name)).toBeInTheDocument();
+        });
 
-      // Find button
-      const deletebutton = screen.getByRole("button", {
-        name: deletedSkillName,
-      });
+        // Find add button with disabled attribute
+        const addRecordButton = screen.getByRole("button", {
+          name: new RegExp(`addnew${listNameCapitalized}`, `i`),
+          disabled: false,
+        });
+        expect(addRecordButton).toBeInTheDocument();
 
-      // Check list of skills before delete list item
-      skillList.forEach((el) => {
-        expect(screen.getByText(el.name)).toBeInTheDocument();
-        expect(skillList).toHaveLength(skillList.length);
-      });
+        // Find input to add new record
+        const addNewRecordInput = screen.getByPlaceholderText(
+          new RegExp(`new ${listNameCapitalized}`, `i`)
+        );
 
-      // Click on delete button
-      await user.click(deletebutton);
-      skillList = skillList.filter((el) => {
-        return el.name !== deletedSkillName;
-      });
+        // Click on input
+        await user.click(addNewRecordInput);
 
-      // Check list of skills after delete list item
-      skillList.forEach((el) => {
-        expect(screen.getByText(el.name)).toBeInTheDocument();
-      });
-      expect(skillList).toHaveLength(skillList.length);
+        // Type on input new record
+        await user.keyboard(newRecord.name);
 
-      // Check content of rest elements (confirm that correct element was deleted)
-      skillList.forEach((el) => {
-        if (tempDelElement === el.name) {
-          throw new Error(`ELEMENT ${deletedSkillName} SHOULD BE DELETED!`);
-        }
-      });
-    }
-  });
+        // Click add button
+        await user.click(addRecordButton);
+        updatedRecordList.push(newRecord);
 
-  it("Simulates adding new record", async () => {
-    const user = userEvent.setup();
-    let updatedSkillList = [...userSkills];
-    const newSkillsList = [
-      { name: "Machine learning", level: 1, isEditing: false },
-      { name: "Deep learning", level: 2, isEditing: false },
-      { name: "Data Science", level: 4, isEditing: false },
-    ];
+        // Verify if new record is visible
+        expect(screen.getByText(newRecord.name)).toBeInTheDocument();
+      }
+    });
 
-    for (let i = 0; i < userSkills.length; i++) {
-      let newSkill = newSkillsList[i];
+    it(`Simulates add, delete and modify ${listNameCapitalized}`, async () => {
+      const user = userEvent.setup();
+      let updatedRecordList = [...userAttributes];
+      let newRecord = newAttributesNames[0];
+      let recordToDelete = attributeToChange;
 
-      // Check did all skills are visible
-      updatedSkillList.forEach((el) => {
+      // Check did all attributes are visible
+      updatedRecordList.forEach((el) => {
         expect(screen.getByText(el.name)).toBeInTheDocument();
       });
 
       // Find add button with disabled attribute
-      const addSkillButton = screen.getByRole("button", {
-        name: new RegExp(`addnewskill`, `i`),
+      const addRecordButton = screen.getByRole("button", {
+        name: new RegExp(`addnew${listNameCapitalized}`, `i`),
         disabled: false,
       });
-      expect(addSkillButton).toBeInTheDocument();
+      expect(addRecordButton).toBeInTheDocument();
 
       // Find input to add new record
-      const addNewSkillInput = screen.getByPlaceholderText(/new skill/i);
+      const addNewRecordInput = screen.getByPlaceholderText(
+        new RegExp(`new ${listNameCapitalized}`, `i`)
+      );
 
       // Click on input
-      await user.click(addNewSkillInput);
+      await user.click(addNewRecordInput);
 
-      // Type on input new skill
-      await user.keyboard(newSkill.name);
+      // Type on input new record
+      await user.keyboard(newRecord);
 
       // Click add button
-      await user.click(addSkillButton);
-      updatedSkillList.push(newSkill);
+      await user.click(addRecordButton);
+      updatedRecordList.push(newRecord);
 
-      // Verify if new skill is visible
-      expect(screen.getByText(newSkill.name)).toBeInTheDocument();
-    }
-  });
+      // Verify if new record is visible
+      expect(screen.getByText(newRecord)).toBeInTheDocument();
 
-  it("Simulates add, delete and modify skill", async () => {
-    const user = userEvent.setup();
-    let updatedSkillList = [...userSkills];
-    let newSkill = "Software Architecture";
-    let skillToDelete = "Machine";
+      // Delete first record - <attributeToChange>
+      //// Find delete button with name <attributeToChange>
+      const deleteBtn = screen.getByRole("button", { name: recordToDelete });
 
-    // Check did all skills are visible
-    updatedSkillList.forEach((el) => {
-      expect(screen.getByText(el.name)).toBeInTheDocument();
+      //// Click delete btn
+      await user.click(deleteBtn);
+
+      //// Check did deleted element is visible
+      const deletedRecord = screen.queryByText(recordToDelete);
+      expect(deletedRecord).not.toBeInTheDocument();
+
+      // Find and modify newly added record name to existing one
+      const newRecordTextElement = screen.getByText(newRecord);
+      await user.click(newRecordTextElement);
+
+      const updatedInput = screen.getByDisplayValue(newRecord);
+      await user.click(updatedInput);
+      await user.clear(updatedInput);
+      await user.keyboard(actualUserAttributes[1].name);
+
+      // Check did show tooltip with "duplicated record message"
+      const tooltip = screen.getByText(/duplicated record/i);
+      await user.tab();
     });
-
-    // Find add button with disabled attribute
-    const addSkillButton = screen.getByRole("button", {
-      name: new RegExp(`addnewskill`, `i`),
-      disabled: false,
-    });
-    expect(addSkillButton).toBeInTheDocument();
-
-    // Find input to add new record
-    const addNewSkillInput = screen.getByPlaceholderText(/new skill/i);
-
-    // Click on input
-    await user.click(addNewSkillInput);
-
-    // Type on input new skill
-    await user.keyboard(newSkill);
-
-    // Click add button
-    await user.click(addSkillButton);
-    updatedSkillList.push(newSkill);
-
-    // Verify if new skill is visible
-    expect(screen.getByText(newSkill)).toBeInTheDocument();
-
-    // Delete first skill - "Machine"
-    //// Find delete button with name "Machine"
-    const deleteBtn = screen.getByRole("button", { name: skillToDelete });
-
-    //// Click delete btn
-    await user.click(deleteBtn);
-
-    //// Check did deleted element is visible
-    const deletedSkill = screen.queryByText(skillToDelete);
-    expect(deletedSkill).not.toBeInTheDocument();
-
-    // Find and modify newly added skill name to existing one
-    const newSkillTextElement = screen.getByText(newSkill);
-    await user.click(newSkillTextElement);
-
-    const updatedInput = screen.getByDisplayValue(newSkill);
-    await user.click(updatedInput);
-    await user.clear(updatedInput);
-    await user.keyboard("Deep");
-
-    // Check did show tooltip with "duplicated record message"
-    const tooltip = screen.getByText(/duplicated record/i);
-    await user.tab();
   });
-});
+};
+
+createTests(actualUserSkills, newSkillNames, skillToChange, "skills");
+createTests(
+  actualUserLanguages,
+  newLanguageNames,
+  languageToChange,
+  "languages"
+);

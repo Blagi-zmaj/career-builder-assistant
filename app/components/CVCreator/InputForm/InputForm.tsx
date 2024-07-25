@@ -26,6 +26,7 @@ const InputForm = forwardRef<
     ref
   ) => {
     // console.log(`Render InputForm`);
+    // console.log(`name = ${name}`);
     return (
       <>
         {isTextArea ? (
@@ -36,6 +37,7 @@ const InputForm = forwardRef<
             name={name}
             value={value}
             placeholder={placeholder}
+            aria-label={name}
             onKeyDown={handleKeyEnterAndShift}
             {...props}
           />
@@ -48,6 +50,7 @@ const InputForm = forwardRef<
             value={value}
             placeholder={placeholder}
             onKeyDown={handleKeyEnterAndShift}
+            aria-label={name}
             {...props}
           />
         )}

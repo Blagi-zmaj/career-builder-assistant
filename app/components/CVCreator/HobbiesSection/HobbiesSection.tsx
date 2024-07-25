@@ -1,5 +1,5 @@
 import { useState, useContext, ChangeEvent, useEffect } from "react";
-import { NavAndDrawerContext } from "@/app/util/context";
+import { NavAndDrawerContext } from "../../../util/context";
 import { userProfileData } from "../CVCreatorUtils/helpers";
 import styles from "./HobbiesSection.module.css";
 import InputForm from "../InputForm/InputForm";
@@ -187,7 +187,7 @@ export default function HobbiesSection() {
       return;
     }
 
-    console.log(hasDuplicates(userContact.hobbies));
+    // console.log(hasDuplicates(userContact.hobbies));
     if (hasDuplicates(userContact.hobbies)) {
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
       setUserContact((prevValues) => {
@@ -209,7 +209,7 @@ export default function HobbiesSection() {
       return;
     }
 
-    console.log(`UPDATE onBlur`);
+    // console.log(`UPDATE onBlur`);
 
     setUserContact((prevValues) => {
       const newData = {
@@ -223,7 +223,7 @@ export default function HobbiesSection() {
           ...prevValues[inputName].slice(index + 1),
         ],
       };
-      console.log(newData);
+      // console.log(newData);
       return newData;
     });
   };
@@ -291,7 +291,7 @@ export default function HobbiesSection() {
           ...prevValues[inputName].slice(listItemIndex + 1),
         ],
       };
-      console.log(newData);
+      // console.log(newData);
       return newData;
     });
   };
@@ -405,6 +405,7 @@ export default function HobbiesSection() {
               }
               variant="contained"
               className={showButtons ? styles.hiddenButton : styles.hobbiesBtn}
+              aria-label={hobby.name}
             >
               <RemoveIcon />
             </Button>
@@ -416,7 +417,7 @@ export default function HobbiesSection() {
           key={"addHobby"}
           type="text"
           name={"addHobby"}
-          placeholder="Hobby"
+          placeholder="New hobby"
           value={userContact.newHobby.name}
           className={styles.control}
           onChange={(event) => handleChangeAddNewListItem(event, "newHobby")}
@@ -431,6 +432,7 @@ export default function HobbiesSection() {
             }
             variant="contained"
             disabled={isDisabledAddBtn}
+            aria-label={`AddNewHobby`}
           >
             <AddIcon />
           </Button>
