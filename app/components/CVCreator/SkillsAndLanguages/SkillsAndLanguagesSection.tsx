@@ -11,7 +11,7 @@ export default function SkillsAndLanguagesSection() {
 
   return (
     <>
-      {["skills", "languages"].map((categoryList, indexCategory) => {
+      {["skills", "languages", "hobbies"].map((categoryList, indexCategory) => {
         return (
           <div key={categoryList} className={styles.asideDataRowBox}>
             <h3>{`${categoryList.slice(0, 1).toUpperCase()}${categoryList.slice(
@@ -19,21 +19,7 @@ export default function SkillsAndLanguagesSection() {
             )}`}</h3>
             <UserDetailsList
               categoryList={categoryList}
-              // userData={userContact}
-              // handleBlur={handleBlur}
-              // handleUserDetailsKeyDown={handleUserDetailsKeyDown}
-              // handleChangeUserActualInput={handleChangeUserActualInput}
-              // replaceTextWithInput={replaceTextWithInput}
-              // handleDeleteListItem={handleDeleteListItem}
-              // handleChangeRatingExistingListItem={
-              //   handleChangeRatingExistingListItem
-              // }
-              // handleChangeAddNewListItem={handleChangeAddNewListItem}
-              // handleChangeRatingNewListItem={handleChangeRatingNewListItem}
-              // handleAddNewItemList={handleAddNewItemList}
               hideAllButtons={showButtons}
-              // isDisabledAddBtn={isDisabledAddBtn}
-              // showTooltip={showTooltip}
             />
           </div>
         );

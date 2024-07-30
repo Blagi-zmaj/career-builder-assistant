@@ -27,6 +27,18 @@ export default function UserContactDataSection() {
     text: "Empty record",
   });
 
+  // console.log(
+  //   `
+  //   name ${userContact.name}
+  //   surname ${userContact.surname}
+  //   address ${userContact.address}
+  //   email ${userContact.email}
+  //   phone ${userContact.phone}
+  //   github ${userContact.github}
+  //   linkedin ${userContact.linkedin}
+  //   `
+  // );
+
   const handleInputChange = function (
     identifier: string,
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

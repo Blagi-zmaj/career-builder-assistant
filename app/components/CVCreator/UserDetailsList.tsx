@@ -5,7 +5,8 @@ import styles from "./CVForm.module.css";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { userProfileData } from "./CVCreatorUtils/helpers";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useReducer, useState } from "react";
+import userDetailsListReducer from "@/app/util/reducers";
 
 type Skill = {
   name: string;
@@ -64,10 +65,15 @@ type UserProfile = {
 };
 
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
-  const listNameCapitalized = `${categoryList[0].toUpperCase()}${categoryList.slice(
-    1,
-    -1
-  )}`;
+  const listNameCapitalized =
+    categoryList !== `hobbies`
+      ? `${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`
+      : `Hobby`;
+
+  // const [localUserData, dispatch] = useReducer(
+  //   userDetailsListReducer,
+  //   userProfileData
+  // );
   const [userData, setUserData] = useState<UserProfile>(userProfileData);
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
@@ -80,7 +86,8 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     text: "Empty record",
   });
 
-  const listNameSingular = `${categoryList.slice(0, -1)}`;
+  const listNameSingular =
+    categoryList !== `hobbies` ? `${categoryList.slice(0, -1)}` : `hobby`;
   const newListName = `new${listNameCapitalized}`;
   const addListName = `add${listNameCapitalized}`;
   useEffect(() => {
@@ -103,6 +110,12 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     index: number = 0
   ) {
+    // dispatch({
+    //   type: `changeRatingNewListItem`,
+    //   rate: rate,              // check if i works with rate instead of rate:rate
+    //   identifier: identifier
+    // })
+
     setUserData((prevValues) => {
       return {
         ...prevValues,
@@ -233,7 +246,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     index: number
   ) {
-    // console.log(event.target.value.toLowerCase());
     if (!event.target.value) {
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     } else {
@@ -244,17 +256,9 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       return el.name.toLowerCase() === event.target.value.toLowerCase();
     });
 
-    // console.log(isInUserProperty);
-
     if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
-      // console.log(`userData[identifier] !== ""`);
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
     }
-    // else {
-    //   setShowActualRecordTooltip((prevValues) => {
-    //     return { ...prevValues, open: false };
-    //   });
-    // }
 
     const updatedDetail = {
       ...userData[identifier][index],
@@ -363,6 +367,13 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     });
   };
 
+  // console.log(`==================${categoryList}================`);
+  // userData[categoryList].forEach((el) => {
+  //   console.log(`${el.name} ${el.level ?? 0}`);
+  // });
+
+  console.table(userData[categoryList]);
+
   return (
     <>
       {userData[categoryList].map((listItem, listIndex) => {
@@ -408,12 +419,18 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
                   {listItem.name ? listItem.name : `<empty> ${listIndex}`}
                 </span>
               )}
-              <RadioGroupRating
-                rate={listItem.level}
-                handleChangeRatingListItem={handleChangeRatingExistingListItem}
-                categoryList={categoryList}
-                index={listIndex}
-              />
+              {categoryList !== "hobbies" ? (
+                <RadioGroupRating
+                  rate={listItem.level}
+                  handleChangeRatingListItem={
+                    handleChangeRatingExistingListItem
+                  }
+                  categoryList={categoryList}
+                  index={listIndex}
+                />
+              ) : (
+                <div></div>
+              )}
               <Button
                 onClick={(event) =>
                   handleDeleteListItem(event, listItem.name, categoryList)
@@ -442,17 +459,22 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
           onChange={(event) =>
             handleChangeAddNewListItem(
               event,
-              `new${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`,
+              // `new${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`,
+              newListName,
               categoryList
             )
           }
         />
-        <RadioGroupRating
-          rate={userData[newListName].level}
-          handleChangeRatingListItem={handleChangeRatingNewListItem}
-          categoryList={newListName}
-          index={0}
-        />
+        {categoryList !== "hobbies" ? (
+          <RadioGroupRating
+            rate={userData[newListName].level}
+            handleChangeRatingListItem={handleChangeRatingNewListItem}
+            categoryList={newListName}
+            index={0}
+          />
+        ) : (
+          <div></div>
+        )}
         <Tooltip title={showTooltip.text} open={showTooltip.open}>
           <Button
             disabled={isDisabledAddBtn}

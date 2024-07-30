@@ -122,7 +122,7 @@ export default function CVForm() {
           <PhotoUpload />
           <UserContactDataSection />
           <SkillsAndLanguagesSection />
-          <HobbiesSection />
+          {/* <HobbiesSection /> */}
         </div>
       </div>
       <SummarySection />

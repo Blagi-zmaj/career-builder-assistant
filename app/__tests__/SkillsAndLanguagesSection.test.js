@@ -12,16 +12,20 @@ const actualUserLanguages = [...userProfileData.languages];
 const newLanguageNames = ["Ukrainian", "Polish", "Norwegian"];
 const languageToChange = "English";
 
+const actualUserHobbies = [...userProfileData.hobbies];
+const newHobbyNames = ["Swimming", "Gym", "Elektronika"];
+const hobbyToChange = "Nauka";
+
 const createTests = function (
   actualUserAttributes,
   newAttributesNames,
   attributeToChange,
   categoryListName
 ) {
-  const listNameCapitalized = `${categoryListName[0].toUpperCase()}${categoryListName.slice(
-    1,
-    -1
-  )}`;
+  const listNameCapitalized =
+    categoryListName !== "hobbies"
+      ? `${categoryListName[0].toUpperCase()}${categoryListName.slice(1, -1)}`
+      : `Hobby`;
 
   describe(`${categoryListName} section`, () => {
     const userAttributes = [...actualUserAttributes];
@@ -168,16 +172,19 @@ const createTests = function (
       const user = userEvent.setup();
       //Create copy od user attributes
       let recordsList = [...userAttributes];
+      // console.log(recordsList);
 
       const tempDelElement = attributeToChange;
+      // console.log(tempDelElement);
 
       for (let i = 0; i < recordsList.length; i++) {
         let deletedRecordName = recordsList[i].name;
-
+        // console.log(deletedRecordName);
         // Find button
         const deletebutton = screen.getByRole("button", {
           name: deletedRecordName,
         });
+        // console.log(deletebutton.name);
 
         // Check list of attributes before delete list item
         recordsList.forEach((el) => {
@@ -191,6 +198,7 @@ const createTests = function (
           return el.name !== deletedRecordName;
         });
 
+        // console.log(recordsList);
         // Check list of attributes after delete list item
         recordsList.forEach((el) => {
           expect(screen.getByText(el.name)).toBeInTheDocument();
@@ -215,6 +223,9 @@ const createTests = function (
         { name: newAttributesNames[2], level: 4, isEditing: false },
       ];
 
+      // console.log(newRecordsList);
+      // console.log(updatedRecordList);
+
       for (let i = 0; i < userAttributes.length; i++) {
         let newRecord = newRecordsList[i];
 
@@ -235,16 +246,24 @@ const createTests = function (
           new RegExp(`new ${listNameCapitalized}`, `i`)
         );
 
+        // console.log(addRecordButton);
+        // console.log(addNewRecordInput);
+
         // Click on input
+        await user.click(addNewRecordInput);
         await user.click(addNewRecordInput);
 
         // Type on input new record
         await user.keyboard(newRecord.name);
+        expect(addNewRecordInput.value).toBe(newRecord.name);
 
         // Click add button
         await user.click(addRecordButton);
         updatedRecordList.push(newRecord);
 
+        // console.log(updatedRecordList);
+        // console.log(newRecord.name);
+        // console.log(screen.getByText(newRecord.name));
         // Verify if new record is visible
         expect(screen.getByText(newRecord.name)).toBeInTheDocument();
       }
@@ -314,9 +333,12 @@ const createTests = function (
 };
 
 createTests(actualUserSkills, newSkillNames, skillToChange, "skills");
+
 createTests(
   actualUserLanguages,
   newLanguageNames,
   languageToChange,
   "languages"
 );
+
+createTests(actualUserHobbies, newHobbyNames, hobbyToChange, "hobbies");
