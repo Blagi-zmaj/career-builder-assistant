@@ -115,14 +115,14 @@ const createTests = function (
         expect(tooltip).toBeInTheDocument();
         expect(tooltip).toHaveTextContent(/empty record/i);
 
-        // check did in recordNameText show text "ADD OR DELETE!"
+        // check did in recordNameText show text "CHANGE OR DELETE!"
         await user.tab();
-        const updatedRecordSpan = screen.getByText(/add or delete/i);
-        expect(updatedRecordSpan).toHaveTextContent(/add or delete/i);
+        const updatedRecordSpan = screen.getByText(/change or delete/i);
+        expect(updatedRecordSpan).toHaveTextContent(/change or delete/i);
 
         // write new value for empty element
         await user.click(updatedRecordSpan);
-        await user.clear(screen.getByDisplayValue(/add or delete/i));
+        await user.clear(screen.getByDisplayValue(/change or delete/i));
         await user.keyboard(localNewAttributesNames[index]);
         await user.tab();
 

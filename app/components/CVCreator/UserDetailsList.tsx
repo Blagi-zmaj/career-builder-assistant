@@ -6,7 +6,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { userProfileData } from "./CVCreatorUtils/helpers";
 import { MouseEvent, useEffect, useReducer, useState } from "react";
-import userDetailsListReducer from "@/app/util/reducers";
+import userDetailsListReducer from "../../util/reducers";
+// import { UserProfile } from "../../util/types";
 
 type Skill = {
   name: string;
@@ -70,11 +71,11 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       ? `${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`
       : `Hobby`;
 
-  // const [localUserData, dispatch] = useReducer(
-  //   userDetailsListReducer,
-  //   userProfileData
-  // );
-  const [userData, setUserData] = useState<UserProfile>(userProfileData);
+  const [userData, dispatch] = useReducer(
+    userDetailsListReducer,
+    userProfileData
+  );
+  // const [userData, setUserData] = useState<UserProfile>(userProfileData);
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showTooltip, setShowTooltip] = useState({
@@ -110,18 +111,18 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     index: number = 0
   ) {
-    // dispatch({
-    //   type: `changeRatingNewListItem`,
-    //   rate: rate,              // check if i works with rate instead of rate:rate
-    //   identifier: identifier
-    // })
-
-    setUserData((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: { ...prevValues[identifier], level: rate },
-      };
+    dispatch({
+      type: `changeRatingNewListItem`,
+      rate: rate, // check if i works with rate instead of rate:rate
+      identifier: identifier,
     });
+
+    // setUserData((prevValues) => {
+    //   return {
+    //     ...prevValues,
+    //     [identifier]: { ...prevValues[identifier], level: rate },
+    //   };
+    // });
   };
 
   const handleAddNewItemList = function (
@@ -129,13 +130,19 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     listName: string
   ) {
-    setUserData((prevValues) => {
-      return {
-        ...prevValues,
-        [listName]: [...prevValues[listName], prevValues[identifier]],
-        [identifier]: { ...prevValues[identifier], name: "" },
-      };
+    dispatch({
+      type: `addNewItemList`,
+      listName: listName,
+      identifier: identifier,
     });
+
+    // setUserData((prevValues) => {
+    //   return {
+    //     ...prevValues,
+    //     [listName]: [...prevValues[listName], prevValues[identifier]],
+    //     [identifier]: { ...prevValues[identifier], name: "" },
+    //   };
+    // });
   };
 
   function hasDuplicates(arr) {
@@ -146,22 +153,29 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
   const handleBlur = function (categoryList: string, listIndex: number) {
     if (userData[categoryList][actualRecordUpdated]?.name === "") {
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
-      setUserData((prevValues) => {
-        const newData = {
-          ...prevValues,
-          [categoryList]: [
-            ...prevValues[categoryList].slice(0, listIndex),
-            {
-              ...prevValues[categoryList][listIndex],
-              isEditing: !prevValues[categoryList][listIndex].isEditing,
-              name: "ADD OR DELETE!",
-            },
-            ...prevValues[categoryList].slice(listIndex + 1),
-          ],
-        };
-        // console.log(newData);
-        return newData;
+
+      dispatch({
+        type: `blur`,
+        categoryList: categoryList, // check if i works with rate instead of rate:rate
+        listIndex: listIndex,
       });
+
+      // setUserData((prevValues) => {
+      //   const newData = {
+      //     ...prevValues,
+      //     [categoryList]: [
+      //       ...prevValues[categoryList].slice(0, listIndex),
+      //       {
+      //         ...prevValues[categoryList][listIndex],
+      //         isEditing: !prevValues[categoryList][listIndex].isEditing,
+      //         name: "ADD OR DELETE!",
+      //       },
+      //       ...prevValues[categoryList].slice(listIndex + 1),
+      //     ],
+      //   };
+      //   // console.log(newData);
+      //   return newData;
+      // });
 
       return;
     }
@@ -169,42 +183,59 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     // console.log(hasDuplicates(userData[categoryList]));
     if (hasDuplicates(userData[categoryList])) {
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
-      setUserData((prevValues) => {
-        const newData = {
-          ...prevValues,
-          [categoryList]: [
-            ...prevValues[categoryList].slice(0, listIndex),
-            {
-              ...prevValues[categoryList][listIndex],
-              isEditing: !prevValues[categoryList][listIndex].isEditing,
-              name: "CHANGE OR DELETE!",
-            },
-            ...prevValues[categoryList].slice(listIndex + 1),
-          ],
-        };
-        // console.log(newData);
-        return newData;
+
+      dispatch({
+        type: `blur`, // verify HERE if error with blur!
+        categoryList: categoryList,
+        listIndex: listIndex,
       });
+
+      // verify HERE if error with blur!
+
+      // setUserData((prevValues) => {
+      //   const newData = {
+      //     ...prevValues,
+      //     [categoryList]: [
+      //       ...prevValues[categoryList].slice(0, listIndex),
+      //       {
+      //         ...prevValues[categoryList][listIndex],
+      //         isEditing: !prevValues[categoryList][listIndex].isEditing,
+      //         name: "CHANGE OR DELETE!",
+      //       },
+      //       ...prevValues[categoryList].slice(listIndex + 1),
+      //     ],
+      //   };
+      //   // console.log(newData);
+      //   return newData;
+      // });
+
       return;
     }
 
     // console.log(`handleBlur`);
     // console.log(categoryList, listIndex);
-    setUserData((prevValues) => {
-      const newData = {
-        ...prevValues,
-        [categoryList]: [
-          ...prevValues[categoryList].slice(0, listIndex),
-          {
-            ...prevValues[categoryList][listIndex],
-            isEditing: !prevValues[categoryList][listIndex].isEditing,
-          },
-          ...prevValues[categoryList].slice(listIndex + 1),
-        ],
-      };
-      // console.log(newData);
-      return newData;
+
+    dispatch({
+      type: `blurCorrectName`,
+      categoryList: categoryList,
+      listIndex: listIndex,
     });
+
+    // setUserData((prevValues) => {
+    //   const newData = {
+    //     ...prevValues,
+    //     [categoryList]: [
+    //       ...prevValues[categoryList].slice(0, listIndex),
+    //       {
+    //         ...prevValues[categoryList][listIndex],
+    //         isEditing: !prevValues[categoryList][listIndex].isEditing,
+    //       },
+    //       ...prevValues[categoryList].slice(listIndex + 1),
+    //     ],
+    //   };
+    //   // console.log(newData);
+    //   return newData;
+    // });
   };
 
   const handleUserDetailsKeyDown = function (
@@ -223,21 +254,27 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
         return;
       }
 
-      setUserData((prevValues) => {
-        const newData = {
-          ...prevValues,
-          [inputName]: [
-            ...prevValues[inputName].slice(0, index),
-            {
-              ...prevValues[inputName][index],
-              isEditing: !prevValues[inputName][index].isEditing,
-            },
-            ...prevValues[inputName].slice(index + 1),
-          ],
-        };
-        console.log(newData);
-        return newData;
+      dispatch({
+        type: `keyDown`,
+        inputName: inputName,
+        index: index,
       });
+
+      // setUserData((prevValues) => {
+      //   const newData = {
+      //     ...prevValues,
+      //     [inputName]: [
+      //       ...prevValues[inputName].slice(0, index),
+      //       {
+      //         ...prevValues[inputName][index],
+      //         isEditing: !prevValues[inputName][index].isEditing,
+      //       },
+      //       ...prevValues[inputName].slice(index + 1),
+      //     ],
+      //   };
+      //   console.log(newData);
+      //   return newData;
+      // });
     }
   };
 
@@ -265,16 +302,23 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       name: event.target.value,
     };
 
-    setUserData((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues[identifier].slice(0, index),
-          updatedDetail,
-          ...prevValues[identifier].slice(index + 1),
-        ],
-      };
+    dispatch({
+      type: `changeUserActualInput`,
+      identifier: identifier,
+      index: index,
+      updatedDetail: updatedDetail, //  ???
     });
+
+    // setUserData((prevValues) => {
+    //   return {
+    //     ...prevValues,
+    //     [identifier]: [
+    //       ...prevValues[identifier].slice(0, index),
+    //       updatedDetail,
+    //       ...prevValues[identifier].slice(index + 1),
+    //     ],
+    //   };
+    // });
   };
 
   const replaceTextWithInput = function (
@@ -287,21 +331,27 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       return { ...prevValues, open: false };
     });
 
-    setUserData((prevValues) => {
-      const newData = {
-        ...prevValues,
-        [inputName]: [
-          ...prevValues[inputName].slice(0, listItemIndex),
-          {
-            ...prevValues[inputName][listItemIndex],
-            isEditing: !prevValues[inputName][listItemIndex].isEditing,
-          },
-          ...prevValues[inputName].slice(listItemIndex + 1),
-        ],
-      };
-      // console.log(newData);
-      return newData;
+    dispatch({
+      type: `replaceTextWithInput`,
+      inputName: inputName,
+      listItemIndex: listItemIndex,
     });
+
+    // setUserData((prevValues) => {
+    //   const newData = {
+    //     ...prevValues,
+    //     [inputName]: [
+    //       ...prevValues[inputName].slice(0, listItemIndex),
+    //       {
+    //         ...prevValues[inputName][listItemIndex],
+    //         isEditing: !prevValues[inputName][listItemIndex].isEditing,
+    //       },
+    //       ...prevValues[inputName].slice(listItemIndex + 1),
+    //     ],
+    //   };
+    //   // console.log(newData);
+    //   return newData;
+    // });
   };
 
   const handleDeleteListItem = function (
@@ -313,9 +363,15 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       return el.name !== skillName;
     });
 
-    setUserData((prevValues) => {
-      return { ...prevValues, [identifier]: updatedList };
+    dispatch({
+      type: `delete`,
+      identifier: identifier,
+      updatedList: updatedList, // ???
     });
+
+    // setUserData((prevValues) => {
+    //   return { ...prevValues, [identifier]: updatedList };
+    // });
   };
 
   const handleChangeRatingExistingListItem = function (
@@ -323,17 +379,25 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     index: number
   ) {
-    // console.log(typeof rate, typeof identifier, typeof index);
-    setUserData((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues[identifier].slice(0, index),
-          { ...prevValues[identifier][index], level: rate },
-          ...prevValues[identifier].slice(index + 1),
-        ],
-      };
+    dispatch({
+      type: `changeRatingExistingListItem`,
+      identifier: identifier,
+      index: index,
+      rate: rate,
     });
+
+    // console.log(typeof rate, typeof identifier, typeof index);
+
+    // setUserData((prevValues) => {
+    //   return {
+    //     ...prevValues,
+    //     [identifier]: [
+    //       ...prevValues[identifier].slice(0, index),
+    //       { ...prevValues[identifier][index], level: rate },
+    //       ...prevValues[identifier].slice(index + 1),
+    //     ],
+    //   };
+    // });
   };
 
   const handleChangeAddNewListItem = function (
@@ -356,15 +420,22 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       });
     }
 
-    setUserData((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: {
-          ...prevValues[identifier],
-          name: event.target.value,
-        },
-      };
+    dispatch({
+      type: `changeAddNewListItem`,
+      identifier: identifier,
+      categoryList: categoryList,
+      name: event.target.value,
     });
+
+    // setUserData((prevValues) => {
+    //   return {
+    //     ...prevValues,
+    //     [identifier]: {
+    //       ...prevValues[identifier],
+    //       name: event.target.value,
+    //     },
+    //   };
+    // });
   };
 
   // console.log(`==================${categoryList}================`);
@@ -372,7 +443,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
   //   console.log(`${el.name} ${el.level ?? 0}`);
   // });
 
-  console.table(userData[categoryList]);
+  // console.table(userData[categoryList]);
 
   return (
     <>

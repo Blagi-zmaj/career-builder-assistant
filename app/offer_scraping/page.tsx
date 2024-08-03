@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import Drawer from "../components/Drawer";
 import { usePathname } from "next/navigation";
 import ResponsiveDrawer from "../components/DrawerWithoutHideMain";
+import TransferList from "../components/JobOfferScraping/JobOfferScraping";
 
 export default function Specialization({
   params,
@@ -16,7 +17,7 @@ export default function Specialization({
 
   return (
     <ResponsiveDrawer>
-      <h1>Offer scraping</h1>
+      <TransferList />
     </ResponsiveDrawer>
   );
 }
