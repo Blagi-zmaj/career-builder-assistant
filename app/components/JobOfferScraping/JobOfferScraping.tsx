@@ -22,13 +22,13 @@ export default function JobOfferScraping() {
       <SkillBlockWrapper>
         <SkillsListWrapper>
           <h1>Wymagane</h1>
-          <ChipsArray data={mockData} />
+          <ChipsArray data={mockData} type="info" />
         </SkillsListWrapper>
         <SkillsListWrapper>
           <h1>Zgodne</h1>
-          <ChipsArray data={mockData} />
+          <ChipsArray data={mockData} type="success" />
         </SkillsListWrapper>
-        <SelectAllTransferList />
+        <SelectAllTransferList data={mockData} />
       </SkillBlockWrapper>
       <input
         type="url"

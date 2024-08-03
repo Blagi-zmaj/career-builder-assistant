@@ -12,13 +12,14 @@ import { ChipData } from "../util/types";
 
 interface ChipsArrayProps {
   data: readonly ChipData[];
+  type: string;
 }
 
 const ListItem = styled("li")(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-const ChipsArray: React.FC<ChipsArrayProps> = ({ data }) => {
+const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
   const [chipData, setChipData] = React.useState<readonly ChipData[]>(data);
 
   //   const [chipData, setChipData] = React.useState<readonly ChipData[]>([
@@ -54,11 +55,15 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data }) => {
         //   icon = <TagFacesIcon />;
         // }
 
+        if (type === "info") {
+          // icon = < />
+        }
+
         return (
-          <ListItem key={data.key}>
+          <ListItem key={data.key ?? data}>
             <Chip
               icon={icon}
-              label={data.label}
+              label={data.label ?? data}
               // onDelete={data.label === "React" ? undefined : handleDelete(data)}
             />
           </ListItem>

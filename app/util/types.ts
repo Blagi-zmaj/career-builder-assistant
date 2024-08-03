@@ -58,3 +58,8 @@ export interface ChipData {
   key: number;
   label: string;
 }
+
+export interface ChipsArrayProps {
+  data: readonly ChipData[];
+  type: string;
+}

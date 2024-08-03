@@ -10,7 +10,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
-import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+// import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import ChipsArray from "../ChipsArray";
+import { ChipsArrayProps } from "@/app/util/types";
 
 function not(a: readonly number[], b: readonly number[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -24,15 +26,14 @@ function union(a: readonly number[], b: readonly number[]) {
   return [...a, ...not(b, a)];
 }
 
-export default function SelectAllTransferList() {
-  const [checked, setChecked] = React.useState<readonly number[]>([]);
-  const [left, setLeft] = React.useState<readonly number[]>([0, 1, 2, 3]);
-  const [right, setRight] = React.useState<readonly number[]>([
+export default function SelectAllTransferList({ data }) {
+  const [checked, setChecked] = React.useState<readonly number[]>([1, 2]);
+  const [missing, setMissing] = React.useState<readonly number[]>([0, 1, 2, 3]);
+  const [owned, setOwned] = React.useState<readonly number[]>([
     8, 9, 10, 11, 12,
   ]);
 
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
+  const missingChecked = intersection(checked, missing);
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -59,15 +60,9 @@ export default function SelectAllTransferList() {
   };
 
   const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
-  };
-
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
+    setOwned(owned.concat(missingChecked));
+    setMissing(not(missing, missingChecked));
+    setChecked(not(checked, missingChecked));
   };
 
   const customList = (title: React.ReactNode, items: readonly number[]) => (
@@ -150,7 +145,6 @@ export default function SelectAllTransferList() {
   return (
     <Grid
       container
-      // spacing={2}
       justifyContent="center"
       alignItems="center"
       direction="column"
@@ -158,7 +152,7 @@ export default function SelectAllTransferList() {
     >
       <h1>Brakujące</h1>
       <Grid sx={{ width: "100%" }} item>
-        {customList("Brakujące", left)}
+        {customList("Brakujące", missing)}
       </Grid>
       <Grid item>
         <Grid container direction="row" alignItems="center">
@@ -167,26 +161,17 @@ export default function SelectAllTransferList() {
             variant="outlined"
             size="small"
             onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
+            disabled={missingChecked.length === 0}
+            aria-label="move selected owned"
           >
             <KeyboardDoubleArrowDownIcon />
-          </Button>
-          <Button
-            sx={{ my: 1.5 }}
-            variant="outlined"
-            size="small"
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            <KeyboardDoubleArrowUpIcon />
           </Button>
         </Grid>
       </Grid>
       <h1>Posiadane</h1>
       <Grid sx={{ width: "100%" }} item>
-        {customList("Posiadane", right)}
+        {/* {customList("Owned", owned)} */}
+        <ChipsArray data={owned} />
       </Grid>
     </Grid>
   );
