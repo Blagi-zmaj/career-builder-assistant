@@ -9,6 +9,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { Button, ButtonBase } from "@mui/material";
 import { createContext } from "vm";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 
 interface ChipsArrayProps {
   data: readonly ChipData[];
@@ -42,7 +43,7 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
             <Chip
               color="info"
               label={data.label ?? data}
-              icon={<DownloadForOfflineIcon />}
+              icon={<AssignmentTurnedInIcon />}
             />
           );
         }

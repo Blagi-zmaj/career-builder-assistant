@@ -121,7 +121,9 @@ export default function JobOfferScraping() {
 
   return (
     <AppWrapper>
-      <h1>Check how your CV match offer you are interested in!</h1>
+      <h1 style={{ textAlign: "center" }}>
+        Check how your CV match offer you are interested in!
+      </h1>
       <SkillBlockWrapper>
         <SkillsListWrapper>
           <h1>Wymagane</h1>

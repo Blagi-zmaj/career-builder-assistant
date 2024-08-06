@@ -183,7 +183,12 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
       justifyContent="start"
       alignItems="center"
       direction="column"
-      sx={{ width: "100%", height: "100%", backgroundColor: "silver" }}
+      sx={{
+        width: "100%",
+        height: "100%",
+        // backgroundColor: "silver",
+        boxShadow: "0px 0px 13px 0px rgba(102, 179, 255, 1)",
+      }}
     >
       {missing.length > 0 ? (
         <>
