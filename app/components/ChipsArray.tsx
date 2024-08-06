@@ -44,6 +44,7 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
               color="info"
               label={data.label ?? data}
               icon={<AssignmentTurnedInIcon />}
+              style={{ fontSize: "1.5rem", padding: "1.25rem" }}
             />
           );
         }
@@ -54,6 +55,7 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
               color="warning"
               label={data.label ?? data}
               icon={<PriorityHighIcon />}
+              style={{ fontSize: "1.5rem", padding: "1.25rem" }}
             />
           );
         }
@@ -64,6 +66,7 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
               color="success"
               label={data.label ?? data}
               icon={<CheckIcon />}
+              style={{ fontSize: "1.5rem", padding: "1.25rem" }}
             />
           );
         }

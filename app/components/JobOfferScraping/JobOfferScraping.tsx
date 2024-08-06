@@ -7,6 +7,8 @@ import {
 import ChipsArray from "../ChipsArray";
 import { useEffect, useReducer, useState } from "react";
 import Link from "next/link";
+import { Button, Divider } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 
 const reducer = function (state, action) {
   if (action.type === "update") {
@@ -128,12 +130,13 @@ export default function JobOfferScraping() {
         <SkillsListWrapper>
           <h1>Wymagane</h1>
           <ChipsArray data={offerData.required} type="required" />
+          <Divider />
           <Link
             key="requiredToCV"
             href="/cv_creator"
             style={{ textDecoration: "none" }}
           >
-            <button
+            {/* <button
               onClick={() => addOnlyRequiredSkillsToCV(offerData.required)}
               style={{
                 width: "100%",
@@ -143,7 +146,17 @@ export default function JobOfferScraping() {
               }}
             >
               Do you wanna see ONLY required skills on YOUR cv? Click HERE!
-            </button>
+            </button> */}
+            <Button
+              variant="contained"
+              color="info"
+              size="medium"
+              onClick={() => addOnlyRequiredSkillsToCV(offerData.required)}
+              endIcon={<SendIcon />}
+              style={{ marginTop: "1.5rem" }}
+            >
+              Do you wanna see ONLY required skills on YOUR cv? Click HERE!
+            </Button>
           </Link>
         </SkillsListWrapper>
         <SkillsListWrapper>

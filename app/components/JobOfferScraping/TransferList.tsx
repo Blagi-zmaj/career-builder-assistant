@@ -11,8 +11,12 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import ChipsArray from "../ChipsArray";
 import { ChipsArrayProps } from "@/app/util/types";
+import { purple } from "@mui/material/colors";
+import styled from "styled-components";
+import { ButtonProps } from "@mui/joy";
 
 function not(a: readonly number[], b: readonly number[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -48,6 +52,16 @@ function union(a: readonly number[], b: readonly number[]) {
 //     { key: 2, label: "CSS" },
 //   ],
 // };
+
+const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  // color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: "rgba(102, 179, 255, 1)",
+  // backgroundColor: purple[700],
+  "&:hover": {
+    // backgroundColor: purple[700],
+    backgroundColor: "rgba(102, 179, 255, 1)",
+  },
+}));
 
 export default function SelectAllTransferList({ data, updateOwnedSkills }) {
   const [checked, setChecked] = React.useState<readonly number[]>(["Python"]);
@@ -233,6 +247,7 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
         <input
           style={{
             margin: "0 auto",
+            fontSize: "1.5rem",
             width: "60%",
             textAlign: "center",
             height: "2rem",
@@ -244,7 +259,7 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
           pattern="https://.*"
           required
         />
-        <button
+        {/* <button
           style={{
             width: "50%",
             height: "2.5rem",
@@ -253,7 +268,16 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
           }}
         >
           Get data from website
-        </button>
+        </button> */}
+        <ColorButton
+          variant="contained"
+          color="warning"
+          size="medium"
+          endIcon={<DownloadForOfflineIcon />}
+          style={{ width: "50%", marginTop: "1.5rem" }}
+        >
+          Get data from website
+        </ColorButton>
       </Grid>
     </Grid>
   );

@@ -49,6 +49,7 @@ const SkillBlockWrapper = styled.div`
 const SkillsListWrapper = styled.div`
   width: 100%;
   height: 100%;
+  padding: 1rem;
   // background-color: green;
   // border: 1px solid blue;
   box-shadow: 0px 0px 13px 0px rgba(102, 179, 255, 1);
