@@ -4,6 +4,13 @@ export default function userDetailsListReducer(state, action) {
   // console.log(state);
   // console.log(action);
   switch (action.type) {
+    case "fetchFromLocalStorage": {
+      return {
+        ...state,
+        skills: action.ownedFromLocalStorage,
+      };
+    }
+
     case "changeRatingNewListItem": {
       // console.log(`changeRatingNewListItem`);
       // console.log(action.rate);
@@ -93,6 +100,18 @@ export default function userDetailsListReducer(state, action) {
     }
 
     case "changeUserActualInput": {
+      if (action.identifier === "skills") {
+        const skillObjectsArr = [
+          ...state[action.identifier].slice(0, action.index),
+          action.updatedDetail,
+          ...state[action.identifier].slice(action.index + 1),
+        ];
+        console.log(skillObjectsArr);
+        const skillsStringList = skillObjectsArr.map((skill) => skill.name);
+        console.log(skillsStringList);
+        window.localStorage.setItem("skills", JSON.stringify(skillsStringList));
+      }
+
       return {
         ...state,
         [action.identifier]: [
@@ -120,6 +139,15 @@ export default function userDetailsListReducer(state, action) {
     }
 
     case "delete": {
+      if (action.identifier === "skills") {
+        const skillsStringList = action.updatedList.map((el) => {
+          return el.name;
+        });
+        console.log(skillsStringList);
+        window.localStorage.setItem("skills", JSON.stringify(skillsStringList));
+      }
+      console.log(action.identifier, action.updatedList);
+
       return { ...state, [action.identifier]: action.updatedList };
     }
 

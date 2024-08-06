@@ -11,12 +11,16 @@ export default function DatePicker({
   const [isEditingState, setIsEditingState] = useState(false);
 
   const datePickerRef = useRef();
-  if (isEditingState) {
+
+  const handleDateClick = () => {
+    setIsEditingState(true);
     setTimeout(() => {
-      datePickerRef?.current.focus();
-      datePickerRef?.current?.showPicker();
+      if (datePickerRef.current) {
+        datePickerRef.current.focus();
+        datePickerRef.current.showPicker();
+      }
     }, 0);
-  }
+  };
 
   return (
     <div>
@@ -37,6 +41,7 @@ export default function DatePicker({
         <span
           onClick={() => {
             setIsEditingState(true);
+            handleDateClick();
           }}
         >
           {date}

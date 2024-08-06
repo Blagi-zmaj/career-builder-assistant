@@ -3,7 +3,7 @@ import "./globals.css";
 import * as React from "react";
 import { StyledRoot } from "./util/StyledRoot";
 // import { ThemeProvider } from "./util/context";
-import { NavAndDrawerProvider } from "./util/context";
+import { NavAndDrawerProvider, UserDataProvider } from "./util/context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +20,9 @@ export default function RootLayout({
       <body className={"1"}>
         <NavAndDrawerProvider>
           {/* <ThemeProvider> */}
-          <StyledRoot>{children}</StyledRoot>
+          <UserDataProvider>
+            <StyledRoot>{children}</StyledRoot>
+          </UserDataProvider>
           {/* </ThemeProvider> */}
         </NavAndDrawerProvider>
       </body>

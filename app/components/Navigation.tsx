@@ -154,7 +154,7 @@ export default function Navigation({
       </MenuItem>
     </Menu>
   );
-  console.log(pathname);
+  // console.log(pathname);
   return (
     <>
       <AppBar

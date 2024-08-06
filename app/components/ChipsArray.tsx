@@ -4,11 +4,11 @@ import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 import { ChipData } from "../util/types";
-
-// interface ChipData {
-//   key: number;
-//   label: string;
-// }
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import CheckIcon from "@mui/icons-material/Check";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { Button, ButtonBase } from "@mui/material";
+import { createContext } from "vm";
 
 interface ChipsArrayProps {
   data: readonly ChipData[];
@@ -20,21 +20,7 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
-  const [chipData, setChipData] = React.useState<readonly ChipData[]>(data);
-
-  //   const [chipData, setChipData] = React.useState<readonly ChipData[]>([
-  //     { key: 0, label: "Angular" },
-  //     { key: 1, label: "jQuery" },
-  //     { key: 2, label: "Polymer" },
-  //     { key: 3, label: "React" },
-  //     { key: 4, label: "Vue.js" },
-  //   ]);
-
-  const handleDelete = (chipToDelete: ChipData) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
-    );
-  };
+  console.log(data);
 
   return (
     <Paper
@@ -48,26 +34,40 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
       }}
       component="ul"
     >
-      {chipData.map((data) => {
-        let icon;
+      {data.map((data) => {
+        let chip;
 
-        // if (data.label === "React") {
-        //   icon = <TagFacesIcon />;
-        // }
-
-        if (type === "info") {
-          // icon = < />
+        if (type === "owned") {
+          chip = (
+            <Chip
+              color="info"
+              label={data.label ?? data}
+              icon={<DownloadForOfflineIcon />}
+            />
+          );
         }
 
-        return (
-          <ListItem key={data.key ?? data}>
+        if (type === "required") {
+          chip = (
             <Chip
-              icon={icon}
+              color="warning"
               label={data.label ?? data}
-              // onDelete={data.label === "React" ? undefined : handleDelete(data)}
+              icon={<PriorityHighIcon />}
             />
-          </ListItem>
-        );
+          );
+        }
+
+        if (type === "compatible") {
+          chip = (
+            <Chip
+              color="success"
+              label={data.label ?? data}
+              icon={<CheckIcon />}
+            />
+          );
+        }
+
+        return <ListItem key={data.key ?? data}>{chip}</ListItem>;
       })}
     </Paper>
   );

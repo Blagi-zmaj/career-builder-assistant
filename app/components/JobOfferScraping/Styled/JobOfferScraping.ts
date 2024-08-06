@@ -9,15 +9,20 @@ export const breakpoints = {
 const AppWrapper = styled.section`
   display: grid;
   width: calc(100vw - 10rem);
-  grid-template-rows: 0.5fr 5fr 0.5fr;
+  height: 100%;
+  grid-template-rows: 0.25fr 6fr;
   gap: 2rem;
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
-  margin: 5rem 2rem;
+  margin: 5rem 0 0 2rem;
   border: 1px solid white;
+  // align-items: center;
+  // justify-content: center;
+  justify-items: center;
 
   @media (max-width: ${breakpoints.mobile}) {
     background-color: lightcoral;
+    width: calc(100vw - 4rem);
   }
 
   @media (min-width: ${breakpoints.mobile}) and (max-width: ${breakpoints.tablet}) {
@@ -35,7 +40,7 @@ const SkillBlockWrapper = styled.div`
   background-color: grey;
   border: 1px solid yellow;
   display: grid;
-  grid-template-rows: 0.5fr 0.5fr 3fr;
+  grid-template-rows: 0.5fr 0.5fr 2fr;
   // gap: 2rem;
   margin: 0;
 `;
@@ -45,6 +50,10 @@ const SkillsListWrapper = styled.div`
   height: 100%;
   background-color: green;
   border: 1px solid blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export { AppWrapper, SkillBlockWrapper, SkillsListWrapper };

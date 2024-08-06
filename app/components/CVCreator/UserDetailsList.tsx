@@ -66,6 +66,30 @@ type UserProfile = {
 };
 
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
+  useEffect(() => {
+    const userSkillsFromLocalStorage = JSON.parse(
+      localStorage.getItem("skills") ?? "[]" //or localStorage.getItem("skills") as string
+    );
+    console.log(localStorage.getItem("skills"));
+    console.log(typeof localStorage.getItem("skills"));
+    console.log(userSkillsFromLocalStorage);
+    userSkillsFromLocalStorage.forEach((el) => console.log(el));
+
+    //create array with skills objects
+    const ownedSkillObjectsArr = userSkillsFromLocalStorage.map((skill) => {
+      return {
+        name: skill,
+        level: 3,
+        isEditing: false,
+      };
+    });
+
+    dispatch({
+      type: "fetchFromLocalStorage",
+      ownedFromLocalStorage: ownedSkillObjectsArr,
+    });
+  }, []);
+
   const listNameCapitalized =
     categoryList !== `hobbies`
       ? `${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`
@@ -86,6 +110,8 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     open: true,
     text: "Empty record",
   });
+
+  console.log(userData);
 
   const listNameSingular =
     categoryList !== `hobbies` ? `${categoryList.slice(0, -1)}` : `hobby`;
@@ -447,6 +473,10 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
 
   return (
     <>
+      {/* {(categoryList === "skills"
+        ? [{ name: "one", rate: 3, isEditing: false }]
+        : userData[categoryList]
+      ).map((listItem, listIndex) => { */}
       {userData[categoryList].map((listItem, listIndex) => {
         return (
           <div key={categoryList + listIndex}>
