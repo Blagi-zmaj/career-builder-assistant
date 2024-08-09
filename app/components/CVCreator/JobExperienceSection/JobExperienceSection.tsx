@@ -8,6 +8,7 @@ import DatePicker from "../DatePicker";
 import Modal from "../ModalDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Tooltip } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Skill = {
   name: string;
@@ -316,7 +317,7 @@ export default function JobExperienceSection() {
                 )
               }
             >
-              X
+              <DeleteIcon />
             </button>
             {Object.entries(work).map((el, elIndex) => {
               return el[0] === "startDate" || el[0] === "endDate" ? (

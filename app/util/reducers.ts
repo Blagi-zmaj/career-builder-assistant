@@ -1,8 +1,6 @@
 import { UserProfile } from "../util/types";
 
 export default function userDetailsListReducer(state, action) {
-  // console.log(state);
-  // console.log(action);
   switch (action.type) {
     case "fetchFromLocalStorage": {
       return {
@@ -12,9 +10,6 @@ export default function userDetailsListReducer(state, action) {
     }
 
     case "changeRatingNewListItem": {
-      // console.log(`changeRatingNewListItem`);
-      // console.log(action.rate);
-      // console.log(action.identifier);
       return {
         ...state,
         [action.identifier]: {
@@ -48,23 +43,8 @@ export default function userDetailsListReducer(state, action) {
           ...state[action.categoryList].slice(action.listIndex + 1),
         ],
       };
-      // console.log(newData);
-      return newData;
 
-      // const newData = {
-      //   ...state,
-      //   [categoryList]: [
-      //     ...state[categoryList].slice(0, listIndex),
-      //     {
-      //       ...state[categoryList][listIndex],
-      //       isEditing: !state[categoryList][listIndex].isEditing,
-      //       name: "ADD OR DELETE!",
-      //     },
-      //     ...state[categoryList].slice(listIndex + 1),
-      //   ],
-      // };
-      // // console.log(newData);
-      // return newData;
+      return newData;
     }
 
     case "blurCorrectName": {
@@ -79,7 +59,7 @@ export default function userDetailsListReducer(state, action) {
           ...state[action.categoryList].slice(action.listIndex + 1),
         ],
       };
-      // console.log(newData);
+
       return newData;
     }
 
@@ -170,12 +150,6 @@ export default function userDetailsListReducer(state, action) {
           name: action.name,
         },
       };
-    }
-
-    case "": {
-    }
-
-    case "": {
     }
   }
 }

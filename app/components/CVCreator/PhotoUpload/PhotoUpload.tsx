@@ -1,13 +1,17 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import Image from "next/image";
 import frog from "../../../../public/cv_creator.jpg";
 import styles from "./PhotoUpload.module.css";
+import { NavAndDrawerContext } from "@/app/util/context";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function PhotoUpload() {
   const [showFileInput, setShowFileInput] = useState(false);
   const [imageSrc, setImageSrc] = useState(frog);
   const [imageFile, setImageFile] = useState(null);
   const profilePicture = useRef();
+
+  const { toggleShowPhoto } = useContext(NavAndDrawerContext);
 
   const handleImageUpload = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -28,8 +32,6 @@ export default function PhotoUpload() {
     profilePicture.current.click();
   };
 
-  // console.log(profilePicture.current);
-
   return showFileInput ? (
     <div
       style={{
@@ -40,7 +42,6 @@ export default function PhotoUpload() {
       }}
       onMouseEnter={() => {
         setShowFileInput(true);
-        //add function to show
       }}
       onMouseLeave={() => setShowFileInput(false)}
     >
@@ -54,10 +55,17 @@ export default function PhotoUpload() {
       <button
         type="button"
         onClick={handleButtonClick}
-        // style={{ position: "absolute" }}
         className={styles.changeImageBtn}
       >
         Choose File
+      </button>
+      {/* <button onClick={toggleShowPhoto}>Delete Image</button> */}
+      <button
+        type="button"
+        onClick={toggleShowPhoto}
+        className={styles.addImageBtn}
+      >
+        <DeleteIcon />
       </button>
 
       <div>

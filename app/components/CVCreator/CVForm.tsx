@@ -47,6 +47,8 @@ export default function CVForm() {
     toggleShowNavAndDrawer,
     toggleShowButtons,
     showButtons,
+    showPhoto,
+    toggleShowPhoto,
   } = useContext(NavAndDrawerContext);
   // console.log(`CV Form ${showButtons}`);
   const [inputValues, setInputValues] = useState(userContactData);
@@ -134,7 +136,8 @@ export default function CVForm() {
     <div className={styles.form} id="form">
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
-          <PhotoUpload />
+          {showPhoto && <PhotoUpload />}
+          {/* {!showPhoto && <button onClick={toggleShowPhoto}>Add image</button>}   */}
           <UserContactDataSection />
           <SkillsAndLanguagesSection />
           {/* <HobbiesSection /> */}

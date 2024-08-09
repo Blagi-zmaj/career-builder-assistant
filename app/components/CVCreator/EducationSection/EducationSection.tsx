@@ -1,7 +1,7 @@
 import { useState, useContext, ChangeEvent } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
 import { userProfileData } from "../CVCreatorUtils/helpers";
-import styles from "../CVForm.module.css";
+import styles from "./EducationSection.module.css";
 import InputForm from "../InputForm/InputForm";
 import WorkIcon from "@mui/icons-material/Work";
 import DatePicker from "../DatePicker";
@@ -9,6 +9,7 @@ import Modal from "../ModalDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SchoolIcon from "@mui/icons-material/School";
 import { Tooltip } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Skill = {
   name: string;
@@ -320,7 +321,7 @@ export default function EducationSection() {
                 )
               }
             >
-              X
+              <DeleteIcon />
             </button>
             {Object.entries(subject).map((el, elIndex) => {
               return el[0] === "startDate" || el[0] === "endDate" ? (

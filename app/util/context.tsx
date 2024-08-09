@@ -7,13 +7,14 @@ export const NavAndDrawerContext = createContext({
   showButtons: false,
   toggleShowNavAndDrawer: () => {},
   toggleShowButtons: () => {},
+  showPhoto: true,
+  toggleShowPhoto: () => {},
 });
-
-// create context and import data
 
 export const NavAndDrawerProvider = ({ children }) => {
   const [showNavAndDrawer, setNavAndDrawer] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
+  const [showPhoto, setShowPhoto] = useState(true);
 
   const toggleShowNavAndDrawer = () => {
     setNavAndDrawer((prev) => !prev);
@@ -25,6 +26,10 @@ export const NavAndDrawerProvider = ({ children }) => {
     setShowButtons((prev) => !prev);
   };
 
+  const toggleShowPhoto = () => {
+    setShowPhoto((prev) => !prev);
+  };
+
   return (
     <NavAndDrawerContext.Provider
       value={{
@@ -32,12 +37,16 @@ export const NavAndDrawerProvider = ({ children }) => {
         toggleShowNavAndDrawer,
         toggleShowButtons,
         showButtons,
+        showPhoto,
+        toggleShowPhoto,
       }}
     >
       {children}
     </NavAndDrawerContext.Provider>
   );
 };
+
+///////////////////////////////////////////////////////////////////////////
 
 export const UserDataContext = createContext({
   updateCandidateSkills: () => {},

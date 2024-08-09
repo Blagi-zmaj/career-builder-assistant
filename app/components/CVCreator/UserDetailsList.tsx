@@ -99,7 +99,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     userDetailsListReducer,
     userProfileData
   );
-  // const [userData, setUserData] = useState<UserProfile>(userProfileData);
+
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showTooltip, setShowTooltip] = useState({
@@ -139,16 +139,9 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
   ) {
     dispatch({
       type: `changeRatingNewListItem`,
-      rate: rate, // check if i works with rate instead of rate:rate
+      rate: rate,
       identifier: identifier,
     });
-
-    // setUserData((prevValues) => {
-    //   return {
-    //     ...prevValues,
-    //     [identifier]: { ...prevValues[identifier], level: rate },
-    //   };
-    // });
   };
 
   const handleAddNewItemList = function (
@@ -161,14 +154,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       listName: listName,
       identifier: identifier,
     });
-
-    // setUserData((prevValues) => {
-    //   return {
-    //     ...prevValues,
-    //     [listName]: [...prevValues[listName], prevValues[identifier]],
-    //     [identifier]: { ...prevValues[identifier], name: "" },
-    //   };
-    // });
   };
 
   function hasDuplicates(arr) {
@@ -182,86 +167,30 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
 
       dispatch({
         type: `blur`,
-        categoryList: categoryList, // check if i works with rate instead of rate:rate
-        listIndex: listIndex,
-      });
-
-      // setUserData((prevValues) => {
-      //   const newData = {
-      //     ...prevValues,
-      //     [categoryList]: [
-      //       ...prevValues[categoryList].slice(0, listIndex),
-      //       {
-      //         ...prevValues[categoryList][listIndex],
-      //         isEditing: !prevValues[categoryList][listIndex].isEditing,
-      //         name: "ADD OR DELETE!",
-      //       },
-      //       ...prevValues[categoryList].slice(listIndex + 1),
-      //     ],
-      //   };
-      //   // console.log(newData);
-      //   return newData;
-      // });
-
-      return;
-    }
-
-    // console.log(hasDuplicates(userData[categoryList]));
-    if (hasDuplicates(userData[categoryList])) {
-      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
-
-      dispatch({
-        type: `blur`, // verify HERE if error with blur!
         categoryList: categoryList,
         listIndex: listIndex,
       });
 
-      // verify HERE if error with blur!
-
-      // setUserData((prevValues) => {
-      //   const newData = {
-      //     ...prevValues,
-      //     [categoryList]: [
-      //       ...prevValues[categoryList].slice(0, listIndex),
-      //       {
-      //         ...prevValues[categoryList][listIndex],
-      //         isEditing: !prevValues[categoryList][listIndex].isEditing,
-      //         name: "CHANGE OR DELETE!",
-      //       },
-      //       ...prevValues[categoryList].slice(listIndex + 1),
-      //     ],
-      //   };
-      //   // console.log(newData);
-      //   return newData;
-      // });
-
       return;
     }
 
-    // console.log(`handleBlur`);
-    // console.log(categoryList, listIndex);
+    if (hasDuplicates(userData[categoryList])) {
+      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
+
+      dispatch({
+        type: `blur`,
+        categoryList: categoryList,
+        listIndex: listIndex,
+      });
+
+      return;
+    }
 
     dispatch({
       type: `blurCorrectName`,
       categoryList: categoryList,
       listIndex: listIndex,
     });
-
-    // setUserData((prevValues) => {
-    //   const newData = {
-    //     ...prevValues,
-    //     [categoryList]: [
-    //       ...prevValues[categoryList].slice(0, listIndex),
-    //       {
-    //         ...prevValues[categoryList][listIndex],
-    //         isEditing: !prevValues[categoryList][listIndex].isEditing,
-    //       },
-    //       ...prevValues[categoryList].slice(listIndex + 1),
-    //     ],
-    //   };
-    //   // console.log(newData);
-    //   return newData;
-    // });
   };
 
   const handleUserDetailsKeyDown = function (
@@ -285,22 +214,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
         inputName: inputName,
         index: index,
       });
-
-      // setUserData((prevValues) => {
-      //   const newData = {
-      //     ...prevValues,
-      //     [inputName]: [
-      //       ...prevValues[inputName].slice(0, index),
-      //       {
-      //         ...prevValues[inputName][index],
-      //         isEditing: !prevValues[inputName][index].isEditing,
-      //       },
-      //       ...prevValues[inputName].slice(index + 1),
-      //     ],
-      //   };
-      //   console.log(newData);
-      //   return newData;
-      // });
     }
   };
 
@@ -332,19 +245,8 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       type: `changeUserActualInput`,
       identifier: identifier,
       index: index,
-      updatedDetail: updatedDetail, //  ???
+      updatedDetail: updatedDetail,
     });
-
-    // setUserData((prevValues) => {
-    //   return {
-    //     ...prevValues,
-    //     [identifier]: [
-    //       ...prevValues[identifier].slice(0, index),
-    //       updatedDetail,
-    //       ...prevValues[identifier].slice(index + 1),
-    //     ],
-    //   };
-    // });
   };
 
   const replaceTextWithInput = function (
@@ -362,22 +264,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       inputName: inputName,
       listItemIndex: listItemIndex,
     });
-
-    // setUserData((prevValues) => {
-    //   const newData = {
-    //     ...prevValues,
-    //     [inputName]: [
-    //       ...prevValues[inputName].slice(0, listItemIndex),
-    //       {
-    //         ...prevValues[inputName][listItemIndex],
-    //         isEditing: !prevValues[inputName][listItemIndex].isEditing,
-    //       },
-    //       ...prevValues[inputName].slice(listItemIndex + 1),
-    //     ],
-    //   };
-    //   // console.log(newData);
-    //   return newData;
-    // });
   };
 
   const handleDeleteListItem = function (
@@ -392,12 +278,8 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     dispatch({
       type: `delete`,
       identifier: identifier,
-      updatedList: updatedList, // ???
+      updatedList: updatedList,
     });
-
-    // setUserData((prevValues) => {
-    //   return { ...prevValues, [identifier]: updatedList };
-    // });
   };
 
   const handleChangeRatingExistingListItem = function (
@@ -411,19 +293,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       index: index,
       rate: rate,
     });
-
-    // console.log(typeof rate, typeof identifier, typeof index);
-
-    // setUserData((prevValues) => {
-    //   return {
-    //     ...prevValues,
-    //     [identifier]: [
-    //       ...prevValues[identifier].slice(0, index),
-    //       { ...prevValues[identifier][index], level: rate },
-    //       ...prevValues[identifier].slice(index + 1),
-    //     ],
-    //   };
-    // });
   };
 
   const handleChangeAddNewListItem = function (
@@ -436,7 +305,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     });
 
     if (isInUserProperty.length > 0 && userData[identifier] !== "") {
-      // console.log(`userData[identifier] !== ""`);
       setIsDisabledAddBtn(true);
       setShowTooltip({ open: true, text: "Duplicated record" });
     } else {
@@ -452,31 +320,10 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       categoryList: categoryList,
       name: event.target.value,
     });
-
-    // setUserData((prevValues) => {
-    //   return {
-    //     ...prevValues,
-    //     [identifier]: {
-    //       ...prevValues[identifier],
-    //       name: event.target.value,
-    //     },
-    //   };
-    // });
   };
-
-  // console.log(`==================${categoryList}================`);
-  // userData[categoryList].forEach((el) => {
-  //   console.log(`${el.name} ${el.level ?? 0}`);
-  // });
-
-  // console.table(userData[categoryList]);
 
   return (
     <>
-      {/* {(categoryList === "skills"
-        ? [{ name: "one", rate: 3, isEditing: false }]
-        : userData[categoryList]
-      ).map((listItem, listIndex) => { */}
       {userData[categoryList].map((listItem, listIndex) => {
         return (
           <div key={categoryList + listIndex}>
@@ -558,12 +405,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
           placeholder={`New ${listNameSingular}`}
           className={styles.control}
           onChange={(event) =>
-            handleChangeAddNewListItem(
-              event,
-              // `new${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`,
-              newListName,
-              categoryList
-            )
+            handleChangeAddNewListItem(event, newListName, categoryList)
           }
         />
         {categoryList !== "hobbies" ? (

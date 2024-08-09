@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./ModalDialog.module.css";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function FormDialog({
   type,
@@ -36,7 +37,7 @@ export default function FormDialog({
           hideAllButtons ? styles.modalHiddenButton : styles.addNewRecordModal
         }
       >
-        +
+        <AddIcon />
       </Button>
       <Dialog
         open={open}

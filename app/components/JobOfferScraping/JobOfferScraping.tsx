@@ -92,6 +92,10 @@ export default function JobOfferScraping() {
       return null;
     };
 
+    if (!getDataFromLocalStorage("skills")) {
+      window.localStorage.setItem("skills", "[]");
+    }
+
     const skills = getDataFromLocalStorage("skills");
     dispatch({ type: "fetchFromLocalStorage", ownedFromStorage: skills });
   }, []);
