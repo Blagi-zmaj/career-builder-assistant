@@ -27,21 +27,6 @@ import JobExperienceSection from "./JobExperienceSection/JobExperienceSection";
 import EducationSection from "./EducationSection/EducationSection";
 
 export default function CVForm() {
-  // ////////////////////////////////////////////////////////////////
-  // //fetch data from localStorage
-
-  // useEffect(() => {
-  //   const userSkillsFromLocalStorage = JSON.parse(
-  //     localStorage.getItem("skills") ?? "[]" //or localStorage.getItem("skills") as string
-  //   );
-  //   console.log(localStorage.getItem("skills"));
-  //   console.log(typeof localStorage.getItem("skills"));
-  //   console.log(userSkillsFromLocalStorage);
-  //   userSkillsFromLocalStorage.forEach((el) => console.log(el));
-  // });
-
-  // ////////////////////////////////////////////////////////////////
-
   const {
     showNavAndDrawer,
     toggleShowNavAndDrawer,
@@ -137,7 +122,11 @@ export default function CVForm() {
       <div className={(styles.section, styles.aside)}>
         <div className={(styles.section, styles.aboutDetails)}>
           {showPhoto && <PhotoUpload />}
-          {/* {!showPhoto && <button onClick={toggleShowPhoto}>Add image</button>}   */}
+          {!showPhoto && (
+            <button onClick={toggleShowPhoto} className={styles.addPhotoBtn}>
+              Add photo
+            </button>
+          )}
           <UserContactDataSection />
           <SkillsAndLanguagesSection />
           {/* <HobbiesSection /> */}

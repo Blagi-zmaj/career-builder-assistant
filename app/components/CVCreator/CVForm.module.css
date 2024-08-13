@@ -18,6 +18,19 @@
   }
 }
 
+.addPhotoBtn {
+  opacity: 0;
+  background-color: yellowgreen;
+  margin-top: 0.5rem;
+  height: 4rem;
+  width: 100%;
+}
+
+.addPhotoBtn:hover {
+  opacity: 1;
+  background-color: yellowgreen;
+}
+
 .addNewRecordForm {
   color: #fff;
   -webkit-box-shadow: 0px 0px 30px 0px rgba(24, 59, 240, 1);

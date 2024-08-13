@@ -32,9 +32,9 @@ export const userProfileData = {
   newLanguage: { name: "", level: 3, isEditing: false },
   newHobby: { name: "", isEditing: false },
   skills: [
-    { name: "Machine", level: 1, isEditing: false },
-    { name: "Deep", level: 2, isEditing: false },
-    { name: "Data", level: 4, isEditing: false },
+    // { name: "Machine", level: 1, isEditing: false },
+    // { name: "Deep", level: 2, isEditing: false },
+    // { name: "Data", level: 4, isEditing: false },
   ],
   languages: [
     { name: "English", level: 2, isEditing: false },

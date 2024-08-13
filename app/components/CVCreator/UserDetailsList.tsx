@@ -68,12 +68,8 @@ type UserProfile = {
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
   useEffect(() => {
     const userSkillsFromLocalStorage = JSON.parse(
-      localStorage.getItem("skills") ?? "[]" //or localStorage.getItem("skills") as string
+      localStorage.getItem("skills") ?? `["Machine","AI"]` //or localStorage.getItem("skills") as string
     );
-    console.log(localStorage.getItem("skills"));
-    console.log(typeof localStorage.getItem("skills"));
-    console.log(userSkillsFromLocalStorage);
-    userSkillsFromLocalStorage.forEach((el) => console.log(el));
 
     //create array with skills objects
     const ownedSkillObjectsArr = userSkillsFromLocalStorage.map((skill) => {
@@ -111,7 +107,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     text: "Empty record",
   });
 
-  console.log(userData);
+  // console.log(userData);
 
   const listNameSingular =
     categoryList !== `hobbies` ? `${categoryList.slice(0, -1)}` : `hobby`;

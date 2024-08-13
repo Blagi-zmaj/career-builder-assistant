@@ -1,10 +1,24 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import UserDetailsList from "../components/CVCreator/UserDetailsList";
 import { userProfileData } from "../components/CVCreator/CVCreatorUtils/helpers";
 
-const actualUserSkills = [...userProfileData.skills];
+const userSkillsFromLocalStorage = JSON.parse(
+  localStorage.getItem("skills") ?? `["Machine","Python"]` //or localStorage.getItem("skills") as string
+);
+
+//create array with skills objects
+const ownedSkillObjectsArr = userSkillsFromLocalStorage.map((skill) => {
+  return {
+    name: skill,
+    level: 3,
+    isEditing: false,
+  };
+});
+
+// const actualUserSkills = [...userProfileData.skills];
+const actualUserSkills = [...ownedSkillObjectsArr];
 const newSkillNames = ["Machine learning", "React PRO", "Deep learning"];
 const skillToChange = "Machine";
 
@@ -32,6 +46,11 @@ const createTests = function (
     const localNewAttributesNames = [...newAttributesNames];
 
     beforeEach(() => {
+      localStorage.setItem(
+        "skills",
+        JSON.stringify(userSkillsFromLocalStorage)
+      );
+
       render(
         <UserDetailsList
           categoryList={categoryListName}
