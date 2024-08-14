@@ -21,7 +21,7 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
-  console.log(data);
+  // console.log(data);
 
   return (
     <Paper

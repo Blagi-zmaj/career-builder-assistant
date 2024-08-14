@@ -12,8 +12,8 @@ import SendIcon from "@mui/icons-material/Send";
 
 const reducer = function (state, action) {
   if (action.type === "update") {
-    console.log({ ...state, ...action.data });
-    console.log(action.newOwned);
+    // console.log({ ...state, ...action.data });
+    // console.log(action.newOwned);
 
     window.localStorage.setItem(
       "skills",
@@ -57,13 +57,26 @@ const getMissing = function (required, owned) {
   });
 };
 
-export default function JobOfferScraping() {
+export default function JobOfferScraping({ skillsFromOffer }) {
+  console.log(skillsFromOffer);
   // useEffect(() => {
   //   const technologies = ["Python", "Google analytics", "HTML", "CSS"];
   //   window.localStorage.setItem("skills", JSON.stringify(technologies));
   // }, []);
 
   //get data from website
+  // const [dataFromWeb, setDataFromWeb] = useState([
+  //   "React",
+  //   "Polish",
+  //   "AI",
+  //   "Azure",
+  //   "Google analytics",
+  //   "Vue.js",
+  //   "Python",
+  // ]);
+
+  // skillsFromOffer.map((el) => console.log(el));
+
   const [dataFromWeb, setDataFromWeb] = useState([
     "React",
     "Polish",
@@ -78,7 +91,7 @@ export default function JobOfferScraping() {
     const getDataFromLocalStorage = (key) => {
       if (typeof window !== "undefined") {
         const jsonArray = localStorage.getItem(key);
-        console.log(jsonArray);
+        // console.log(jsonArray);
         if (jsonArray) {
           try {
             return JSON.parse(jsonArray);
@@ -116,12 +129,12 @@ export default function JobOfferScraping() {
   };
 
   const addOnlyRequiredSkillsToCV = function (requiredSkills) {
-    console.log("addOnlyRequiredSkillsToCV", requiredSkills);
+    // console.log("addOnlyRequiredSkillsToCV", requiredSkills);
     window.localStorage.setItem("skills", JSON.stringify(requiredSkills));
   };
 
   const deleteOwnedSkill = function (deletedSkill) {
-    console.log(`deletedSkill: ${deletedSkill}`);
+    // console.log(`deletedSkill: ${deletedSkill}`);
     dispatch({ type: "delete" });
   };
 

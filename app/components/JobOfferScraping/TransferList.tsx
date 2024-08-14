@@ -67,8 +67,8 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
   const [checked, setChecked] = React.useState<readonly number[]>(["Python"]);
   const [missing, setMissing] = React.useState<readonly number[]>(data.missing);
   const [owned, setOwned] = React.useState<readonly number[]>(data.owned);
-  console.log(data);
-  console.log(owned);
+  // console.log(data);
+  // console.log(owned);
 
   React.useEffect(() => {
     setMissing(data.missing);
