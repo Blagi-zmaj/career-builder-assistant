@@ -12,9 +12,6 @@ import SendIcon from "@mui/icons-material/Send";
 
 const reducer = function (state, action) {
   if (action.type === "update") {
-    // console.log({ ...state, ...action.data });
-    // console.log(action.newOwned);
-
     window.localStorage.setItem(
       "skills",
       JSON.stringify([...state.owned, ...action.newOwned])
@@ -41,9 +38,14 @@ const reducer = function (state, action) {
       missing: getMissing(state.required, state.owned),
     };
   }
-};
 
-const getDataFromWebsite = function () {};
+  if (action.type === "updateRequired") {
+    return {
+      ...state,
+      required: action.data,
+    };
+  }
+};
 
 const getCompatible = function (required, owned) {
   return required.filter((el) => {
@@ -57,41 +59,40 @@ const getMissing = function (required, owned) {
   });
 };
 
-export default function JobOfferScraping({ skillsFromOffer }) {
-  console.log(skillsFromOffer);
+export default function JobOfferScraping() {
+  // export default function JobOfferScraping({ skillsFromOffer }) {
+  // console.log(skillsFromOffer);
+
+  const [skillsFromOffer, setSkillsFromOffer] = useState([]);
+  // const [userUrl, setUserUrl] = useState("");
+
+  const getUrlFromUser = function (userUrl) {
+    console.log(`userUrl`, userUrl);
+    scrapeOfferSkills(userUrl);
+  };
+
+  const scrapeOfferSkills = async function (url: string) {
+    console.log(`scrapeOfferSkills`, url);
+    const response = await fetch("pages/api/skills", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    console.log("response joboffer", response);
+    const data = await response.json();
+    console.log(data);
+    setSkillsFromOffer(data);
+  };
+
   // useEffect(() => {
   //   const technologies = ["Python", "Google analytics", "HTML", "CSS"];
   //   window.localStorage.setItem("skills", JSON.stringify(technologies));
   // }, []);
 
-  //get data from website
-  // const [dataFromWeb, setDataFromWeb] = useState([
-  //   "React",
-  //   "Polish",
-  //   "AI",
-  //   "Azure",
-  //   "Google analytics",
-  //   "Vue.js",
-  //   "Python",
-  // ]);
-
-  // skillsFromOffer.map((el) => console.log(el));
-
-  const [dataFromWeb, setDataFromWeb] = useState([
-    "React",
-    "Polish",
-    "AI",
-    "Azure",
-    "Google analytics",
-    "Vue.js",
-    "Python",
-  ]);
-
   useEffect(() => {
     const getDataFromLocalStorage = (key) => {
       if (typeof window !== "undefined") {
         const jsonArray = localStorage.getItem(key);
-        // console.log(jsonArray);
         if (jsonArray) {
           try {
             return JSON.parse(jsonArray);
@@ -114,15 +115,18 @@ export default function JobOfferScraping({ skillsFromOffer }) {
   }, []);
 
   const [offerData, dispatch] = useReducer(reducer, {
-    required: dataFromWeb, // add here from website in future
+    required: skillsFromOffer, // add here from website in future
     compatible: [],
     missing: [],
     owned: [],
   });
 
+  console.log(offerData.required);
+
   useEffect(() => {
+    dispatch({ type: "updateRequired", data: skillsFromOffer });
     dispatch({ type: "compute" });
-  }, []);
+  }, [skillsFromOffer]);
 
   const updateOwnedSkills = function (updatedSkills, missingChecked) {
     dispatch({ type: "update", data: updatedSkills, newOwned: missingChecked });
@@ -148,33 +152,39 @@ export default function JobOfferScraping({ skillsFromOffer }) {
           <h1>Wymagane</h1>
           <ChipsArray data={offerData.required} type="required" />
           <Divider />
-          <Link
+          {/* <Link
             key="requiredToCV"
             href="/cv_creator"
             style={{ textDecoration: "none" }}
-          >
-            {/* <button
-              onClick={() => addOnlyRequiredSkillsToCV(offerData.required)}
+          > */}
+          {offerData.required.length > 0 ? (
+            <Link
+              key="requiredToCV"
+              href="/cv_creator"
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                variant="contained"
+                color="info"
+                size="medium"
+                onClick={() => addOnlyRequiredSkillsToCV(offerData.required)}
+                endIcon={<SendIcon />}
+                // style={{ marginTop: "1.5rem" }}
+              >
+                Do you wanna see ONLY required skills on YOUR cv? Click HERE!
+              </Button>
+            </Link>
+          ) : (
+            <p
               style={{
-                width: "100%",
-                height: "2.5rem",
-                margin: "1rem 0",
-                fontSize: "1rem",
+                color: "white",
+                textShadow: "1px 1px 2px grey, 0 0 1em grey, 0 0 0.2em grey",
+                // textShadow: "white 1px 0 1px",
               }}
             >
-              Do you wanna see ONLY required skills on YOUR cv? Click HERE!
-            </button> */}
-            <Button
-              variant="contained"
-              color="info"
-              size="medium"
-              onClick={() => addOnlyRequiredSkillsToCV(offerData.required)}
-              endIcon={<SendIcon />}
-              style={{ marginTop: "1.5rem" }}
-            >
-              Do you wanna see ONLY required skills on YOUR cv? Click HERE!
-            </Button>
-          </Link>
+              Write url below to check skills comparison with your cv!
+            </p>
+          )}
         </SkillsListWrapper>
         <SkillsListWrapper>
           <h1>Zgodne</h1>
@@ -182,6 +192,7 @@ export default function JobOfferScraping({ skillsFromOffer }) {
         </SkillsListWrapper>
 
         <SelectAllTransferList
+          getUrlFromUser={getUrlFromUser}
           data={offerData}
           updateOwnedSkills={updateOwnedSkills}
           // deleteOwnedSkill={deleteOwnedSkill}

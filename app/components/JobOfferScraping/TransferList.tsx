@@ -30,43 +30,23 @@ function union(a: readonly number[], b: readonly number[]) {
   return [...a, ...not(b, a)];
 }
 
-// const mockData = {
-//   required: [
-//     { key: 0, label: "React" },
-//     { key: 1, label: "Polish" },
-//     { key: 2, label: "AI" },
-//     { key: 3, label: "Azure" },
-//   ],
-//   compatible: [
-//     { key: 3, label: "React" },
-//     { key: 4, label: "Vue.js" },
-//   ],
-//   missing: [
-//     { key: 0, label: "Angular" },
-//     { key: 1, label: "jQuery" },
-//     { key: 2, label: "Polymer" },
-//   ],
-//   owned: [
-//     { key: 0, label: "Amazon" },
-//     { key: 1, label: "HTML" },
-//     { key: 2, label: "CSS" },
-//   ],
-// };
-
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  // color: theme.palette.getContrastText(purple[500]),
   backgroundColor: "rgba(102, 179, 255, 1)",
-  // backgroundColor: purple[700],
   "&:hover": {
-    // backgroundColor: purple[700],
     backgroundColor: "rgba(102, 179, 255, 1)",
   },
 }));
 
-export default function SelectAllTransferList({ data, updateOwnedSkills }) {
+export default function SelectAllTransferList({
+  data,
+  updateOwnedSkills,
+  getUrlFromUser,
+}) {
   const [checked, setChecked] = React.useState<readonly number[]>(["Python"]);
   const [missing, setMissing] = React.useState<readonly number[]>(data.missing);
   const [owned, setOwned] = React.useState<readonly number[]>(data.owned);
+
+  const urlInputRef = React.useRef("");
   // console.log(data);
   // console.log(owned);
 
@@ -191,6 +171,13 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
     </Card>
   );
 
+  // const scrapeOfferSkills = async function (url: string) {
+  //   console.log(url);
+  //   // const response = await fetch(url);
+  //   // console.log(response);
+  //   // const data = await response.text();
+  //   // console.log(data);
+  // };
   return (
     <Grid
       container
@@ -245,6 +232,7 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
           Write url for job offer you wanna check:
         </h1>
         <input
+          ref={urlInputRef}
           style={{
             margin: "0 auto",
             fontSize: "1.5rem",
@@ -252,6 +240,7 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
             textAlign: "center",
             height: "2rem",
           }}
+          // onChange={()=>{}}
           type="url"
           name="url"
           id="url"
@@ -259,22 +248,23 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
           pattern="https://.*"
           required
         />
-        {/* <button
-          style={{
-            width: "50%",
-            height: "2.5rem",
-            margin: "1rem 0",
-            fontSize: "1rem",
-          }}
-        >
-          Get data from website
-        </button> */}
+
         <ColorButton
           variant="contained"
           color="warning"
           size="medium"
           endIcon={<DownloadForOfflineIcon />}
           style={{ width: "50%", marginTop: "1.5rem" }}
+          onClick={() => {
+            const url = urlInputRef.current.value;
+            getUrlFromUser(url);
+            urlInputRef.current.value = "";
+          }}
+          // onClick={() =>
+          //   scrapeOfferSkills(
+          //     "https://nofluffjobs.com/pl/job/senior-fullstack-developer-react-node-js-xebia-remote-1"
+          //   )
+          // }
         >
           Get data from website
         </ColorButton>
@@ -282,315 +272,3 @@ export default function SelectAllTransferList({ data, updateOwnedSkills }) {
     </Grid>
   );
 }
-
-///////////////////////////////////////////////////////////////////////////////////
-
-// export default function SelectAllTransferList({
-//   data,
-//   updateOwnedSkills,
-//   skills,
-// }) {
-//   const [checked, setChecked] = React.useState<readonly number[]>(["Python"]);
-//   const [missing, setMissing] = React.useState<readonly number[]>(data.missing);
-//   const [owned, setOwned] = React.useState<readonly number[]>(data.owned);
-//   console.log(skills);
-
-//   const missingChecked = intersection(checked, missing);
-
-//   const handleToggle = (value: number) => () => {
-//     const currentIndex = checked.indexOf(value);
-//     const newChecked = [...checked];
-
-//     if (currentIndex === -1) {
-//       newChecked.push(value);
-//     } else {
-//       newChecked.splice(currentIndex, 1);
-//     }
-
-//     setChecked(newChecked);
-//   };
-
-//   const numberOfChecked = (items: readonly number[]) =>
-//     intersection(checked, items).length;
-
-//   const handleToggleAll = (items: readonly number[]) => () => {
-//     if (numberOfChecked(items) === items.length) {
-//       setChecked(not(checked, items));
-//     } else {
-//       setChecked(union(checked, items));
-//     }
-//   };
-
-//   const handleCheckedMissing = () => {
-//     const newOwned = owned.concat(missingChecked);
-//     const newMissing = not(missing, missingChecked);
-//     updateOwnedSkills({ missing: newMissing, owned: newOwned });
-//     setOwned(newOwned);
-//     setMissing(newMissing);
-//     setChecked(not(checked, missingChecked));
-//   };
-
-//   const customList = (title: React.ReactNode, items: readonly number[]) => (
-//     <Card sx={{ backgroundColor: "blue", margin: "0 auto" }}>
-//       <CardHeader
-//         sx={{
-//           px: 2,
-//           py: 1,
-//           display: "flex",
-//           justifyItems: "center",
-//           width: "15rem",
-//           margin: "0 auto",
-//           fontSize: "3rem",
-//         }}
-//         avatar={
-//           <Checkbox
-//             sx={{ marginRight: "0rem" }}
-//             onClick={handleToggleAll(items)}
-//             checked={
-//               numberOfChecked(items) === items.length && items.length !== 0
-//             }
-//             indeterminate={
-//               numberOfChecked(items) !== items.length &&
-//               numberOfChecked(items) !== 0
-//             }
-//             disabled={items.length === 0}
-//             inputProps={{
-//               "aria-label": "all items selected",
-//             }}
-//           />
-//         }
-//         subheader={`${numberOfChecked(items)}/${items.length} selected`}
-//       />
-//       <Divider />
-//       <List
-//         sx={{
-//           width: "100%",
-//           bgcolor: "background.paper",
-//           overflow: "auto",
-//           display: "flex",
-//           flexWrap: "wrap",
-//         }}
-//         dense
-//         component="div"
-//         role="list"
-//       >
-//         {items.map((value: number) => {
-//           const labelId = `transfer-list-all-item-${value}-label`;
-
-//           return (
-//             <ListItemButton
-//               key={value}
-//               role="listitem"
-//               onClick={handleToggle(value)}
-//               sx={{
-//                 flex: "1 1 12rem",
-//                 height: "4rem",
-//                 backgroundColor: "purple",
-//                 alignItems: "center",
-//               }}
-//             >
-//               <ListItemIcon>
-//                 <Checkbox
-//                   checked={checked.indexOf(value) !== -1}
-//                   tabIndex={-1}
-//                   disableRipple
-//                   inputProps={{
-//                     "aria-labelledby": labelId,
-//                   }}
-//                 />
-//               </ListItemIcon>
-//               <ListItemText id={labelId} primary={`${value}`} />
-//             </ListItemButton>
-//           );
-//         })}
-//       </List>
-//     </Card>
-//   );
-
-//   return (
-//     <Grid
-//       container
-//       justifyContent="center"
-//       alignItems="center"
-//       direction="column"
-//       sx={{ width: "100%", backgroundColor: "silver" }}
-//     >
-//       <h1>Brakujące</h1>
-//       <Grid sx={{ width: "100%" }} item>
-//         {customList("Brakujące", missing)}
-//       </Grid>
-//       <Grid item>
-//         <Grid container direction="row" alignItems="center">
-//           <Button
-//             sx={{ my: 1.5 }}
-//             variant="outlined"
-//             size="small"
-//             onClick={handleCheckedMissing}
-//             disabled={missingChecked.length === 0}
-//             aria-label="move selected owned"
-//           >
-//             <KeyboardDoubleArrowDownIcon />
-//           </Button>
-//         </Grid>
-//       </Grid>
-//       <h1>Posiadane</h1>
-//       <Grid sx={{ width: "100%" }} item>
-//         {/* {customList("Owned", owned)} */}
-//         <ChipsArray data={owned} type="owned" />
-//       </Grid>
-//     </Grid>
-//   );
-// }
-
-///////////////////////////////////////////////////////////////////////////////////
-
-// export default function SelectAllTransferList({ data }) {
-//   const [checked, setChecked] = React.useState<readonly number[]>([1, 2]);
-//   const [missing, setMissing] = React.useState<readonly number[]>([0, 1, 2, 3]);
-//   const [owned, setOwned] = React.useState<readonly number[]>([
-//     8, 9, 10, 11, 12,
-//   ]);
-
-//   const missingChecked = intersection(checked, missing);
-
-//   const handleToggle = (value: number) => () => {
-//     const currentIndex = checked.indexOf(value);
-//     const newChecked = [...checked];
-
-//     if (currentIndex === -1) {
-//       newChecked.push(value);
-//     } else {
-//       newChecked.splice(currentIndex, 1);
-//     }
-
-//     setChecked(newChecked);
-//   };
-
-//   const numberOfChecked = (items: readonly number[]) =>
-//     intersection(checked, items).length;
-
-//   const handleToggleAll = (items: readonly number[]) => () => {
-//     if (numberOfChecked(items) === items.length) {
-//       setChecked(not(checked, items));
-//     } else {
-//       setChecked(union(checked, items));
-//     }
-//   };
-
-//   const handleCheckedRight = () => {
-//     setOwned(owned.concat(missingChecked));
-//     setMissing(not(missing, missingChecked));
-//     setChecked(not(checked, missingChecked));
-//   };
-
-//   const customList = (title: React.ReactNode, items: readonly number[]) => (
-//     <Card sx={{ backgroundColor: "blue", margin: "0 auto" }}>
-//       <CardHeader
-//         sx={{
-//           px: 2,
-//           py: 1,
-//           display: "flex",
-//           justifyItems: "center",
-//           width: "15rem",
-//           margin: "0 auto",
-//           fontSize: "3rem",
-//         }}
-//         avatar={
-//           <Checkbox
-//             sx={{ marginRight: "0rem" }}
-//             onClick={handleToggleAll(items)}
-//             checked={
-//               numberOfChecked(items) === items.length && items.length !== 0
-//             }
-//             indeterminate={
-//               numberOfChecked(items) !== items.length &&
-//               numberOfChecked(items) !== 0
-//             }
-//             disabled={items.length === 0}
-//             inputProps={{
-//               "aria-label": "all items selected",
-//             }}
-//           />
-//         }
-//         subheader={`${numberOfChecked(items)}/${items.length} selected`}
-//       />
-//       <Divider />
-//       <List
-//         sx={{
-//           width: "100%",
-//           bgcolor: "background.paper",
-//           overflow: "auto",
-//           display: "flex",
-//           flexWrap: "wrap",
-//         }}
-//         dense
-//         component="div"
-//         role="list"
-//       >
-//         {items.map((value: number) => {
-//           const labelId = `transfer-list-all-item-${value}-label`;
-
-//           return (
-//             <ListItemButton
-//               key={value}
-//               role="listitem"
-//               onClick={handleToggle(value)}
-//               sx={{
-//                 flex: "1 1 12rem",
-//                 height: "4rem",
-//                 backgroundColor: "purple",
-//                 alignItems: "center",
-//               }}
-//             >
-//               <ListItemIcon>
-//                 <Checkbox
-//                   checked={checked.indexOf(value) !== -1}
-//                   tabIndex={-1}
-//                   disableRipple
-//                   inputProps={{
-//                     "aria-labelledby": labelId,
-//                   }}
-//                 />
-//               </ListItemIcon>
-//               <ListItemText id={labelId} primary={`List item ${value + 1}`} />
-//             </ListItemButton>
-//           );
-//         })}
-//       </List>
-//     </Card>
-//   );
-
-//   return (
-//     <Grid
-//       container
-//       justifyContent="center"
-//       alignItems="center"
-//       direction="column"
-//       sx={{ width: "100%", backgroundColor: "yellow" }}
-//     >
-//       <h1>Brakujące</h1>
-//       <Grid sx={{ width: "100%" }} item>
-//         {customList("Brakujące", missing)}
-//       </Grid>
-//       <Grid item>
-//         <Grid container direction="row" alignItems="center">
-//           <Button
-//             sx={{ my: 1.5 }}
-//             variant="outlined"
-//             size="small"
-//             onClick={handleCheckedRight}
-//             disabled={missingChecked.length === 0}
-//             aria-label="move selected owned"
-//           >
-//             <KeyboardDoubleArrowDownIcon />
-//           </Button>
-//         </Grid>
-//       </Grid>
-//       <h1>Posiadane</h1>
-//       <Grid sx={{ width: "100%" }} item>
-//         {/* {customList("Owned", owned)} */}
-//         <ChipsArray data={owned} />
-//       </Grid>
-//     </Grid>
-//   );
-// }

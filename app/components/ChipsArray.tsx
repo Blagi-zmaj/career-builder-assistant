@@ -32,6 +32,7 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
         listStyle: "none",
         p: 0.5,
         m: 0,
+        marginBottom: "1.5rem",
       }}
       component="ul"
     >

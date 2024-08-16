@@ -26,7 +26,7 @@ export const pagesUrls: string[] = [
 export const drawerTabs: string[] = [
   "Your career",
   "CV Creator",
-  "Get data from offer",
+  "Get offer data",
   "Statistics",
   "Career advisor",
 ];

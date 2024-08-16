@@ -13,28 +13,25 @@ export default function Specialization({
 }: {
   params: { specialization: string };
 }) {
-  const pathname = usePathname();
-  // console.log(pathname);
-  // console.log(params.specialization);
+  // const pathname = usePathname();
+  // const [skillsFromOffer, setSkillsFromOffer] = useState([]);
 
-  const [skillsFromOffer, setSkillsFromOffer] = useState([]);
+  // useEffect(() => {
+  //   const response = fetch("pages/api/skills", { method: "GET" });
+  //   // console.log(response);
+  //   response
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setSkillsFromOffer(data);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    const response = fetch("pages/api/skills", { method: "GET" });
-    // console.log(response);
-    response
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setSkillsFromOffer(data);
-      });
-  }, []);
-
-  console.log(skillsFromOffer);
+  // console.log(skillsFromOffer);
 
   return (
     <ResponsiveDrawer>
-      <TransferList skillsFromOffer={skillsFromOffer} />
+      <TransferList />
       {/* <Home /> */}
     </ResponsiveDrawer>
   );

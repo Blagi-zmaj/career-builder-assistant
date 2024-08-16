@@ -78,13 +78,17 @@ export default function ResponsiveDrawer({ children }) {
                 minHeight: 48,
                 justifyContent: mobileOpen ? "initial" : "center",
                 px: 2.5,
+                display: "flex",
+                flexDirection: mobileOpen ? "row" : "column",
+                alignItems: mobileOpen ? "end" : "center",
               }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: mobileOpen ? 3 : "auto",
+                  mr: mobileOpen ? 2 : 0,
                   justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 {icons[index]}
@@ -96,20 +100,66 @@ export default function ResponsiveDrawer({ children }) {
                     opacity: mobileOpen ? 1 : 0,
                   }}
                 />
-              ) : null}
+              ) : (
+                // null
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    textAlign: "center",
+                    marginTop: "0.25rem",
+                  }}
+                >
+                  {text}
+                </span>
+              )}
             </ListItemButton>
             {/* </Tooltip> */}
           </ListItem>
         ))}
         <Divider />
-        <ListItemButton onClick={handleCollapse}>
+        <ListItemButton
+          onClick={handleCollapse}
+          // sx={{
+          //   color: "white",
+          //   display: mobileOpen ? "flex" : "block",
+          //   flexDirection: mobileOpen ? "column" : "row",
+          //   alignItems: mobileOpen ? "center" : "start",
+          // }}
+
+          sx={{
+            minHeight: 48,
+            justifyContent: mobileOpen ? "initial" : "center",
+            px: 2.5,
+            display: "flex",
+            flexDirection: mobileOpen ? "row" : "column",
+            alignItems: mobileOpen ? "end" : "center",
+          }}
+        >
           <ListItemIcon>
-            <StarsSharpIcon />
+            <StarsSharpIcon sx={{ margin: mobileOpen ? "" : "0 auto" }} />
           </ListItemIcon>
-          <ListItemText
-            primary={mobileOpen ? "Specialization" : ""}
-            sx={{ color: "white" }}
-          />
+          {/* <ListItemText
+            primary={mobileOpen ? "Specialization" : "Specialization"}
+            sx={{
+              color: "white",
+              // display: "flex",
+              // flexDirection: "column",
+              // minHeight: 148,
+              // justifyContent: mobileOpen ? "initial" : "center",
+              // // px: 2.5,
+              // flexDirection: mobileOpen ? "row" : "column",
+              // alignItems: mobileOpen ? "end" : "center",
+            }}
+          /> */}
+          <span
+            style={{
+              fontSize: mobileOpen ? "1.25rem" : "0.75rem",
+              textAlign: mobileOpen ? "center" : "left",
+              marginTop: "0.25rem",
+            }}
+          >
+            Specialization
+          </span>
           {mobileOpen ? collapse ? <ExpandLess /> : <ExpandMore /> : null}
         </ListItemButton>
         <Collapse in={collapse} timeout="auto" unmountOnExit>
@@ -122,12 +172,28 @@ export default function ResponsiveDrawer({ children }) {
                     href={dynamicUrls[index]}
                     selected={selectedIndex === index + 5}
                     onClick={() => handleSelectItem(index + 5)}
-                    sx={{ pl: 4, color: "white" }}
+                    sx={{
+                      // pl: 4,
+                      color: "white",
+                      minHeight: 48,
+                      justifyContent: mobileOpen ? "initial" : "center",
+                      px: 2.5,
+                      display: "flex",
+                      flexDirection: mobileOpen ? "row" : "column",
+                      alignItems: mobileOpen ? "end" : "center",
+                    }}
                   >
                     <ListItemIcon key={specialization + 5}>
-                      <StarBorder />
+                      <StarBorder sx={{ margin: mobileOpen ? "" : "0 auto" }} />
                     </ListItemIcon>
-                    <ListItemText primary={specialization} />
+                    <span
+                      style={{
+                        fontSize: mobileOpen ? "1.25rem" : "0.75rem",
+                        textAlign: mobileOpen ? "center" : "center",
+                      }}
+                    >
+                      {specialization}
+                    </span>
                   </ListItemButton>
                 );
               }
@@ -176,13 +242,29 @@ export default function ResponsiveDrawer({ children }) {
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: mobileOpen ? drawerWidth : "5rem",
+              width: mobileOpen ? drawerWidth : "6rem",
             },
           }}
           open={mobileOpen}
         >
           {drawer}
         </Drawer>
+
+        {/* <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            // flexDirection: "column",
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              // width: mobileOpen ? drawerWidth : "5rem",
+              width: mobileOpen ? "5rem" : "10rem",
+            },
+          }}
+          open={mobileOpen}
+        >
+          {drawer}
+        </Drawer> */}
       </Box>
       <div
         component="main"
