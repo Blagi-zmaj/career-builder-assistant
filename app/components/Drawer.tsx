@@ -17,6 +17,7 @@ import StarBorder from "@mui/icons-material/StarBorder";
 import StarsSharpIcon from "@mui/icons-material/StarsSharp";
 import { usePathname } from "next/navigation";
 import Navigation from "./Navigation";
+import Link from "next/link";
 import {
   drawerTabs,
   pagesUrls,
@@ -73,6 +74,9 @@ export default function MiniDrawer({ children }) {
         </DrawerHeader>
         <Divider />
         <br />
+        <Link href={"/login_page"}>
+          <button>LOGIN</button>
+        </Link>
         <List>
           {drawerTabs.map((text, index) => (
             <ListItem
@@ -117,7 +121,7 @@ export default function MiniDrawer({ children }) {
             {collapse ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={collapse} timeout="auto" unmountOnExit>
-            <List component="div" key="specialization_list" disablePadding>
+            <List component="div" key="specialization" disablePadding>
               {["React Developer", "ML Developer"].map(
                 (specialization, index) => {
                   return (
@@ -128,7 +132,7 @@ export default function MiniDrawer({ children }) {
                       onClick={() => handleSelectItem(index + 5)}
                       sx={{ pl: 4, color: "white" }}
                     >
-                      <ListItemIcon key={specialization + 5}>
+                      <ListItemIcon key={specialization + "spec"}>
                         <StarBorder />
                       </ListItemIcon>
                       <ListItemText primary={specialization} />

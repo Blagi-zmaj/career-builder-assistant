@@ -17,13 +17,13 @@ import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import StarsSharpIcon from "@mui/icons-material/StarsSharp";
 import { useContext } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
+import { cardsDescriptions } from "../util/helpers";
 
 const drawerWidth = 300;
 
 export default function ResponsiveDrawer({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-  // const [showTooltip, setShowTooltip] = React.useState(true);
   const { showNavAndDrawer, toggleShowNavAndDrawer } =
     useContext(NavAndDrawerContext);
 
@@ -62,16 +62,21 @@ export default function ResponsiveDrawer({ children }) {
     <div>
       <Toolbar />
       <Divider />
-      <List>
+      <List sx={{ marginTop: "1rem" }}>
         {drawerTabs.map((text, index) => (
           <ListItem
             key={text}
             disablePadding
-            sx={{ display: "block", color: "white" }}
+            sx={{
+              display: "block",
+              color: "white",
+              opacity: cardsDescriptions[index].productionStatus ? 1 : 0.5,
+            }}
           >
-            {/* <Tooltip title={text} open={showTooltip}> */}
             <ListItemButton
-              href={pagesUrls[index]}
+              href={
+                cardsDescriptions[index].productionStatus && pagesUrls[index]
+              }
               selected={selectedIndex === index}
               onClick={() => handleSelectItem(index)}
               sx={{
@@ -119,13 +124,6 @@ export default function ResponsiveDrawer({ children }) {
         <Divider />
         <ListItemButton
           onClick={handleCollapse}
-          // sx={{
-          //   color: "white",
-          //   display: mobileOpen ? "flex" : "block",
-          //   flexDirection: mobileOpen ? "column" : "row",
-          //   alignItems: mobileOpen ? "center" : "start",
-          // }}
-
           sx={{
             minHeight: 48,
             justifyContent: mobileOpen ? "initial" : "center",
@@ -133,24 +131,13 @@ export default function ResponsiveDrawer({ children }) {
             display: "flex",
             flexDirection: mobileOpen ? "row" : "column",
             alignItems: mobileOpen ? "end" : "center",
+            opacity: 0.5,
           }}
         >
           <ListItemIcon>
             <StarsSharpIcon sx={{ margin: mobileOpen ? "" : "0 auto" }} />
           </ListItemIcon>
-          {/* <ListItemText
-            primary={mobileOpen ? "Specialization" : "Specialization"}
-            sx={{
-              color: "white",
-              // display: "flex",
-              // flexDirection: "column",
-              // minHeight: 148,
-              // justifyContent: mobileOpen ? "initial" : "center",
-              // // px: 2.5,
-              // flexDirection: mobileOpen ? "row" : "column",
-              // alignItems: mobileOpen ? "end" : "center",
-            }}
-          /> */}
+
           <span
             style={{
               fontSize: mobileOpen ? "1.25rem" : "0.75rem",
@@ -169,7 +156,7 @@ export default function ResponsiveDrawer({ children }) {
                 return (
                   <ListItemButton
                     key={specialization + index}
-                    href={dynamicUrls[index]}
+                    href={false && dynamicUrls[index]}
                     selected={selectedIndex === index + 5}
                     onClick={() => handleSelectItem(index + 5)}
                     sx={{
@@ -181,6 +168,7 @@ export default function ResponsiveDrawer({ children }) {
                       display: "flex",
                       flexDirection: mobileOpen ? "row" : "column",
                       alignItems: mobileOpen ? "end" : "center",
+                      opacity: 0.5,
                     }}
                   >
                     <ListItemIcon key={specialization + 5}>
@@ -249,22 +237,6 @@ export default function ResponsiveDrawer({ children }) {
         >
           {drawer}
         </Drawer>
-
-        {/* <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "flex" },
-            // flexDirection: "column",
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              // width: mobileOpen ? drawerWidth : "5rem",
-              width: mobileOpen ? "5rem" : "10rem",
-            },
-          }}
-          open={mobileOpen}
-        >
-          {drawer}
-        </Drawer> */}
       </Box>
       <div
         component="main"

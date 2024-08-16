@@ -43,9 +43,9 @@ export default function Main({ open }: { open: boolean }) {
           justifyContent={"stretch"}
         >
           {cardsDescriptions.map((card, index) => {
-            return (
+            return card.productionStatus ? (
               <Link
-                key={"card" + index}
+                key={"cardLink" + index}
                 href={pagesUrls[index]}
                 style={{ textDecoration: "none" }}
               >
@@ -57,6 +57,14 @@ export default function Main({ open }: { open: boolean }) {
                   />
                 </Grid2>
               </Link>
+            ) : (
+              <Grid2 key={"cardWithoutLink" + index}>
+                <MultiActionAreaCard
+                  src={imagesSrc[index]}
+                  title={drawerTabs[index]}
+                  content={card}
+                />
+              </Grid2>
             );
           })}
         </Grid2>

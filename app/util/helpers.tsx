@@ -40,12 +40,28 @@ export const imagesSrc: string[] = [
   "your_career.jpg",
 ];
 
-export const cardsDescriptions: string[] = [
-  "Check your progress and what are you learning, before moving to next stage in your career!",
-  "Create your cv: manually, importing existing one or create based on offer you found in web",
-  "Get information and insights from offer you find by inserting link and we will compare how do you suits to offer ",
-  "Usage statistics for each of our products",
-  "If you like to discuss about your current work and next steps, check our chatbot!",
+export const cardsDescriptions = [
+  {
+    text: "Check your progress and what are you learning, before moving to next stage in your career!",
+    productionStatus: false,
+  },
+  {
+    text: "Create your cv: manually, importing existing one or create based on offer you found in web",
+    productionStatus: true,
+  },
+  {
+    text: "Get information and insights from offer you find by inserting link and we will compare how do you suits to offer ",
+    productionStatus: true,
+  },
+  {
+    text: "Usage statistics for each of our products",
+    productionStatus: false,
+  },
+
+  {
+    text: "If you like to discuss about your current work and next steps, check our chatbot!",
+    productionStatus: false,
+  },
 ];
 
 export const dynamicUrls = ["/react_developer", "/ml_developer"];
