@@ -3,7 +3,6 @@
 import { Avatar, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 import TextField from "@mui/material/TextField";
 import {
   LoginWrapper,
@@ -13,13 +12,12 @@ import {
 } from "./components";
 import { useState } from "react";
 
-export default function Login() {
-  const [isLoginPage, setIsLoginPage] = useState(true);
+export default function SignUp() {
+  const [isLoginPage, setIsLoginPage] = useState(false);
   const router = useRouter();
   const moveToOtherPage = function (btnId) {
     console.log(btnId);
     if (isLoginPage && btnId === "loginBtn") {
-      window.localStorage.setItem("isLogged", "true");
       router.push("/");
     }
 

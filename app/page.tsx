@@ -9,9 +9,18 @@ import "@fontsource/roboto/700.css";
 import Drawer from "./components/Drawer";
 import Main from "./components/Main";
 import { Box } from "@mui/material";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   // const queryClient = new QueryClient()
+  const router = useRouter();
+  useEffect(() => {
+    console.log("isLogged", window.localStorage.getItem("isLogged"));
+    if (!window.localStorage.getItem("isLogged")) {
+      router.push("/login_page");
+    }
+  });
 
   return (
     <main className={styles.main}>

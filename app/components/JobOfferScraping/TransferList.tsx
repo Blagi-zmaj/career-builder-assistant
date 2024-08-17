@@ -235,7 +235,7 @@ export default function SelectAllTransferList({
           ref={urlInputRef}
           style={{
             margin: "0 auto",
-            fontSize: "1.5rem",
+            fontSize: "clamp(0.5rem, 1rem, 1.5rem)",
             width: "60%",
             textAlign: "center",
             height: "2rem",
@@ -254,17 +254,12 @@ export default function SelectAllTransferList({
           color="warning"
           size="medium"
           endIcon={<DownloadForOfflineIcon />}
-          style={{ width: "50%", marginTop: "1.5rem" }}
+          style={{ width: "80%", marginTop: "1.5rem" }}
           onClick={() => {
             const url = urlInputRef.current.value;
             getUrlFromUser(url);
             urlInputRef.current.value = "";
           }}
-          // onClick={() =>
-          //   scrapeOfferSkills(
-          //     "https://nofluffjobs.com/pl/job/senior-fullstack-developer-react-node-js-xebia-remote-1"
-          //   )
-          // }
         >
           Get data from website
         </ColorButton>
