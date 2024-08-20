@@ -8,7 +8,6 @@ describe("Home", () => {
       render(<TestHome />);
 
       const heading = screen.getByRole("heading", { level: i });
-      // console.log(heading.textContent);
       expect(heading).toBeInTheDocument();
     });
   }

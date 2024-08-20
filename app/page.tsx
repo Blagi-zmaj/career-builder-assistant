@@ -17,7 +17,10 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     console.log("isLogged", window.localStorage.getItem("isLogged"));
-    if (!window.localStorage.getItem("isLogged")) {
+    if (
+      !window.localStorage.getItem("isLogged") ||
+      window.localStorage.getItem("isLogged") === "false"
+    ) {
       router.push("/login_page");
     }
   });

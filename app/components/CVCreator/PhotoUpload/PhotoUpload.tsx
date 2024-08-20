@@ -59,7 +59,7 @@ export default function PhotoUpload() {
       >
         Choose File
       </button>
-      {/* <button onClick={toggleShowPhoto}>Delete Image</button> */}
+
       <button
         type="button"
         onClick={toggleShowPhoto}

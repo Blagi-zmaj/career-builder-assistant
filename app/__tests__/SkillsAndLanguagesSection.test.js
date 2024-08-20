@@ -189,21 +189,18 @@ const createTests = function (
 
     it("Simulates deleting record", async () => {
       const user = userEvent.setup();
+
       //Create copy od user attributes
       let recordsList = [...userAttributes];
-      // console.log(recordsList);
-
       const tempDelElement = attributeToChange;
-      // console.log(tempDelElement);
 
       for (let i = 0; i < recordsList.length; i++) {
         let deletedRecordName = recordsList[i].name;
-        // console.log(deletedRecordName);
+
         // Find button
         const deletebutton = screen.getByRole("button", {
           name: deletedRecordName,
         });
-        // console.log(deletebutton.name);
 
         // Check list of attributes before delete list item
         recordsList.forEach((el) => {
@@ -217,7 +214,6 @@ const createTests = function (
           return el.name !== deletedRecordName;
         });
 
-        // console.log(recordsList);
         // Check list of attributes after delete list item
         recordsList.forEach((el) => {
           expect(screen.getByText(el.name)).toBeInTheDocument();
@@ -242,9 +238,6 @@ const createTests = function (
         { name: newAttributesNames[2], level: 4, isEditing: false },
       ];
 
-      // console.log(newRecordsList);
-      // console.log(updatedRecordList);
-
       for (let i = 0; i < userAttributes.length; i++) {
         let newRecord = newRecordsList[i];
 
@@ -265,9 +258,6 @@ const createTests = function (
           new RegExp(`new ${listNameCapitalized}`, `i`)
         );
 
-        // console.log(addRecordButton);
-        // console.log(addNewRecordInput);
-
         // Click on input
         await user.click(addNewRecordInput);
         await user.click(addNewRecordInput);
@@ -280,9 +270,6 @@ const createTests = function (
         await user.click(addRecordButton);
         updatedRecordList.push(newRecord);
 
-        // console.log(updatedRecordList);
-        // console.log(newRecord.name);
-        // console.log(screen.getByText(newRecord.name));
         // Verify if new record is visible
         expect(screen.getByText(newRecord.name)).toBeInTheDocument();
       }

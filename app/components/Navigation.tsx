@@ -13,7 +13,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Avatar } from "@mui/material";
 import CustomBreadcrumbs from "./Breadcrumbs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import PrintIcon from "@mui/icons-material/Print";
 import Tooltip from "@mui/material/Tooltip";
 import {
@@ -35,17 +35,26 @@ export default function Navigation({
     toggleShowNavAndDrawer,
     toggleShowButtons,
     showButtons,
+    userLoggingData,
   } = useContext(NavAndDrawerContext);
-
+  const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [hideAllButtons, setHideButtons] = React.useState(showButtons);
-
+  // const login = window.localStorage.getItem("login");
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const [login, setLogin] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    // This code runs only on the client side
+    const storedLogin = window.localStorage.getItem("login");
+    setLogin(storedLogin);
+  }, []);
 
   const handleToggleButtons = () => {
     console.log(`Print from Navigation`);
@@ -80,6 +89,14 @@ export default function Navigation({
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLogout = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+    window.localStorage.setItem("isLogged", "false");
+    window.localStorage.setItem("login", "undefined");
+    router.push("/login_page");
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -97,9 +114,9 @@ export default function Navigation({
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>{login}</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </Menu>
   );
 

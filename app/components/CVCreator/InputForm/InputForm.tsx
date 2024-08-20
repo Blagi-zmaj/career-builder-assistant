@@ -25,8 +25,6 @@ const InputForm = forwardRef<
     },
     ref
   ) => {
-    // console.log(`Render InputForm`);
-    // console.log(`name = ${name}`);
     return (
       <>
         {isTextArea ? (
@@ -59,7 +57,6 @@ const InputForm = forwardRef<
   }
 );
 
-// Add displayName for debugging purposes
 InputForm.displayName = "InputForm";
 
 export default InputForm;

@@ -3,69 +3,13 @@ import { NavAndDrawerContext } from "@/app/util/context";
 import { userProfileData } from "../CVCreatorUtils/helpers";
 import styles from "./EducationSection.module.css";
 import InputForm from "../InputForm/InputForm";
-import WorkIcon from "@mui/icons-material/Work";
 import DatePicker from "../DatePicker";
 import Modal from "../ModalDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SchoolIcon from "@mui/icons-material/School";
 import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-type Skill = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Language = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Hobby = {
-  name: string;
-  isEditing: boolean;
-};
-
-type Summary = {
-  description: string;
-  isEditing: boolean;
-};
-
-type Education = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type Experience = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type UserProfile = {
-  newSkill: Skill;
-  newLanguage: Language;
-  newHobby: Hobby;
-  skills: Skill[];
-  languages: Language[];
-  hobbies: Hobby[];
-  summary: Summary;
-  education: Education[];
-  experience: Experience[];
-};
+import { UserProfile } from "../../../util/types";
 
 export default function EducationSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
@@ -81,11 +25,9 @@ export default function EducationSection() {
     listName: string,
     identifier: string
   ) {
-    console.log(listName, identifier);
     const filteredData = userContact[listName].filter((record) => {
       return record.institution.value !== identifier;
     });
-    console.log(filteredData);
 
     setUserContact((prevValues) => {
       return { ...prevValues, [listName]: filteredData };
@@ -98,14 +40,10 @@ export default function EducationSection() {
     index: number,
     identifier: string
   ) {
-    console.log(date, type, index, identifier);
-
     const updatedRecord = {
       ...userContact[identifier][index],
       [type]: { ...userContact[identifier][index][type], value: date },
     };
-
-    console.log(updatedRecord);
 
     setUserContact((prevValues) => {
       return {
@@ -151,20 +89,9 @@ export default function EducationSection() {
     workIndex: number,
     identifier: string
   ) {
-    console.log(listName, workIndex, identifier); // education 0 startDate
-
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
-      console.log(`clicked enter`);
-
-      console.log(
-        userContact[listName][actualRecordUpdated][identifier].value,
-        listName,
-        actualRecordUpdated,
-        identifier
-      );
-
       if (userContact[listName][actualRecordUpdated][identifier].value === "") {
         setShowActualRecordTooltip({ open: true, text: "Empty record" });
         return;
@@ -197,14 +124,11 @@ export default function EducationSection() {
     workIndex: number,
     identifier: string
   ) {
-    // console.log(listName, workIndex, identifier); // experience 0 startDate
     setShowActualRecordTooltip((prevValues) => {
       return { ...prevValues, open: false };
     });
 
     if (!event.target.value) {
-      console.log(event.target.value);
-      console.log("EMPTY");
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     }
 
@@ -215,8 +139,6 @@ export default function EducationSection() {
         value: event.target.value,
       },
     };
-
-    console.log(updatedItem);
 
     setUserContact((prevValues) => {
       return {
@@ -242,12 +164,9 @@ export default function EducationSection() {
     });
 
     if (!userContact[listName][workIndex][identifier].value) {
-      console.log(actualRecordUpdated);
-      console.log("EMPTY");
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     }
 
-    console.log(userContact[listName][workIndex][identifier]);
     const updatedListItemStatus = {
       ...userContact[listName][workIndex],
       [identifier]: {
@@ -269,9 +188,6 @@ export default function EducationSection() {
   };
 
   const handleAddNewItemListFromModal = function (data) {
-    console.log(data.type);
-    console.log(data);
-
     const objWithIsEditing = {
       institution: { value: data.institution, isEditing: false },
       position: { value: data.position, isEditing: false },
@@ -282,7 +198,6 @@ export default function EducationSection() {
         isEditing: false,
       },
     };
-    console.log(objWithIsEditing);
 
     if (data.type === "work") {
       setUserContact((prevValues) => {

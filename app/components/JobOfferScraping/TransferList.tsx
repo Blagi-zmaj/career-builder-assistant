@@ -47,8 +47,6 @@ export default function SelectAllTransferList({
   const [owned, setOwned] = React.useState<readonly number[]>(data.owned);
 
   const urlInputRef = React.useRef("");
-  // console.log(data);
-  // console.log(owned);
 
   React.useEffect(() => {
     setMissing(data.missing);
@@ -171,13 +169,6 @@ export default function SelectAllTransferList({
     </Card>
   );
 
-  // const scrapeOfferSkills = async function (url: string) {
-  //   console.log(url);
-  //   // const response = await fetch(url);
-  //   // console.log(response);
-  //   // const data = await response.text();
-  //   // console.log(data);
-  // };
   return (
     <Grid
       container
@@ -244,10 +235,31 @@ export default function SelectAllTransferList({
           type="url"
           name="url"
           id="url"
+          list="url-examples"
           placeholder="https://example.com"
           pattern="https://.*"
           required
         />
+        <datalist id="url-examples">
+          <option
+            style={{ width: "20rem" }}
+            value="https://nofluffjobs.com/pl/job/frontend-developer-react-travelplanet-pl-invia-group-wroclaw-2"
+          >
+            Frontend Developer React
+          </option>
+          <option value="https://nofluffjobs.com/pl/job/senior-fullstack-developer-react-node-js-xebia-remote-1">
+            Senior Fullstack Developer (React/Node.js)
+          </option>
+          <option value="https://nofluffjobs.com/pl/job/lead-software-engineer-react-node-js-7n-warszawa">
+            Lead Software Engineer (React + Node.js)
+          </option>
+          <option value="https://nofluffjobs.com/pl/job/front-end-developer-with-react-cognitran-remote">
+            Front-end developer with React
+          </option>
+          <option value="https://nofluffjobs.com/pl/job/full-stack-developer-node-js-react-azure-publicis-groupe-warszawa">
+            Full Stack Developer (Node.js, React, Azure)
+          </option>
+        </datalist>
 
         <ColorButton
           variant="contained"

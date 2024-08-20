@@ -1,4 +1,3 @@
-import { useState } from "react";
 import CVForm from "./CVForm";
 
 export default function CVCreator() {

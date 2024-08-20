@@ -6,62 +6,7 @@ import InputForm from "../InputForm/InputForm";
 import { Button, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
-type Skill = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Language = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Hobby = {
-  name: string;
-  isEditing: boolean;
-};
-
-type Summary = {
-  description: string;
-  isEditing: boolean;
-};
-
-type Education = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type Experience = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type UserProfile = {
-  newSkill: Skill;
-  newLanguage: Language;
-  newHobby: Hobby;
-  skills: Skill[];
-  languages: Language[];
-  hobbies: Hobby[];
-  summary: Summary;
-  education: Education[];
-  experience: Experience[];
-};
+import { UserProfile } from "../../../util/types";
 
 export default function HobbiesSection() {
   const {
@@ -112,24 +57,6 @@ export default function HobbiesSection() {
     inputName: string,
     index: number
   ) {
-    // if (event.key === "Enter") {
-    //   setUserContact((prevValues) => {
-    //     const newData = {
-    //       ...prevValues,
-    //       [inputName]: [
-    //         ...prevValues[inputName].slice(0, index),
-    //         {
-    //           ...prevValues[inputName][index],
-    //           isEditing: !prevValues[inputName][index].isEditing,
-    //         },
-    //         ...prevValues[inputName].slice(index + 1),
-    //       ],
-    //     };
-    //     console.log(newData);
-    //     return newData;
-    //   });
-    // }
-
     if (event.key === "Enter") {
       if (userContact.hobbies[actualRecordUpdated]?.name === "") {
         setShowActualRecordTooltip({ open: true, text: "Empty record" });
@@ -141,7 +68,6 @@ export default function HobbiesSection() {
         return;
       }
 
-      console.log(`UPDATE keyenTER`);
       setUserContact((prevValues) => {
         const newData = {
           ...prevValues,
@@ -154,7 +80,7 @@ export default function HobbiesSection() {
             ...prevValues[inputName].slice(index + 1),
           ],
         };
-        console.log(newData);
+
         return newData;
       });
     }
@@ -180,14 +106,13 @@ export default function HobbiesSection() {
             ...prevValues[inputName].slice(index + 1),
           ],
         };
-        console.log(newData);
+
         return newData;
       });
 
       return;
     }
 
-    // console.log(hasDuplicates(userContact.hobbies));
     if (hasDuplicates(userContact.hobbies)) {
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
       setUserContact((prevValues) => {
@@ -203,13 +128,11 @@ export default function HobbiesSection() {
             ...prevValues[inputName].slice(index + 1),
           ],
         };
-        console.log(newData);
+
         return newData;
       });
       return;
     }
-
-    // console.log(`UPDATE onBlur`);
 
     setUserContact((prevValues) => {
       const newData = {
@@ -223,7 +146,7 @@ export default function HobbiesSection() {
           ...prevValues[inputName].slice(index + 1),
         ],
       };
-      // console.log(newData);
+
       return newData;
     });
   };
@@ -240,7 +163,6 @@ export default function HobbiesSection() {
     });
 
     if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
-      console.log(`userContact[identifier] !== ""`);
       setIsDisabledAddBtn(true);
       setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
     } else {
@@ -291,7 +213,7 @@ export default function HobbiesSection() {
           ...prevValues[inputName].slice(listItemIndex + 1),
         ],
       };
-      // console.log(newData);
+
       return newData;
     });
   };
@@ -341,7 +263,6 @@ export default function HobbiesSection() {
     });
 
     if (isInUserProperty.length > 0 && userContact[identifier] !== "") {
-      console.log(`userContact[identifier] !== ""`);
       setIsDisabledAddBtn(true);
       setShowTooltip({ open: true, text: "Duplicated record" });
     } else {

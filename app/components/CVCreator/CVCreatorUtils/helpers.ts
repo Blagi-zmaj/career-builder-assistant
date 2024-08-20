@@ -23,19 +23,11 @@ export const isEditingStates = {
   isEditingEducation: false,
 };
 
-// export const userProfileData = {
-//   newSkill: { name: "", level: 3, isEditing: false },
-// };
-
 export const userProfileData = {
   newSkill: { name: "", level: 3, isEditing: false },
   newLanguage: { name: "", level: 3, isEditing: false },
   newHobby: { name: "", isEditing: false },
-  skills: [
-    // { name: "Machine", level: 1, isEditing: false },
-    // { name: "Deep", level: 2, isEditing: false },
-    // { name: "Data", level: 4, isEditing: false },
-  ],
+  skills: [],
   languages: [
     { name: "English", level: 2, isEditing: false },
     { name: "French", level: 3, isEditing: false },
@@ -122,7 +114,6 @@ export default function setIsEditingItem(state, inputType) {
 }
 
 export function setIsEditingItemInSet(userProfileValues, index, list) {
-  console.log(userProfileValues);
   const updatedOneSkill = {
     ...userProfileValues[list][index],
     isEditing: !userProfileValues[list][index].isEditing,

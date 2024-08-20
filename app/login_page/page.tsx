@@ -3,7 +3,10 @@
 import { Avatar, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import {
+  NavAndDrawerContext,
+  // ,
+} from "../util/context";
 import TextField from "@mui/material/TextField";
 import {
   LoginWrapper,
@@ -11,15 +14,36 @@ import {
   RightColumn,
   LoginPanel,
 } from "./components";
-import { useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 export default function Login() {
   const [isLoginPage, setIsLoginPage] = useState(true);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const loginRef = useRef();
+  const signupRef = useRef();
+
+  const { userLoggingData, updateUserLoggingData } =
+    useContext(NavAndDrawerContext);
+  console.log(userLoggingData, updateUserLoggingData);
   const router = useRouter();
   const moveToOtherPage = function (btnId) {
     console.log(btnId);
     if (isLoginPage && btnId === "loginBtn") {
       window.localStorage.setItem("isLogged", "true");
+      window.localStorage.setItem(
+        "login",
+        loginRef?.current.querySelector("#filled-required").value || "Anonymous"
+      );
+      // console.log(loginRef?.current.querySelector("#filled-required").value);
+      // console.log(loginRef?.current?.children[1]?.children[0].value);
+      updateUserLoggingData({
+        login:
+          loginRef?.current.querySelector("#filled-required").value ||
+          "Anonymous",
+        password: signupRef?.current.querySelector("#standard-password-input")
+          .value,
+      });
       router.push("/");
     }
 
@@ -66,7 +90,6 @@ export default function Login() {
               fontSize: "clamp(min(2vw, 2rem), 15vw, max(2vw, 2rem))",
               color: "white",
             }}
-            // sx={{ textAlign: "center", fontSize: "clamp(2rem, 7.5vw, 2rem)" }}
           >
             Career Builder{" "}
           </Typography>
@@ -78,8 +101,8 @@ export default function Login() {
             required
             id="filled-required"
             label="Login"
-            // defaultValue="user"
             variant="standard"
+            ref={loginRef}
           />
           <br />
           <TextField
@@ -89,6 +112,7 @@ export default function Login() {
             type="password"
             autoComplete="current-password"
             variant="standard"
+            ref={signupRef}
           />
           <br />
           {!isLoginPage ? (

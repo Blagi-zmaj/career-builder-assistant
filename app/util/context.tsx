@@ -9,12 +9,25 @@ export const NavAndDrawerContext = createContext({
   toggleShowButtons: () => {},
   showPhoto: true,
   toggleShowPhoto: () => {},
+  userLoggingData: { login: "", password: "" },
+  updateUserLoggingData: (userData: { login: string; password: string }) => {},
 });
 
 export const NavAndDrawerProvider = ({ children }) => {
   const [showNavAndDrawer, setNavAndDrawer] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
   const [showPhoto, setShowPhoto] = useState(true);
+  const [userLoggingData, setUserLoggingData] = useState({
+    login: "",
+    password: "",
+    isLogged: "",
+  });
+
+  const updateUserLoggingData = (userLogData) => {
+    console.log(userLogData);
+    setUserLoggingData(userLogData);
+    console.log(userLogData);
+  };
 
   const toggleShowNavAndDrawer = () => {
     setNavAndDrawer((prev) => !prev);
@@ -30,6 +43,8 @@ export const NavAndDrawerProvider = ({ children }) => {
     setShowPhoto((prev) => !prev);
   };
 
+  console.log(userLoggingData);
+
   return (
     <NavAndDrawerContext.Provider
       value={{
@@ -39,6 +54,8 @@ export const NavAndDrawerProvider = ({ children }) => {
         showButtons,
         showPhoto,
         toggleShowPhoto,
+        userLoggingData,
+        updateUserLoggingData,
       }}
     >
       {children}

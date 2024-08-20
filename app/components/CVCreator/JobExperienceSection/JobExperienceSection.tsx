@@ -9,62 +9,7 @@ import Modal from "../ModalDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-type Skill = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Language = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Hobby = {
-  name: string;
-  isEditing: boolean;
-};
-
-type Summary = {
-  description: string;
-  isEditing: boolean;
-};
-
-type Education = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type Experience = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type UserProfile = {
-  newSkill: Skill;
-  newLanguage: Language;
-  newHobby: Hobby;
-  skills: Skill[];
-  languages: Language[];
-  hobbies: Hobby[];
-  summary: Summary;
-  education: Education[];
-  experience: Experience[];
-};
+import { UserProfile } from "../../../util/types";
 
 export default function JobExperienceSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
@@ -76,9 +21,6 @@ export default function JobExperienceSection() {
   });
 
   const handleAddNewItemListFromModal = function (data) {
-    console.log(data.type);
-    console.log(data);
-
     const objWithIsEditing = {
       institution: { value: data.institution, isEditing: false },
       position: { value: data.position, isEditing: false },
@@ -89,7 +31,6 @@ export default function JobExperienceSection() {
         isEditing: false,
       },
     };
-    console.log(objWithIsEditing);
 
     if (data.type === "work") {
       setUserContact((prevValues) => {
@@ -119,16 +60,10 @@ export default function JobExperienceSection() {
       return { ...prevValues, open: false };
     });
 
-    console.log(listName, actualRecordUpdated, identifier);
-    // console.log(userContact[listName][actualRecordUpdated][identifier].value);
-
     if (!userContact[listName][workIndex][identifier].value) {
-      console.log(actualRecordUpdated);
-      console.log("EMPTY");
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     }
 
-    console.log(userContact[listName][workIndex][identifier]);
     const updatedListItemStatus = {
       ...userContact[listName][workIndex],
       [identifier]: {
@@ -160,8 +95,6 @@ export default function JobExperienceSection() {
     });
 
     if (!event.target.value) {
-      console.log(event.target.value);
-      console.log("EMPTY");
       setShowActualRecordTooltip({ open: true, text: "Empty record" });
     }
 
@@ -194,12 +127,6 @@ export default function JobExperienceSection() {
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
-      console.log(
-        userContact[listName][actualRecordUpdated][identifier].value,
-        listName,
-        actualRecordUpdated,
-        identifier
-      );
       if (userContact[listName][actualRecordUpdated][identifier].value === "") {
         setShowActualRecordTooltip({ open: true, text: "Empty record" });
         return;
@@ -225,8 +152,6 @@ export default function JobExperienceSection() {
       });
     }
   };
-
-  console.log(userContact.experience);
 
   const handleBlurUser = function (
     event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -260,14 +185,10 @@ export default function JobExperienceSection() {
     index: number,
     identifier: string
   ) {
-    console.log(typeof date, typeof type, index, identifier);
-
     const updatedRecord = {
       ...userContact[identifier][index],
       [type]: { ...userContact[identifier][index][type], value: date },
     };
-
-    console.log(updatedRecord);
 
     setUserContact((prevValues) => {
       return {
@@ -286,11 +207,9 @@ export default function JobExperienceSection() {
     listName: string,
     identifier: string
   ) {
-    console.log(listName, identifier);
     const filteredData = userContact[listName].filter((record) => {
       return record.institution.value !== identifier;
     });
-    console.log(filteredData);
 
     setUserContact((prevValues) => {
       return { ...prevValues, [listName]: filteredData };
@@ -329,7 +248,6 @@ export default function JobExperienceSection() {
                       id={"start" + elIndex}
                       index={workIndex}
                       type={"startDate"}
-                      //   isEditing={work.startDate.isEditing}
                       updateDate={handleUpdateDate}
                       listName={"experience"}
                     />

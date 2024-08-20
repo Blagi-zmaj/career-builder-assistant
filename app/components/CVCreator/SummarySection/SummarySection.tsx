@@ -1,76 +1,13 @@
 import InputForm from "../InputForm/InputForm";
 import styles from "./SummarySection.module.css";
-import { useState, useContext } from "react";
-import { NavAndDrawerContext } from "@/app/util/context";
-import { userContactData, userProfileData } from "../CVCreatorUtils/helpers";
+import { useState } from "react";
+import { userProfileData } from "../CVCreatorUtils/helpers";
 import InfoIcon from "@mui/icons-material/Info";
 import { Tooltip } from "@mui/material";
-
-type Skill = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Language = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Hobby = {
-  name: string;
-  isEditing: boolean;
-};
-
-type Summary = {
-  description: string;
-  isEditing: boolean;
-};
-
-type Education = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type Experience = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type UserProfile = {
-  newSkill: Skill;
-  newLanguage: Language;
-  newHobby: Hobby;
-  skills: Skill[];
-  languages: Language[];
-  hobbies: Hobby[];
-  summary: Summary;
-  education: Education[];
-  experience: Experience[];
-};
+import { UserProfile } from "../../../util/types";
 
 export default function SummarySection() {
-  const {
-    showNavAndDrawer,
-    toggleShowNavAndDrawer,
-    toggleShowButtons,
-    showButtons,
-  } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
-  const [hideAllButtons, setHideButtons] = useState(showButtons);
   const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
     open: false,
     text: "Empty record",
