@@ -75,7 +75,10 @@ export default function ResponsiveDrawer({ children }) {
           >
             <ListItemButton
               href={
-                cardsDescriptions[index].productionStatus && pagesUrls[index]
+                // cardsDescriptions[index].productionStatus && pagesUrls[index]
+                cardsDescriptions[index].productionStatus === true
+                  ? pagesUrls[index]
+                  : ""
               }
               selected={selectedIndex === index}
               onClick={() => handleSelectItem(index)}
@@ -156,7 +159,7 @@ export default function ResponsiveDrawer({ children }) {
                 return (
                   <ListItemButton
                     key={specialization + index}
-                    href={false && dynamicUrls[index]}
+                    href=""
                     selected={selectedIndex === index + 5}
                     onClick={() => handleSelectItem(index + 5)}
                     sx={{

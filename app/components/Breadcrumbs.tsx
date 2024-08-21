@@ -5,6 +5,7 @@ import Stack from "@mui/material/Stack";
 
 function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
   console.info(`You clicked a breadcrumb: ${event.target}`);
+  //delete this function = used Next.js Link component
 }
 
 export default function CustomBreadcrumbs({ pathName }: { pathName: string }) {

@@ -126,3 +126,14 @@ export function setIsEditingItemInSet(userProfileValues, index, list) {
 
   return { ...userProfileValues, [list]: updatedSkills };
 }
+
+export function hasDuplicates(arr) {
+  const localArr = arr.map((el) => el.name.toLowerCase());
+  return new Set(localArr).size !== localArr.length;
+}
+
+export function getDataFromLocalStorage(key: string) {
+  return JSON.parse(
+    localStorage.getItem(key) ?? `["Machine","AI"]` //or localStorage.getItem("skills") as string
+  );
+}

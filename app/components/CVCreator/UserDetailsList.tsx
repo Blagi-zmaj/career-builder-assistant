@@ -3,75 +3,17 @@ import InputForm from "./InputForm/InputForm";
 import RadioGroupRating from "../Rating";
 import styles from "./CVForm.module.css";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { userProfileData } from "./CVCreatorUtils/helpers";
+import {
+  userProfileData,
+  getDataFromLocalStorage,
+} from "./CVCreatorUtils/helpers";
 import { MouseEvent, useEffect, useReducer, useState } from "react";
 import userDetailsListReducer from "../../util/reducers";
-// import { UserProfile } from "../../util/types";
-
-type Skill = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Language = {
-  name: string;
-  level: number;
-  isEditing: boolean;
-};
-
-type Hobby = {
-  name: string;
-  isEditing: boolean;
-};
-
-type Summary = {
-  description: string;
-  isEditing: boolean;
-};
-
-type Education = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type Experience = {
-  institution: { value: string; isEditing: boolean };
-  position: { value: string; isEditing: boolean };
-  startDate: { value: string; isEditing: boolean };
-  endDate: { value: string; isEditing: boolean };
-  description: {
-    value: string;
-    isEditing: boolean;
-  };
-};
-
-type UserProfile = {
-  newSkill: Skill;
-  newLanguage: Language;
-  newHobby: Hobby;
-  skills: Skill[];
-  languages: Language[];
-  hobbies: Hobby[];
-  summary: Summary;
-  education: Education[];
-  experience: Experience[];
-};
+import ProfileDetails from "./ProfileDetails";
 
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
   useEffect(() => {
-    const userSkillsFromLocalStorage = JSON.parse(
-      localStorage.getItem("skills") ?? `["Machine","AI"]` //or localStorage.getItem("skills") as string
-    );
-
-    //create array with skills objects
+    const userSkillsFromLocalStorage = getDataFromLocalStorage("skills");
     const ownedSkillObjectsArr = userSkillsFromLocalStorage.map((skill) => {
       return {
         name: skill,
@@ -95,7 +37,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     userDetailsListReducer,
     userProfileData
   );
-
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showTooltip, setShowTooltip] = useState({
@@ -107,8 +48,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     text: "Empty record",
   });
 
-  // console.log(userData);
-
   const listNameSingular =
     categoryList !== `hobbies` ? `${categoryList.slice(0, -1)}` : `hobby`;
   const newListName = `new${listNameCapitalized}`;
@@ -116,14 +55,14 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
   useEffect(() => {
     if (!userData[newListName].name) {
       setIsDisabledAddBtn(true);
-      setShowTooltip((prevValues) => {
+      setShowTooltip(() => {
         return { open: true, text: "Empty record" };
       });
     }
   }, [userData[newListName].name]);
 
   useEffect(() => {
-    setShowTooltip((prevValues) => {
+    setShowTooltip(() => {
       return { open: false, text: "Empty record" };
     });
   }, []);
@@ -152,99 +91,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     });
   };
 
-  function hasDuplicates(arr) {
-    const localArr = arr.map((el) => el.name.toLowerCase());
-    return new Set(localArr).size !== localArr.length;
-  }
-
-  const handleBlur = function (categoryList: string, listIndex: number) {
-    if (userData[categoryList][actualRecordUpdated]?.name === "") {
-      setShowActualRecordTooltip({ open: true, text: "Empty record" });
-
-      dispatch({
-        type: `blur`,
-        categoryList: categoryList,
-        listIndex: listIndex,
-      });
-
-      return;
-    }
-
-    if (hasDuplicates(userData[categoryList])) {
-      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
-
-      dispatch({
-        type: `blur`,
-        categoryList: categoryList,
-        listIndex: listIndex,
-      });
-
-      return;
-    }
-
-    dispatch({
-      type: `blurCorrectName`,
-      categoryList: categoryList,
-      listIndex: listIndex,
-    });
-  };
-
-  const handleUserDetailsKeyDown = function (
-    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
-    inputName: string,
-    index: number
-  ) {
-    if (event.key === "Enter") {
-      if (userData[inputName][actualRecordUpdated]?.name === "") {
-        setShowActualRecordTooltip({ open: true, text: "Empty record" });
-        return;
-      }
-
-      if (hasDuplicates(userData[inputName])) {
-        setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
-        return;
-      }
-
-      dispatch({
-        type: `keyDown`,
-        inputName: inputName,
-        index: index,
-      });
-    }
-  };
-
-  const handleChangeUserActualInput = function (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    identifier: string,
-    index: number
-  ) {
-    if (!event.target.value) {
-      setShowActualRecordTooltip({ open: true, text: "Empty record" });
-    } else {
-      setShowActualRecordTooltip({ open: false, text: "Empty record" });
-    }
-
-    const isInUserProperty = userData[identifier].filter((el) => {
-      return el.name.toLowerCase() === event.target.value.toLowerCase();
-    });
-
-    if (isInUserProperty.length > 0 && isInUserProperty[0].name !== "") {
-      setShowActualRecordTooltip({ open: true, text: "Duplicated record" });
-    }
-
-    const updatedDetail = {
-      ...userData[identifier][index],
-      name: event.target.value,
-    };
-
-    dispatch({
-      type: `changeUserActualInput`,
-      identifier: identifier,
-      index: index,
-      updatedDetail: updatedDetail,
-    });
-  };
-
   const replaceTextWithInput = function (
     inputName: string,
     listItemIndex: number = 0
@@ -259,35 +105,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       type: `replaceTextWithInput`,
       inputName: inputName,
       listItemIndex: listItemIndex,
-    });
-  };
-
-  const handleDeleteListItem = function (
-    event: MouseEvent<HTMLButtonElement>,
-    skillName: string,
-    identifier: string
-  ) {
-    const updatedList = userData[identifier].filter((el) => {
-      return el.name !== skillName;
-    });
-
-    dispatch({
-      type: `delete`,
-      identifier: identifier,
-      updatedList: updatedList,
-    });
-  };
-
-  const handleChangeRatingExistingListItem = function (
-    rate: number,
-    identifier: string,
-    index: number
-  ) {
-    dispatch({
-      type: `changeRatingExistingListItem`,
-      identifier: identifier,
-      index: index,
-      rate: rate,
     });
   };
 
@@ -323,71 +140,18 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       {userData[categoryList].map((listItem, listIndex) => {
         return (
           <div key={categoryList + listIndex}>
-            <div
-              className={
-                hideAllButtons ? styles.skillsUIWithoutBtns : styles.skillsUI
-              }
-            >
-              {listItem.isEditing ? (
-                <Tooltip
-                  title={showActualRecordTooltip.text}
-                  open={showActualRecordTooltip.open}
-                >
-                  <InputForm
-                    id={listItem.name}
-                    key={listItem.name}
-                    type="text"
-                    name={listItem.name}
-                    value={listItem.name}
-                    className={styles.control}
-                    autoFocus
-                    onBlur={() => handleBlur(categoryList, listIndex)}
-                    onKeyDown={(event) =>
-                      handleUserDetailsKeyDown(event, categoryList, listIndex)
-                    }
-                    onChange={(event) =>
-                      handleChangeUserActualInput(
-                        event,
-                        categoryList,
-                        listIndex
-                      )
-                    }
-                  />
-                </Tooltip>
-              ) : (
-                <span
-                  onClick={() => replaceTextWithInput(categoryList, listIndex)}
-                  key={listItem.name + 5}
-                  className={styles.wordWrapBreakWord}
-                >
-                  {listItem.name ? listItem.name : `<empty> ${listIndex}`}
-                </span>
-              )}
-              {categoryList !== "hobbies" ? (
-                <RadioGroupRating
-                  rate={listItem.level}
-                  handleChangeRatingListItem={
-                    handleChangeRatingExistingListItem
-                  }
-                  categoryList={categoryList}
-                  index={listIndex}
-                />
-              ) : (
-                <div></div>
-              )}
-              <Button
-                onClick={(event) =>
-                  handleDeleteListItem(event, listItem.name, categoryList)
-                }
-                variant="contained"
-                className={
-                  hideAllButtons ? styles.hiddenButton : styles.addNewRecordForm
-                }
-                aria-label={listItem.name}
-              >
-                <RemoveIcon />
-              </Button>
-            </div>
+            <ProfileDetails
+              hideAllButtons={hideAllButtons}
+              listItem={listItem}
+              showActualRecordTooltip={showActualRecordTooltip}
+              categoryList={categoryList}
+              listIndex={listIndex}
+              actualRecordUpdated={actualRecordUpdated}
+              setShowActualRecordTooltip={setShowActualRecordTooltip}
+              replaceTextWithInput={replaceTextWithInput}
+              userData={userData}
+              dispatch={dispatch}
+            />
           </div>
         );
       })}

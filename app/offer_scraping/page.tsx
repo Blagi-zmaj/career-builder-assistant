@@ -8,7 +8,7 @@ import TransferList from "../components/JobOfferScraping/JobOfferScraping";
 import Home from "../components/JobOfferScraping/localStorageTest";
 import { useEffect, useState } from "react";
 
-export default function Specialization({
+export default function OfferScrape({
   params,
 }: {
   params: { specialization: string };
