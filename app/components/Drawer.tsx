@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/material";
-import { List, CssBaseline, Typography } from "@mui/material/";
+import { List, CssBaseline } from "@mui/material/";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -26,11 +26,8 @@ import {
   dynamicUrls,
   icons,
 } from "../util/helpers";
-import Main from "./Main";
 
 export default function MiniDrawer({ children }) {
-  const drawerWidth = 240;
-  const pathname = usePathname();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [collapse, setCollapse] = React.useState(false);

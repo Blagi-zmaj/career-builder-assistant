@@ -9,7 +9,6 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 
 const StyledRating = styled(Rating)(({ theme }) => ({
   "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
-    // color: theme.palette.action.disabled,
     color: "silver",
   },
 }));
@@ -58,7 +57,6 @@ export default function RadioGroupRating({
   return (
     <StyledRating
       sx={{
-        // border: 1,
         display: "flex",
         alignItems: "center",
         justifySelf: "end",
@@ -70,7 +68,6 @@ export default function RadioGroupRating({
       getLabelText={(value: number) => customIcons[value].label}
       highlightSelectedOnly
       onChange={(event, num) => {
-        console.log(typeof event.target.value, event.target.value);
         setRating(event.target.value);
         handleChangeRatingListItem(
           Number(event.target.value),

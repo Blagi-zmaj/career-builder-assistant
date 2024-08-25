@@ -1,12 +1,8 @@
 "use client";
-
 import { Avatar, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  NavAndDrawerContext,
-  // ,
-} from "../util/context";
+import { NavAndDrawerContext } from "../util/context";
 import TextField from "@mui/material/TextField";
 import {
   LoginWrapper,
@@ -18,25 +14,19 @@ import { useContext, useRef, useState } from "react";
 
 export default function Login() {
   const [isLoginPage, setIsLoginPage] = useState(true);
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
   const loginRef = useRef();
   const signupRef = useRef();
 
   const { userLoggingData, updateUserLoggingData } =
     useContext(NavAndDrawerContext);
-  console.log(userLoggingData, updateUserLoggingData);
   const router = useRouter();
   const moveToOtherPage = function (btnId) {
-    console.log(btnId);
     if (isLoginPage && btnId === "loginBtn") {
       window.localStorage.setItem("isLogged", "true");
       window.localStorage.setItem(
         "login",
         loginRef?.current.querySelector("#filled-required").value || "Anonymous"
       );
-      // console.log(loginRef?.current.querySelector("#filled-required").value);
-      // console.log(loginRef?.current?.children[1]?.children[0].value);
       updateUserLoggingData({
         login:
           loginRef?.current.querySelector("#filled-required").value ||
@@ -51,7 +41,6 @@ export default function Login() {
       router.push("/");
     }
 
-    // changing pages - login or signup
     if (isLoginPage && btnId === "signupBtn") {
       router.push("/signup_page");
     }
@@ -63,23 +52,22 @@ export default function Login() {
 
   return (
     <LoginWrapper>
-      {/* lOGIN */}
       <LeftColumn isloginpage={isLoginPage.toString()}>
         <Image
           src="/leaves.jpg"
           alt="leaves"
-          layout="fill" // Fill the parent container
-          objectFit="cover" // Maintain aspect ratio and cover the entire area
-          quality={10} // Optional: Set image quality (0 to 100)
+          layout="fill"
+          objectFit="cover"
+          quality={10}
         />
       </LeftColumn>
       <RightColumn>
         <Image
           src="/stars.jpg"
           alt="leaves"
-          layout="fill" // Fill the parent container
-          objectFit="cover" // Maintain aspect ratio and cover the entire area
-          quality={10} // Optional: Set image quality (0 to 100)
+          layout="fill"
+          objectFit="cover"
+          quality={10}
         />
         <LoginPanel isloginpage={isLoginPage.toString()}>
           <Avatar src="" sx={{ width: 86, height: 86, margin: "0 auto" }} />

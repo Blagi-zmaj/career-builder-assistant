@@ -9,9 +9,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
-import { Collapse, Tooltip } from "@mui/material";
+import { Collapse } from "@mui/material";
 import { usePathname } from "next/navigation";
-import { drawerTabs, pagesUrls, dynamicUrls, icons } from "../util/helpers";
+import { drawerTabs, pagesUrls, icons } from "../util/helpers";
 import Navigation from "./Navigation";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import StarsSharpIcon from "@mui/icons-material/StarsSharp";
@@ -75,7 +75,6 @@ export default function ResponsiveDrawer({ children }) {
           >
             <ListItemButton
               href={
-                // cardsDescriptions[index].productionStatus && pagesUrls[index]
                 cardsDescriptions[index].productionStatus === true
                   ? pagesUrls[index]
                   : ""
@@ -109,7 +108,6 @@ export default function ResponsiveDrawer({ children }) {
                   }}
                 />
               ) : (
-                // null
                 <span
                   style={{
                     fontSize: "0.75rem",
@@ -121,7 +119,6 @@ export default function ResponsiveDrawer({ children }) {
                 </span>
               )}
             </ListItemButton>
-            {/* </Tooltip> */}
           </ListItem>
         ))}
         <Divider />
@@ -163,7 +160,6 @@ export default function ResponsiveDrawer({ children }) {
                     selected={selectedIndex === index + 5}
                     onClick={() => handleSelectItem(index + 5)}
                     sx={{
-                      // pl: 4,
                       color: "white",
                       minHeight: 48,
                       justifyContent: mobileOpen ? "initial" : "center",

@@ -15,7 +15,6 @@ const theme = createTheme({
         root: {
           fontSize: "2rem",
           color: "#66B3FF",
-          // color: "#B2D732",
         },
       },
     },
@@ -35,13 +34,6 @@ const theme = createTheme({
         },
       },
     },
-    // MuiButtonBase: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: "white",
-    //     },
-    //   },
-    // },
   },
 
   palette: {
@@ -49,7 +41,6 @@ const theme = createTheme({
     primary: {
       main: "#121212",
     },
-    // Uncomment below to activate dark mode and comment above
     mode: "dark",
   },
 

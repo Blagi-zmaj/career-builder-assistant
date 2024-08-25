@@ -35,7 +35,6 @@ export default function Navigation({
     toggleShowNavAndDrawer,
     toggleShowButtons,
     showButtons,
-    userLoggingData,
   } = useContext(NavAndDrawerContext);
   const router = useRouter();
   const pathname = usePathname();
@@ -44,20 +43,18 @@ export default function Navigation({
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
   const [hideAllButtons, setHideButtons] = React.useState(showButtons);
-  // const login = window.localStorage.getItem("login");
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [login, setLogin] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    // This code runs only on the client side
     const storedLogin = window.localStorage.getItem("login");
     setLogin(storedLogin);
   }, []);
 
   const handleToggleButtons = () => {
-    console.log(`Print from Navigation`);
     setHideButtons((prev) => {
       return !prev;
     });
@@ -171,7 +168,6 @@ export default function Navigation({
       </MenuItem>
     </Menu>
   );
-  // console.log(pathname);
   return (
     <>
       <AppBar

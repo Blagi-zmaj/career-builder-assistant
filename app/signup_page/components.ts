@@ -1,21 +1,5 @@
 import styled from "styled-components";
 
-// export const LeftColumn = styled.div`
-//   background-color: yellow;
-//   flex: 1;
-//   position: relative;
-//   overflow: "hidden";
-// `;
-
-// export const RightColumn = styled.div`
-//   height: calc(100vh);
-//   background-color: rgb(30, 90, 160);
-//   flex: 1;
-//   position: relative;
-//   transform-origin: center center;
-//   transform: scale(1);
-// `;
-
 export const LoginWrapper = styled.section`
   background-color: grey;
   display: grid;

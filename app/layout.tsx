@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import * as React from "react";
 import { StyledRoot } from "./util/StyledRoot";
-// import { ThemeProvider } from "./util/context";
 import { NavAndDrawerProvider, UserDataProvider } from "./util/context";
 
 export const metadata: Metadata = {
@@ -19,11 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={"1"}>
         <NavAndDrawerProvider>
-          {/* <ThemeProvider> */}
           <UserDataProvider>
             <StyledRoot>{children}</StyledRoot>
           </UserDataProvider>
-          {/* </ThemeProvider> */}
         </NavAndDrawerProvider>
       </body>
     </html>

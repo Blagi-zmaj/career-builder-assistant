@@ -49,9 +49,9 @@ export default function FormDialog({
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             formJson.type = type;
-            console.log(formJson);
+
             handleAddNewItemListFromModal(formJson);
-            console.log("Add new item list");
+
             handleClose();
           },
         }}

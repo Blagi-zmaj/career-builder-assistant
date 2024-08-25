@@ -2,13 +2,11 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-import TagFacesIcon from "@mui/icons-material/TagFaces";
+
 import { ChipData } from "../util/types";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import CheckIcon from "@mui/icons-material/Check";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import { Button, ButtonBase } from "@mui/material";
-import { createContext } from "vm";
+
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 
 interface ChipsArrayProps {
@@ -21,8 +19,6 @@ const ListItem = styled("li")(({ theme }) => ({
 }));
 
 const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
-  // console.log(data);
-
   return (
     <Paper
       sx={{

@@ -4,7 +4,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
-import styled from "styled-components";
 
 export default function MultiActionAreaCard({
   src,
@@ -23,7 +22,6 @@ export default function MultiActionAreaCard({
         backgroundColor: content.productionStatus ? "#183BF0" : "#111111",
       }}
     >
-      {/* or #D4F7EC */}
       <CardActionArea>
         <CardMedia
           component="img"

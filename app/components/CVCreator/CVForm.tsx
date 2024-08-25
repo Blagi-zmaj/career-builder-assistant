@@ -1,7 +1,6 @@
 import styles from "./CVForm.module.css";
 import { useState, useEffect, useContext } from "react";
 import * as React from "react";
-import { userContactData, userProfileData } from "./CVCreatorUtils/helpers";
 import { NavAndDrawerContext } from "@/app/util/context";
 import PhotoUpload from "./PhotoUpload/PhotoUpload";
 import UserContactDataSection from "./UserContactSection/UserContactDataSection";
@@ -12,16 +11,13 @@ import EducationSection from "./EducationSection/EducationSection";
 
 export default function CVForm() {
   const {
-    showNavAndDrawer,
     toggleShowNavAndDrawer,
     toggleShowButtons,
-    showButtons,
+
     showPhoto,
     toggleShowPhoto,
   } = useContext(NavAndDrawerContext);
-  const [inputValues, setInputValues] = useState(userContactData);
   const [hideAllButtons, setHideButtons] = useState(false);
-  const [userProfileValues, setUserProfileValues] = useState(userProfileData);
   useEffect(() => {
     if (hideAllButtons) {
       window.print();

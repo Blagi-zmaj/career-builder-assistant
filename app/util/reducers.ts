@@ -75,7 +75,7 @@ export default function userDetailsListReducer(state, action) {
           ...state[action.inputName].slice(action.index + 1),
         ],
       };
-      // console.log(newData);
+
       return newData;
     }
 
@@ -86,9 +86,9 @@ export default function userDetailsListReducer(state, action) {
           action.updatedDetail,
           ...state[action.identifier].slice(action.index + 1),
         ];
-        // console.log(skillObjectsArr);
+
         const skillsStringList = skillObjectsArr.map((skill) => skill.name);
-        // console.log(skillsStringList);
+
         window.localStorage.setItem("skills", JSON.stringify(skillsStringList));
       }
 
@@ -114,7 +114,7 @@ export default function userDetailsListReducer(state, action) {
           ...state[action.inputName].slice(action.listItemIndex + 1),
         ],
       };
-      // console.log(newData);
+
       return newData;
     }
 
@@ -123,10 +123,9 @@ export default function userDetailsListReducer(state, action) {
         const skillsStringList = action.updatedList.map((el) => {
           return el.name;
         });
-        // console.log(skillsStringList);
+
         window.localStorage.setItem("skills", JSON.stringify(skillsStringList));
       }
-      // console.log(action.identifier, action.updatedList);
 
       return { ...state, [action.identifier]: action.updatedList };
     }

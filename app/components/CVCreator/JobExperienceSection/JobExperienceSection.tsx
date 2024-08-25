@@ -17,7 +17,6 @@ export default function JobExperienceSection() {
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
   const [state, updateState, synchronizeState] =
     useAddNewItemListFromModal(userProfileData);
-  console.log(state.experience, userContact.experience);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
     open: false,

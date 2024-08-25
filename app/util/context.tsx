@@ -24,9 +24,7 @@ export const NavAndDrawerProvider = ({ children }) => {
   });
 
   const updateUserLoggingData = (userLogData) => {
-    console.log(userLogData);
     setUserLoggingData(userLogData);
-    console.log(userLogData);
   };
 
   const toggleShowNavAndDrawer = () => {
@@ -34,16 +32,12 @@ export const NavAndDrawerProvider = ({ children }) => {
   };
 
   const toggleShowButtons = () => {
-    // console.log(`toggleShowButtons`);
-    // console.log(showButtons);
     setShowButtons((prev) => !prev);
   };
 
   const toggleShowPhoto = () => {
     setShowPhoto((prev) => !prev);
   };
-
-  // console.log(userLoggingData);
 
   return (
     <NavAndDrawerContext.Provider
@@ -63,18 +57,14 @@ export const NavAndDrawerProvider = ({ children }) => {
   );
 };
 
-///////////////////////////////////////////////////////////////////////////
-
 export const UserDataContext = createContext({
   updateCandidateSkills: () => {},
 });
 
-// create context provider for components with userdata
 export const UserDataProvider = ({ children }) => {
   const [userData, setUserData] = useState(userProfileData);
 
   const updateCandidateSkills = (newSkills) => {
-    console.log(newSkills);
     setUserData((prevState) => {
       return { ...prevState, skills: newSkills };
     });

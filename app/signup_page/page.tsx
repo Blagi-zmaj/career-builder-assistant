@@ -16,7 +16,6 @@ export default function SignUp() {
   const [isLoginPage, setIsLoginPage] = useState(false);
   const router = useRouter();
   const moveToOtherPage = function (btnId) {
-    console.log(btnId);
     if (isLoginPage && btnId === "loginBtn") {
       router.push("/");
     }
@@ -25,7 +24,6 @@ export default function SignUp() {
       router.push("/");
     }
 
-    // changing pages - login or signup
     if (isLoginPage && btnId === "signupBtn") {
       router.push("/signup_page");
     }
@@ -37,23 +35,22 @@ export default function SignUp() {
 
   return (
     <LoginWrapper>
-      {/* lOGIN */}
       <LeftColumn isloginpage={isLoginPage.toString()}>
         <Image
           src="/leaves.jpg"
           alt="leaves"
-          layout="fill" // Fill the parent container
-          objectFit="cover" // Maintain aspect ratio and cover the entire area
-          quality={10} // Optional: Set image quality (0 to 100)
+          layout="fill"
+          objectFit="cover"
+          quality={10}
         />
       </LeftColumn>
       <RightColumn>
         <Image
           src="/stars.jpg"
           alt="leaves"
-          layout="fill" // Fill the parent container
-          objectFit="cover" // Maintain aspect ratio and cover the entire area
-          quality={10} // Optional: Set image quality (0 to 100)
+          layout="fill"
+          objectFit="cover"
+          quality={10}
         />
         <LoginPanel isloginpage={isLoginPage.toString()}>
           <Avatar src="" sx={{ width: 86, height: 86, margin: "0 auto" }} />
@@ -64,7 +61,6 @@ export default function SignUp() {
               fontSize: "clamp(min(2vw, 2rem), 15vw, max(2vw, 2rem))",
               color: "white",
             }}
-            // sx={{ textAlign: "center", fontSize: "clamp(2rem, 7.5vw, 2rem)" }}
           >
             Career Builder{" "}
           </Typography>
@@ -76,7 +72,6 @@ export default function SignUp() {
             required
             id="filled-required"
             label="Login"
-            // defaultValue="user"
             variant="standard"
           />
           <br />

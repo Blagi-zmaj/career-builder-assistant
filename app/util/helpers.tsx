@@ -80,10 +80,6 @@ export const icons = [
   <ManageAccountsSharpIcon key="ManageAccountsSharpIcon" />,
 ];
 
-// export const screenSize = window.innerWidth;
-// console.log(screenSize);
-
-// export const drawerWidth = screenSize < 800 ? screenSize : screenSize / 5;
 const drawerWidth = "30rem";
 
 export const openedMixin = (theme: Theme): CSSObject => ({
@@ -112,7 +108,6 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -154,8 +149,6 @@ export const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-//////////////// APP BAR ///////////////////
-
 export const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -166,7 +159,6 @@ export const Search = styled("div")(({ theme }) => ({
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
-  // height: "3rem",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
     width: "auto",

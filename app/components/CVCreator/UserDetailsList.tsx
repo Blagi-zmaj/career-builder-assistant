@@ -14,6 +14,7 @@ import ProfileDetails from "./ProfileDetails";
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
   useEffect(() => {
     const userSkillsFromLocalStorage = getDataFromLocalStorage("skills");
+    console.log(userSkillsFromLocalStorage);
     const ownedSkillObjectsArr = userSkillsFromLocalStorage.map((skill) => {
       return {
         name: skill,

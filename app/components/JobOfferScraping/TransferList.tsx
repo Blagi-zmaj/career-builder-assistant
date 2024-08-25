@@ -10,11 +10,8 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
-import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import ChipsArray from "../ChipsArray";
-import { ChipsArrayProps } from "@/app/util/types";
-import { purple } from "@mui/material/colors";
 import styled from "styled-components";
 import { ButtonProps } from "@mui/joy";
 
@@ -178,7 +175,6 @@ export default function SelectAllTransferList({
       sx={{
         width: "100%",
         height: "100%",
-        // backgroundColor: "silver",
         boxShadow: "0px 0px 13px 0px rgba(102, 179, 255, 1)",
       }}
     >
@@ -231,7 +227,6 @@ export default function SelectAllTransferList({
             textAlign: "center",
             height: "2rem",
           }}
-          // onChange={()=>{}}
           type="url"
           name="url"
           id="url"

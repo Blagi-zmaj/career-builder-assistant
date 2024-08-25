@@ -60,34 +60,21 @@ const getMissing = function (required, owned) {
 };
 
 export default function JobOfferScraping() {
-  // export default function JobOfferScraping({ skillsFromOffer }) {
-  // console.log(skillsFromOffer);
-
   const [skillsFromOffer, setSkillsFromOffer] = useState([]);
-  // const [userUrl, setUserUrl] = useState("");
 
   const getUrlFromUser = function (userUrl) {
-    console.log(`userUrl`, userUrl);
     scrapeOfferSkills(userUrl);
   };
 
   const scrapeOfferSkills = async function (url: string) {
-    console.log(`scrapeOfferSkills`, url);
     const response = await fetch("pages/api/skills", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url }),
     });
-    console.log("response joboffer", response);
     const data = await response.json();
-    console.log(data);
     setSkillsFromOffer(data);
   };
-
-  // useEffect(() => {
-  //   const technologies = ["Python", "Google analytics", "HTML", "CSS"];
-  //   window.localStorage.setItem("skills", JSON.stringify(technologies));
-  // }, []);
 
   useEffect(() => {
     const getDataFromLocalStorage = (key) => {
@@ -115,13 +102,11 @@ export default function JobOfferScraping() {
   }, []);
 
   const [offerData, dispatch] = useReducer(reducer, {
-    required: skillsFromOffer, // add here from website in future
+    required: skillsFromOffer,
     compatible: [],
     missing: [],
     owned: [],
   });
-
-  console.log(offerData.required);
 
   useEffect(() => {
     dispatch({ type: "updateRequired", data: skillsFromOffer });
@@ -133,13 +118,7 @@ export default function JobOfferScraping() {
   };
 
   const addOnlyRequiredSkillsToCV = function (requiredSkills) {
-    // console.log("addOnlyRequiredSkillsToCV", requiredSkills);
     window.localStorage.setItem("skills", JSON.stringify(requiredSkills));
-  };
-
-  const deleteOwnedSkill = function (deletedSkill) {
-    // console.log(`deletedSkill: ${deletedSkill}`);
-    dispatch({ type: "delete" });
   };
 
   return (
@@ -152,11 +131,6 @@ export default function JobOfferScraping() {
           <h1>Wymagane</h1>
           <ChipsArray data={offerData.required} type="required" />
           <Divider />
-          {/* <Link
-            key="requiredToCV"
-            href="/cv_creator"
-            style={{ textDecoration: "none" }}
-          > */}
           {offerData.required.length > 0 ? (
             <Link
               key="requiredToCV"
@@ -169,7 +143,6 @@ export default function JobOfferScraping() {
                 size="medium"
                 onClick={() => addOnlyRequiredSkillsToCV(offerData.required)}
                 endIcon={<SendIcon />}
-                // style={{ marginTop: "1.5rem" }}
               >
                 Do you wanna see ONLY required skills on YOUR cv? Click HERE!
               </Button>
@@ -179,7 +152,6 @@ export default function JobOfferScraping() {
               style={{
                 color: "white",
                 textShadow: "1px 1px 2px grey, 0 0 1em grey, 0 0 0.2em grey",
-                // textShadow: "white 1px 0 1px",
               }}
             >
               Write url below to check skills comparison with your cv!
@@ -195,7 +167,6 @@ export default function JobOfferScraping() {
           getUrlFromUser={getUrlFromUser}
           data={offerData}
           updateOwnedSkills={updateOwnedSkills}
-          // deleteOwnedSkill={deleteOwnedSkill}
         />
       </SkillBlockWrapper>
     </AppWrapper>

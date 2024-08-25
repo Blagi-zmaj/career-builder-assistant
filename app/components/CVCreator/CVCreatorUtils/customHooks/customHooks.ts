@@ -36,7 +36,6 @@ export function useAddNewItemListFromModal(data) {
   };
 
   const synchronizeState = function (newState) {
-    console.log(`Synchronize state`, newState);
     setState(newState);
   };
 

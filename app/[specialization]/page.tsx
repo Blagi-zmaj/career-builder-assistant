@@ -10,15 +10,6 @@ export default function Specialization({
   params: { specialization: string };
 }) {
   const pathname = usePathname();
-  console.log(pathname);
-  console.log(params.specialization);
 
-  return (
-    <>
-      {/* <Drawer>
-        <h1>{pathname}</h1>
-        <h2>{params.specialization}</h2>
-      </Drawer> */}
-    </>
-  );
+  return <></>;
 }
