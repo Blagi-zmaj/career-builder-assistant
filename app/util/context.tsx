@@ -34,8 +34,8 @@ export const NavAndDrawerProvider = ({ children }) => {
   };
 
   const toggleShowButtons = () => {
-    console.log(`toggleShowButtons`);
-    console.log(showButtons);
+    // console.log(`toggleShowButtons`);
+    // console.log(showButtons);
     setShowButtons((prev) => !prev);
   };
 
@@ -43,7 +43,7 @@ export const NavAndDrawerProvider = ({ children }) => {
     setShowPhoto((prev) => !prev);
   };
 
-  console.log(userLoggingData);
+  // console.log(userLoggingData);
 
   return (
     <NavAndDrawerContext.Provider

@@ -1,4 +1,4 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { useState, useContext, useEffect } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
 import { userProfileData } from "../CVCreatorUtils/helpers";
 import styles from "./JobExperienceSection.module.css";
@@ -10,44 +10,23 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { UserProfile } from "../../../util/types";
+import { useAddNewItemListFromModal } from "../CVCreatorUtils/customHooks/customHooks";
 
 export default function JobExperienceSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
   const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
+  const [state, updateState, synchronizeState] =
+    useAddNewItemListFromModal(userProfileData);
+  console.log(state.experience, userContact.experience);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
     open: false,
     text: "Empty record",
   });
 
-  const handleAddNewItemListFromModal = function (data) {
-    const objWithIsEditing = {
-      institution: { value: data.institution, isEditing: false },
-      position: { value: data.position, isEditing: false },
-      startDate: { value: data.startDate, isEditing: false },
-      endDate: { value: data.endDate, isEditing: false },
-      description: {
-        value: data.description,
-        isEditing: false,
-      },
-    };
-
-    if (data.type === "work") {
-      setUserContact((prevValues) => {
-        return {
-          ...prevValues,
-          experience: [...prevValues.experience, objWithIsEditing],
-        };
-      });
-    } else {
-      setUserContact((prevValues) => {
-        return {
-          ...prevValues,
-          education: [...prevValues.education, objWithIsEditing],
-        };
-      });
-    }
-  };
+  useEffect(() => {
+    setUserContact(state);
+  }, [state]);
 
   const handleReplaceTextWithInput = function (
     listName: string,
@@ -72,16 +51,17 @@ export default function JobExperienceSection() {
       },
     };
 
-    setUserContact((prevValues) => {
-      return {
-        ...prevValues,
-        [listName]: [
-          ...prevValues[listName].slice(0, workIndex),
-          updatedListItemStatus,
-          ...prevValues[listName].slice(workIndex + 1),
-        ],
-      };
-    });
+    const updatedObj = {
+      ...userContact,
+      [listName]: [
+        ...userContact[listName].slice(0, workIndex),
+        updatedListItemStatus,
+        ...userContact[listName].slice(workIndex + 1),
+      ],
+    };
+
+    setUserContact(updatedObj);
+    synchronizeState(updatedObj);
   };
 
   const handleChangeUserListItem = function (
@@ -106,16 +86,17 @@ export default function JobExperienceSection() {
       },
     };
 
-    setUserContact((prevValues) => {
-      return {
-        ...prevValues,
-        [listName]: [
-          ...prevValues[listName].slice(0, workIndex),
-          updatedItem,
-          ...prevValues[listName].slice(workIndex + 1),
-        ],
-      };
-    });
+    const updatedUserObj = {
+      ...userContact,
+      [listName]: [
+        ...userContact[listName].slice(0, workIndex),
+        updatedItem,
+        ...userContact[listName].slice(workIndex + 1),
+      ],
+    };
+
+    setUserContact(updatedUserObj);
+    synchronizeState(updatedUserObj);
   };
 
   const handleKeyEnterAndShift = function (
@@ -140,16 +121,17 @@ export default function JobExperienceSection() {
         },
       };
 
-      setUserContact((prevValues) => {
-        return {
-          ...prevValues,
-          [listName]: [
-            ...prevValues[listName].slice(0, workIndex),
-            updatedEditState,
-            ...prevValues[listName].slice(workIndex + 1),
-          ],
-        };
-      });
+      const updatedUserObj = {
+        ...userContact,
+        [listName]: [
+          ...userContact[listName].slice(0, workIndex),
+          updatedEditState,
+          ...userContact[listName].slice(workIndex + 1),
+        ],
+      };
+
+      setUserContact(updatedUserObj);
+      synchronizeState(updatedUserObj);
     }
   };
 
@@ -167,16 +149,17 @@ export default function JobExperienceSection() {
       },
     };
 
-    setUserContact((prevValues) => {
-      return {
-        ...prevValues,
-        [listName]: [
-          ...prevValues[listName].slice(0, workIndex),
-          updatedEditState,
-          ...prevValues[listName].slice(workIndex + 1),
-        ],
-      };
-    });
+    const updatedUserObj = {
+      ...userContact,
+      [listName]: [
+        ...userContact[listName].slice(0, workIndex),
+        updatedEditState,
+        ...userContact[listName].slice(workIndex + 1),
+      ],
+    };
+
+    setUserContact(updatedUserObj);
+    synchronizeState(updatedUserObj);
   };
 
   const handleUpdateDate = function (
@@ -190,16 +173,17 @@ export default function JobExperienceSection() {
       [type]: { ...userContact[identifier][index][type], value: date },
     };
 
-    setUserContact((prevValues) => {
-      return {
-        ...prevValues,
-        [identifier]: [
-          ...prevValues[identifier].slice(0, index),
-          updatedRecord,
-          ...prevValues[identifier].slice(index + 1),
-        ],
-      };
-    });
+    const updatedUserObj = {
+      ...userContact,
+      [identifier]: [
+        ...userContact[identifier].slice(0, index),
+        updatedRecord,
+        ...userContact[identifier].slice(index + 1),
+      ],
+    };
+
+    setUserContact(updatedUserObj);
+    synchronizeState(updatedUserObj);
   };
 
   const handleDeleteListRecord = function (
@@ -214,6 +198,8 @@ export default function JobExperienceSection() {
     setUserContact((prevValues) => {
       return { ...prevValues, [listName]: filteredData };
     });
+
+    synchronizeState({ ...userContact, [listName]: filteredData });
   };
 
   return (
@@ -323,7 +309,7 @@ export default function JobExperienceSection() {
       <Modal
         hideAllButtons={showButtons}
         type={"work"}
-        handleAddNewItemListFromModal={handleAddNewItemListFromModal}
+        handleAddNewItemListFromModal={updateState}
       />
     </div>
   );

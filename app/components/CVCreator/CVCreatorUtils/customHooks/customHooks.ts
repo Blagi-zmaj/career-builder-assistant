@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useAddNewItemListFromModal(data) {
-  const [state, setState] = useState({});
+  const [state, setState] = useState(data);
+  useEffect(() => {
+    setState(data);
+  }, [data]);
 
-  const handleAddNewItemListFromModal = function (data) {
+  const updateState = function (data) {
     const objWithIsEditing = {
       institution: { value: data.institution, isEditing: false },
       position: { value: data.position, isEditing: false },
@@ -32,5 +35,14 @@ export function useAddNewItemListFromModal(data) {
     }
   };
 
-  return [state];
+  const synchronizeState = function (newState) {
+    console.log(`Synchronize state`, newState);
+    setState(newState);
+  };
+
+  return [state, updateState, synchronizeState];
 }
+
+// Consider adding below functions:
+// handleUpdateDate => useUpdateDate
+// handleBlurUser => useUpdateOnBlur

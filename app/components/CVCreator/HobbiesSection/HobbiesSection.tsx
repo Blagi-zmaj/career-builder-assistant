@@ -193,7 +193,6 @@ export default function HobbiesSection() {
     inputName: string,
     listItemIndex: number = 0
   ) {
-    //hide Tooltips on start
     setShowTooltip((prevValues) => {
       return { ...prevValues, open: false };
     });
