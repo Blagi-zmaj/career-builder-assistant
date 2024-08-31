@@ -26,9 +26,10 @@ const ChipsArray: React.FC<ChipsArrayProps> = ({ data, type }) => {
         justifyContent: "center",
         flexWrap: "wrap",
         listStyle: "none",
-        p: 0.5,
+        p: 0,
         m: 0,
-        marginBottom: "1.5rem",
+        marginBottom: "0.5rem",
+        width: '100%'
       }}
       component="ul"
     >

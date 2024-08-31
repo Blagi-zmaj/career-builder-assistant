@@ -15,23 +15,26 @@ const AppWrapper = styled.section`
   box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
   margin: 5rem 0 0 2rem;
-  // border: 1px solid white;
+  border: 1px solid white;
   box-shadow: 0px 3px 13px 0px rgba(255, 255, 255, 1);
-  // align-items: center;
-  // justify-content: center;
   justify-items: center;
 
   @media (max-width: ${breakpoints.mobile}) {
-    // background-color: lightcoral;
-    width: calc(100vw - 4rem);
+    width: calc(100vw - 2rem);
+    margin: 5rem 0 0 1rem;
   }
 
-  @media (min-width: ${breakpoints.mobile}) and (max-width: ${breakpoints.tablet}) {
-    // background-color: lightgreen;
+  @media (min-width: 480px) and (max-width: 600px) {
+    width: calc(100vw - 4rem);
+    margin: 5rem 0 0 2rem;
   }
 
   @media (min-width: ${breakpoints.tablet}) {
-    // background-color: lightblue;
+    width: calc(100vw - 9rem);
+  }
+
+  @media (min-width: ${breakpoints.desktop}) {
+    width: calc(100vw - 9rem);
   }
 `;
 
@@ -46,7 +49,7 @@ const SkillBlockWrapper = styled.div`
 const SkillsListWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  // padding: 1rem;
   box-shadow: 0px 0px 13px 0px rgba(102, 179, 255, 1);
   display: flex;
   flex-direction: column;
