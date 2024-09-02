@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import UserDetailsList from "../UserDetailsList";
-import styles from "./SkillsAndLanguages.module.css";
+import styles from "./MeasureAttribute.module.css";
 import { NavAndDrawerContext } from "@/app/util/context";
 
-export default function SkillsAndLanguagesSection() {
+export default function MeasureAttribute() {
   const { showButtons } = useContext(NavAndDrawerContext);
 
   return (

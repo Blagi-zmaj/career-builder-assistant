@@ -4,7 +4,7 @@ import * as React from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
 import PhotoUpload from "./PhotoUpload/PhotoUpload";
 import UserContactDataSection from "./UserContactSection/UserContactDataSection";
-import SkillsAndLanguagesSection from "./SkillsAndLanguages/SkillsAndLanguagesSection";
+import MeasureAttribute from "./MeasureAttributes/MeasureAttribute";
 import SummarySection from "./SummarySection/SummarySection";
 import JobExperienceSection from "./JobExperienceSection/JobExperienceSection";
 import EducationSection from "./EducationSection/EducationSection";
@@ -37,7 +37,7 @@ export default function CVForm() {
             </button>
           )}
           <UserContactDataSection />
-          <SkillsAndLanguagesSection />
+          <MeasureAttribute />
         </div>
       </div>
       <SummarySection />

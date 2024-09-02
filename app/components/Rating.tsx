@@ -13,7 +13,7 @@ const StyledRating = styled(Rating)(({ theme }) => ({
   },
 }));
 
-const iconSize = "90%";
+const iconSizes = { mobile: "2rem", tablet: "3rem", desktop: "2.5rem" };
 
 const customIcons: {
   [index: string]: {
@@ -24,28 +24,75 @@ const customIcons: {
   1: {
     icon: (
       <SentimentVeryDissatisfiedIcon
-        sx={{ color: "red", fontSize: iconSize }}
+        sx={{
+          color: "red",
+          fontSize: {
+            xs: iconSizes.mobile,
+            sm: iconSizes.tablet,
+            md: iconSizes.desktop,
+          },
+        }}
       />
     ),
     label: "Very Dissatisfied",
   },
   2: {
-    icon: <SentimentDissatisfiedIcon sx={{ color: "red", fontSize: "100%" }} />,
+    icon: (
+      <SentimentDissatisfiedIcon
+        sx={{
+          color: "red",
+          fontSize: {
+            xs: iconSizes.mobile,
+            sm: iconSizes.tablet,
+            md: iconSizes.desktop,
+          },
+        }}
+      />
+    ),
     label: "Dissatisfied",
   },
   3: {
-    icon: <SentimentSatisfiedIcon sx={{ color: "gold", fontSize: iconSize }} />,
+    icon: (
+      <SentimentSatisfiedIcon
+        sx={{
+          color: "gold",
+          fontSize: {
+            xs: iconSizes.mobile,
+            sm: iconSizes.tablet,
+            md: iconSizes.desktop,
+          },
+        }}
+      />
+    ),
     label: "Neutral",
   },
   4: {
     icon: (
-      <SentimentSatisfiedAltIcon sx={{ color: "green", fontSize: iconSize }} />
+      <SentimentSatisfiedAltIcon
+        sx={{
+          color: "green",
+          fontSize: {
+            xs: iconSizes.mobile,
+            sm: iconSizes.tablet,
+            md: iconSizes.desktop,
+          },
+        }}
+      />
     ),
     label: "Satisfied",
   },
   5: {
     icon: (
-      <SentimentVerySatisfiedIcon sx={{ color: "green", fontSize: iconSize }} />
+      <SentimentVerySatisfiedIcon
+        sx={{
+          color: "green",
+          fontSize: {
+            xs: iconSizes.mobile,
+            sm: iconSizes.tablet,
+            md: iconSizes.desktop,
+          },
+        }}
+      />
     ),
     label: "Very Satisfied",
   },
