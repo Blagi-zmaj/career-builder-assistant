@@ -1,26 +1,26 @@
-type Skill = {
+export type Skill = {
   name: string;
   level: number;
   isEditing: boolean;
 };
 
-type Language = {
+export type Language = {
   name: string;
   level: number;
   isEditing: boolean;
 };
 
-type Hobby = {
+export type Hobby = {
   name: string;
   isEditing: boolean;
 };
 
-type Summary = {
+export type Summary = {
   description: string;
   isEditing: boolean;
 };
 
-type Education = {
+export type Education = {
   institution: { value: string; isEditing: boolean };
   position: { value: string; isEditing: boolean };
   startDate: { value: string; isEditing: boolean };
@@ -31,7 +31,7 @@ type Education = {
   };
 };
 
-type Experience = {
+export type Experience = {
   institution: { value: string; isEditing: boolean };
   position: { value: string; isEditing: boolean };
   startDate: { value: string; isEditing: boolean };

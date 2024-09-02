@@ -14,8 +14,9 @@ export default function Main({ open }: { open: boolean }) {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: 2,
           ...(open && { display: { xs: "block", md: "block" } }),
+          ...(open && { m: { xs: "0 0 0 0", sm: "0 0 0 5rem" } }),
         }}
       >
         <DrawerHeader />
@@ -40,7 +41,7 @@ export default function Main({ open }: { open: boolean }) {
           container
           spacing={4}
           alignItems={"center"}
-          justifyContent={"stretch"}
+          justifyContent={"center"}
         >
           {cardsDescriptions.map((card, index) => {
             return card.productionStatus ? (

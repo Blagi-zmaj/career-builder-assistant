@@ -8,6 +8,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Drawer from "./components/Drawer";
 import Main from "./components/Main";
+import ResponsiveDrawer from "./components/DrawerWithoutHideMain";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -25,9 +26,11 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <Drawer>
+      {/* <Drawer> */}
+      <ResponsiveDrawer>
         <Main open={true} />
-      </Drawer>
+      </ResponsiveDrawer>
+      {/* </Drawer> */}
     </main>
   );
 }
