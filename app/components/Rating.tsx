@@ -13,6 +13,8 @@ const StyledRating = styled(Rating)(({ theme }) => ({
   },
 }));
 
+const iconSize = "90%";
+
 const customIcons: {
   [index: string]: {
     icon: React.ReactElement;
@@ -20,23 +22,31 @@ const customIcons: {
   };
 } = {
   1: {
-    icon: <SentimentVeryDissatisfiedIcon sx={{ color: "red" }} />,
+    icon: (
+      <SentimentVeryDissatisfiedIcon
+        sx={{ color: "red", fontSize: iconSize }}
+      />
+    ),
     label: "Very Dissatisfied",
   },
   2: {
-    icon: <SentimentDissatisfiedIcon sx={{ color: "red" }} />,
+    icon: <SentimentDissatisfiedIcon sx={{ color: "red", fontSize: "100%" }} />,
     label: "Dissatisfied",
   },
   3: {
-    icon: <SentimentSatisfiedIcon sx={{ color: "gold" }} />,
+    icon: <SentimentSatisfiedIcon sx={{ color: "gold", fontSize: iconSize }} />,
     label: "Neutral",
   },
   4: {
-    icon: <SentimentSatisfiedAltIcon sx={{ color: "green" }} />,
+    icon: (
+      <SentimentSatisfiedAltIcon sx={{ color: "green", fontSize: iconSize }} />
+    ),
     label: "Satisfied",
   },
   5: {
-    icon: <SentimentVerySatisfiedIcon sx={{ color: "green" }} />,
+    icon: (
+      <SentimentVerySatisfiedIcon sx={{ color: "green", fontSize: iconSize }} />
+    ),
     label: "Very Satisfied",
   },
 };
