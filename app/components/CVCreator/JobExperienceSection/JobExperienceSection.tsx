@@ -9,12 +9,14 @@ import Modal from "../ModalDialog";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { UserProfile } from "../../../util/types";
+import { Experience } from "../../../util/types";
 import { useAddNewItemListFromModal } from "../CVCreatorUtils/customHooks/customHooks";
 
 export default function JobExperienceSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
-  const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
+  const [userContact, setUserContact] = useState<Experience>({
+    experience: userProfileData.experience,
+  });
   const [state, updateState, synchronizeState] =
     useAddNewItemListFromModal(userProfileData);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);

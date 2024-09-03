@@ -9,11 +9,13 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SchoolIcon from "@mui/icons-material/School";
 import { Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { UserProfile } from "../../../util/types";
+import { Education } from "../../../util/types";
 
 export default function EducationSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
-  const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
+  const [userContact, setUserContact] = useState<Education>({
+    education: userProfileData.education,
+  });
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
     open: false,

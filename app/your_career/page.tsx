@@ -1,8 +1,6 @@
 "use client";
-import Drawer from "../components/Drawer";
-import { usePathname } from "next/navigation";
 
-import CVCreator from "../components/CVCreator/CVCreator";
+import { usePathname } from "next/navigation";
 
 export default function Specialization({
   params,
@@ -11,9 +9,5 @@ export default function Specialization({
 }) {
   const pathname = usePathname();
 
-  return (
-    <Drawer>
-      <CVCreator />
-    </Drawer>
-  );
+  return <></>;
 }

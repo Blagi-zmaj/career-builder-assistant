@@ -1,5 +1,5 @@
 "use client";
-import Drawer from "../components/Drawer";
+
 import { usePathname } from "next/navigation";
 
 export default function Specialization({
@@ -9,9 +9,5 @@ export default function Specialization({
 }) {
   const pathname = usePathname();
 
-  return (
-    <>
-      <Drawer />
-    </>
-  );
+  return <></>;
 }

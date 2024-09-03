@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "./page.module.css";
-import { useParams, usePathname } from "next/navigation";
-import Drawer from "../components/Drawer";
+import { usePathname } from "next/navigation";
 
 export default function Specialization({
   params,

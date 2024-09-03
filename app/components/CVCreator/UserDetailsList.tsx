@@ -33,10 +33,14 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       ? `${categoryList[0].toUpperCase()}${categoryList.slice(1, -1)}`
       : `Hobby`;
 
-  const [userData, dispatch] = useReducer(
-    userDetailsListReducer,
-    userProfileData
-  );
+  const [userData, dispatch] = useReducer(userDetailsListReducer, {
+    newSkill: userProfileData.newSkill,
+    newLanguage: userProfileData.newLanguage,
+    newHobby: userProfileData.newHobby,
+    skills: [],
+    languages: userProfileData.languages,
+    hobbies: userProfileData.hobbies,
+  });
   const [isDisabledAddBtn, setIsDisabledAddBtn] = useState(true);
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showTooltip, setShowTooltip] = useState({

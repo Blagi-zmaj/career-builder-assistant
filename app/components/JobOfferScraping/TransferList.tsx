@@ -245,9 +245,6 @@ export default function SelectAllTransferList({
           <option value="https://nofluffjobs.com/pl/job/senior-fullstack-developer-react-node-js-xebia-remote-1">
             Senior Fullstack Developer (React/Node.js)
           </option>
-          <option value="https://nofluffjobs.com/pl/job/lead-software-engineer-react-node-js-7n-warszawa">
-            Lead Software Engineer (React + Node.js)
-          </option>
           <option value="https://nofluffjobs.com/pl/job/front-end-developer-with-react-cognitran-remote">
             Front-end developer with React
           </option>
