@@ -23,3 +23,9 @@
   word-wrap: break-word;
   margin: 0.5rem;
 }
+
+.centerComponent {
+  display: flex;
+  align-self: center;
+  justify-self: center;
+}

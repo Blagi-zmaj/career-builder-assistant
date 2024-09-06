@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userContactData, isEditingStates } from "../CVCreatorUtils/helpers";
 import InputForm from "../InputForm/InputForm";
 import styles from "./UserContactDataSection.module.css";
@@ -9,17 +9,51 @@ type IsEditingStates = {
 };
 
 type UserContact = {
-  name: string;
-  surname: string;
-  address: string;
-  email: string;
-  phone: string;
-  github: string;
-  linkedin: string;
+  name: string | undefined;
+  surname: string | undefined;
+  address: string | undefined;
+  email: string | undefined;
+  phone: string | undefined;
+  github: string | undefined;
+  linkedin: string | undefined;
 };
 
+function Loading() {
+  return (
+    <div className={styles.centerComponent}>
+      <h2>🌀 Loading...</h2>
+    </div>
+  );
+}
+
 export default function UserContactDataSection() {
-  const [userContact, setUserContact] = useState<UserContact>(userContactData);
+  const [userContact, setUserContact] = useState<UserContact>({
+    name: undefined,
+    surname: undefined,
+    address: undefined,
+    email: undefined,
+    phone: undefined,
+    github: undefined,
+    linkedin: undefined,
+  });
+
+  useEffect(() => {
+    async function fetchDataFromDatabase() {
+      const response = await fetch("/api/users", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+      });
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      setUserContact(data);
+    }
+
+    fetchDataFromDatabase();
+  }, []);
+
   const [isEditingInput, setIsEditingInput] =
     useState<IsEditingStates>(isEditingStates);
   const [showTooltip, setShowTooltip] = useState({
@@ -101,44 +135,54 @@ export default function UserContactDataSection() {
     }
   };
 
-  return Object.entries(userContact).map(([key, value], index) => {
-    if (key === "hobbies" || key === "languages" || key === "skills") return;
-    return isEditingInput[`isEditing${key[0].toUpperCase()}${key.slice(1)}`] ? (
-      <div className={styles.detailsBox} key={key}>
-        <label htmlFor={key} style={{ alignSelf: "center" }}>
-          {`${key[0].toUpperCase()}${key.slice(1)}`}
-        </label>
-        <Tooltip title={showTooltip.text} open={showTooltip.open}>
-          <InputForm
-            key={key}
-            id={key}
-            type="text"
-            name={key}
-            onChange={(
-              event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => handleInputChange(key, event)}
-            value={value}
-            className={styles.control}
-            onBlur={(event) => handleOnBlur(key, event)}
-            autoFocus
-            onKeyDown={(
-              event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => handleKeyDown(event, key)}
-          />
-        </Tooltip>
-      </div>
-    ) : (
-      <div className={styles.detailsBox} key={key}>
-        <label htmlFor={key} style={{ margin: "8px" }}>
-          {`${key[0].toUpperCase()}${key.slice(1)}`}
-        </label>
-        <span
-          onClick={() => replaceTextWithInput(key)}
-          className={styles.wordWrapBreakWord}
-        >
-          {value}
-        </span>
-      </div>
-    );
-  });
+  console.log(userContact?.name);
+
+  return userContact?.name !== undefined ? (
+    Object.entries(userContact).map(([key, value], index) => {
+      if (key === "hobbies" || key === "languages" || key === "skills") return;
+      return isEditingInput[
+        `isEditing${key[0].toUpperCase()}${key.slice(1)}`
+      ] ? (
+        <div className={styles.detailsBox} key={key}>
+          <label htmlFor={key} style={{ alignSelf: "center" }}>
+            {`${key[0].toUpperCase()}${key.slice(1)}`}
+          </label>
+          <Tooltip title={showTooltip.text} open={showTooltip.open}>
+            <InputForm
+              key={key}
+              id={key}
+              type="text"
+              name={key}
+              onChange={(
+                event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => handleInputChange(key, event)}
+              value={value}
+              className={styles.control}
+              onBlur={(event) => handleOnBlur(key, event)}
+              autoFocus
+              onKeyDown={(
+                event: React.KeyboardEvent<
+                  HTMLInputElement | HTMLTextAreaElement
+                >
+              ) => handleKeyDown(event, key)}
+            />
+          </Tooltip>
+        </div>
+      ) : (
+        <div className={styles.detailsBox} key={key}>
+          <label htmlFor={key} style={{ margin: "8px" }}>
+            {`${key[0].toUpperCase()}${key.slice(1)}`}
+          </label>
+          <span
+            onClick={() => replaceTextWithInput(key)}
+            className={styles.wordWrapBreakWord}
+          >
+            {value}
+          </span>
+        </div>
+      );
+    })
+  ) : (
+    <Loading />
+  );
 }
