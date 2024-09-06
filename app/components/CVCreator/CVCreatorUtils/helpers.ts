@@ -1,4 +1,35 @@
-export const userContactData = {
+export async function updateRecordInDatabase( // export to separate function to helpers folder
+  type: string,
+  tableName: string,
+  recordToUpdate: string,
+  newData: string
+) {
+  if (type === "create") {
+  }
+
+  if (type === "update") {
+    await fetch("/pages/api/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tableName, recordToUpdate, newData }),
+    });
+  }
+
+  if (type === "delete") {
+  }
+}
+
+type UserContact = {
+  name: string | undefined;
+  surname: string | undefined;
+  address: string | undefined;
+  email: string | undefined;
+  phone: string | undefined;
+  github: string | undefined;
+  linkedin: string | undefined;
+};
+
+export const userContactData: UserContact = {
   name: "Daniel",
   surname: "Konieczny",
   address: "Jaworzno",

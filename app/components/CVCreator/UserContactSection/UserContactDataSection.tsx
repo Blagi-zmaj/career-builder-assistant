@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { userContactData, isEditingStates } from "../CVCreatorUtils/helpers";
+import { isEditingStates } from "../CVCreatorUtils/helpers";
 import InputForm from "../InputForm/InputForm";
 import styles from "./UserContactDataSection.module.css";
 import { Tooltip } from "@mui/material";
+import { updateRecordInDatabase } from "../CVCreatorUtils/helpers";
 
 type IsEditingStates = {
   [key: string]: boolean;
@@ -39,15 +40,13 @@ export default function UserContactDataSection() {
 
   useEffect(() => {
     async function fetchDataFromDatabase() {
-      const response = await fetch("/api/users", {
+      const response = await fetch("pages/api/users", {
         method: "GET",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },
       });
-      console.log(response);
       const data = await response.json();
-      console.log(data);
       setUserContact(data);
     }
 
@@ -100,6 +99,13 @@ export default function UserContactDataSection() {
             [inputName]: `Add ${inputName}`,
           };
         });
+      } else {
+        updateRecordInDatabase(
+          "update",
+          "users",
+          inputName,
+          userContact[inputName]
+        );
       }
     }
   };
@@ -132,10 +138,15 @@ export default function UserContactDataSection() {
           [inputName]: `Add ${inputName}`,
         };
       });
+    } else {
+      updateRecordInDatabase(
+        "update",
+        "users",
+        inputName,
+        userContact[inputName]
+      );
     }
   };
-
-  console.log(userContact?.name);
 
   return userContact?.name !== undefined ? (
     Object.entries(userContact).map(([key, value], index) => {
