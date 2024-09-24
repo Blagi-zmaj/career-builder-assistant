@@ -1,34 +1,72 @@
+// UserContactDataSection.test.js
+
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import UserContactDataSection from "../components/CVCreator/UserContactSection/UserContactDataSection";
-import { render, within, screen, fireEvent } from "@testing-library/react";
-import { userContactData } from "../components/CVCreator/CVCreatorUtils/helpers";
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom"; // For matchers like toBeInTheDocument
 
-describe("UserContactDataSection", () => {
-  const newValues = [
-    "Marta",
-    "Koniecznik",
-    "Kraków",
-    "daniel@daniel.pl",
-    "555-555-555",
-    "blagi-blagi@github.com",
-    "daniel.koniecznik.linkedin.com",
-  ];
+export const userContactData = {
+  name: "John",
+  surname: "Doe",
+  address: "123 Main St",
+  email: "john.doe@example.com",
+  phone: "1234567890",
+  github: "johndoe",
+  linkedin: "linkedin.com/johndoe",
+};
 
+// Mock fetch globally
+global.fetch = jest.fn();
+
+describe("UserContactDataSection Component", () => {
   beforeEach(() => {
-    render(<UserContactDataSection />);
+    fetch.mockClear(); // Clear any previous calls to fetch before each test
   });
 
-  it("Renders component with initial values", () => {
-    Object.entries(userContactData).map((el) => {
-      const dataSection = screen.getByText(
-        el[0].slice(0, 1).toUpperCase() + el[0].slice(1)
-      );
-      expect(dataSection).toBeInTheDocument();
+  test("renders fetched data correctly", async () => {
+    // Mock fetch to return the desired response
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true, // Make sure fetch resolves successfully
+        json: () => Promise.resolve(userContactData),
+      })
+    );
+
+    render(<UserContactDataSection />);
+
+    // Wait for the data to be rendered
+    await waitFor(() => {
+      // Verify that each piece of data is rendered correctly
+      Object.entries(userContactData).map((el) => {
+        const dataSection = screen.getByText(
+          el[0].slice(0, 1).toUpperCase() + el[0].slice(1)
+        );
+        expect(dataSection).toBeInTheDocument();
+      });
     });
   });
 
   Object.entries(userContactData).map((el) => {
-    it("Renders component with initial values - labels and inputs", () => {
+    it("Renders component with initial values - labels and inputs", async () => {
+      fetch.mockImplementationOnce(() =>
+        Promise.resolve({
+          ok: true, // Make sure fetch resolves successfully
+          json: () => Promise.resolve(userContactData),
+        })
+      );
+
+      render(<UserContactDataSection />);
+
+      // Wait for the data to be rendered
+      await waitFor(() => {
+        // Verify that each piece of data is rendered correctly
+        Object.entries(userContactData).map((el) => {
+          const dataSection = screen.getByText(
+            el[0].slice(0, 1).toUpperCase() + el[0].slice(1)
+          );
+          expect(dataSection).toBeInTheDocument();
+        });
+      });
+
       const dataSectionLabel = screen.getByText(
         el[0].slice(0, 1).toUpperCase() + el[0].slice(1)
       );
@@ -38,65 +76,109 @@ describe("UserContactDataSection", () => {
     });
   });
 
-  it("Simulates clicking on text to show input", () => {
-    Object.entries(userContactData).map((el, index) => {
-      const spanDataSectionValue = screen.getByText(el[1]);
-      fireEvent.click(spanDataSectionValue);
-      const inputDataSection = screen.getByDisplayValue(el[1]);
-    });
-  });
+  it("Simulates clicking on text to show input", async () => {
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true, // Make sure fetch resolves successfully
+        json: () => Promise.resolve(userContactData),
+      })
+    );
 
-  it("Simulates span click, input change and state update with pressing Enter", () => {
-    Object.entries(userContactData).map((el, index) => {
-      const spanDataSectionValue = screen.getByText(el[1]);
-      fireEvent.click(spanDataSectionValue);
+    render(<UserContactDataSection />);
 
-      const inputDataSection = screen.getByDisplayValue(el[1]);
-      fireEvent.change(inputDataSection, {
-        target: { value: newValues[index] },
+    await waitFor(() => {
+      Object.entries(userContactData).map((el, index) => {
+        const spanDataSectionValue = screen.getByText(el[1]);
+        fireEvent.click(spanDataSectionValue);
+        const inputDataSection = screen.getByDisplayValue(el[1]);
       });
-      expect(inputDataSection.value).toBe(newValues[index]);
-
-      fireEvent.keyDown(inputDataSection, { key: "Enter", code: "Enter" });
-      const updatedSpanDataSectionValue = screen.getByText(newValues[index]);
-      expect(updatedSpanDataSectionValue.textContent).toBe(newValues[index]);
     });
   });
 
-  it("Simulates blur event and state update", () => {
-    Object.entries(userContactData).map((el, index) => {
-      const spanDataSectionValue = screen.getByText(el[1]);
-      fireEvent.click(spanDataSectionValue);
+  it("Simulates span click, input change and state update with pressing Enter", async () => {
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true, // Make sure fetch resolves successfully
+        json: () => Promise.resolve(userContactData),
+      })
+    );
 
-      const inputDataSection = screen.getByDisplayValue(el[1]);
-      fireEvent.change(inputDataSection, {
-        target: { value: newValues[index] },
+    render(<UserContactDataSection />);
+
+    await waitFor(() => {
+      Object.entries(userContactData).map((el, index) => {
+        const spanDataSectionValue = screen.getByText(el[1]);
+        fireEvent.click(spanDataSectionValue);
+        const inputDataSection = screen.getByDisplayValue(el[1]);
+        fireEvent.change(inputDataSection, {
+          target: { value: userContactData[el[0]] },
+        });
+        expect(inputDataSection.value).toBe(userContactData[el[0]]);
+        fireEvent.keyDown(inputDataSection, { key: "Enter", code: "Enter" });
+        const updatedSpanDataSectionValue = screen.getByText(
+          userContactData[el[0]]
+        );
+        expect(updatedSpanDataSectionValue.textContent).toBe(
+          userContactData[el[0]]
+        );
       });
-
-      expect(inputDataSection.value).toBe(newValues[index]);
-      fireEvent.blur(inputDataSection);
-
-      const updatedSpanDataSectionValue = screen.getByText(newValues[index]);
-      expect(updatedSpanDataSectionValue.textContent).toBe(newValues[index]);
     });
   });
 
-  it("Simulates empty input and tooltip visibility", () => {
-    Object.entries(userContactData).map((el, index) => {
-      const spanDataSectionValue = screen.getByText(el[1]);
-      fireEvent.click(spanDataSectionValue);
+  it("Simulates blur event and state update", async () => {
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(userContactData),
+      })
+    );
 
-      const inputDataSection = screen.getByDisplayValue(el[1]);
-      fireEvent.change(inputDataSection, { target: { value: "" } });
+    render(<UserContactDataSection />);
 
-      // find tooltip with message "empty record"
-      const tooltip = screen.getByText(new RegExp(`empty record`, `i`));
+    await waitFor(() => {
+      Object.entries(userContactData).map((el, index) => {
+        const spanDataSectionValue = screen.getByText(el[1]);
+        fireEvent.click(spanDataSectionValue);
+        const inputDataSection = screen.getByDisplayValue(el[1]);
+        fireEvent.change(inputDataSection, {
+          target: { value: userContactData[el[0]] },
+        });
+        expect(inputDataSection.value).toBe(userContactData[el[0]]);
+        fireEvent.blur(inputDataSection);
+        const updatedSpanDataSectionValue = screen.getByText(
+          userContactData[el[0]]
+        );
+        expect(updatedSpanDataSectionValue.textContent).toBe(
+          userContactData[el[0]]
+        );
+      });
+    });
+  });
 
-      // click enter and check if show text "add <property>""
-      fireEvent.keyDown(inputDataSection, { key: "Enter", code: "Enter" });
-      const updatedSpanDataSectionValue = screen.getByText(
-        new RegExp(`add ${el[0]}`, `i`)
-      );
+  it("Simulates empty input and tooltip visibility", async () => {
+    fetch.mockImplementationOnce(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(userContactData),
+      })
+    );
+
+    render(<UserContactDataSection />);
+
+    await waitFor(() => {
+      Object.entries(userContactData).map((el, index) => {
+        const spanDataSectionValue = screen.getByText(el[1]);
+        fireEvent.click(spanDataSectionValue);
+        const inputDataSection = screen.getByDisplayValue(el[1]);
+        fireEvent.change(inputDataSection, { target: { value: "" } });
+        // find tooltip with message "empty record"
+        const tooltip = screen.getByText(new RegExp(`empty record`, `i`));
+        // click enter and check if show text "add <property>""
+        fireEvent.keyDown(inputDataSection, { key: "Enter", code: "Enter" });
+        const updatedSpanDataSectionValue = screen.getByText(
+          new RegExp(`add ${el[0]}`, `i`)
+        );
+      });
     });
   });
 });
