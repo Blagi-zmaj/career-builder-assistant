@@ -1,4 +1,19 @@
-export async function updateRecordInDatabase( // export to separate function to helpers folder
+export async function updateUserRecordInDatabase(
+  type: string,
+  tableName: string,
+  recordToUpdate: string,
+  newData: string
+) {
+  if (type === "update") {
+    await fetch(`/pages/api/${tableName}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tableName, recordToUpdate, newData }),
+    });
+  }
+}
+
+export async function updateSkillsTableInDatabase(
   type: string,
   tableName: string,
   recordToUpdate: string,
@@ -8,7 +23,7 @@ export async function updateRecordInDatabase( // export to separate function to 
   }
 
   if (type === "update") {
-    await fetch("/pages/api/users", {
+    await fetch(`/pages/api/${tableName}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableName, recordToUpdate, newData }),
@@ -58,7 +73,7 @@ export const userProfileData = {
   newSkill: { name: "", level: 3, isEditing: false },
   newLanguage: { name: "", level: 3, isEditing: false },
   newHobby: { name: "", isEditing: false },
-  skills: [],
+  skills: [{ name: "AI - Test", level: 2, isEditing: false }],
   languages: [
     { name: "English", level: 2, isEditing: false },
     { name: "French", level: 3, isEditing: false },

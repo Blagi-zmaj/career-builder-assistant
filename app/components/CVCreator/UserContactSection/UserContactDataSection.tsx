@@ -3,7 +3,7 @@ import { isEditingStates } from "../CVCreatorUtils/helpers";
 import InputForm from "../InputForm/InputForm";
 import styles from "./UserContactDataSection.module.css";
 import { Tooltip } from "@mui/material";
-import { updateRecordInDatabase } from "../CVCreatorUtils/helpers";
+import { updateUserRecordInDatabase } from "../CVCreatorUtils/helpers";
 
 type IsEditingStates = {
   [key: string]: boolean;
@@ -100,7 +100,7 @@ export default function UserContactDataSection() {
           };
         });
       } else {
-        updateRecordInDatabase(
+        updateUserRecordInDatabase(
           "update",
           "users",
           inputName,
@@ -139,7 +139,7 @@ export default function UserContactDataSection() {
         };
       });
     } else {
-      updateRecordInDatabase(
+      updateUserRecordInDatabase(
         "update",
         "users",
         inputName,

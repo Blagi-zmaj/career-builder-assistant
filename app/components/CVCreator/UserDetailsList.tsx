@@ -13,19 +13,58 @@ import ProfileDetails from "./ProfileDetails";
 
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
   useEffect(() => {
-    const userSkillsFromLocalStorage = getDataFromLocalStorage("skills");
-    const ownedSkillObjectsArr = userSkillsFromLocalStorage.map((skill) => {
-      return {
-        name: skill,
-        level: 3,
-        isEditing: false,
-      };
-    });
+    async function fetchDataFromDatabase() {
+      try {
+        const responses = await Promise.all([
+          await fetch("pages/api/skills", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+            },
+          }),
+          await fetch("pages/api/languages", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+            },
+          }),
+          await fetch("pages/api/hobbies", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+            },
+          }),
+        ]);
 
-    dispatch({
-      type: "fetchFromLocalStorage",
-      ownedFromLocalStorage: ownedSkillObjectsArr,
-    });
+        const dataArr = await Promise.all(
+          responses.map((response) => response.json())
+        );
+
+        const [skills, languages, hobbies] = dataArr;
+
+        const updatedHobbies = hobbies.map((hobby) => {
+          return {
+            name: hobby.name,
+            isEditing: false,
+          };
+        });
+
+        const recordsForSite = [skills, languages].map((data) => {
+          return data.map((attr) => {
+            return { name: attr.name, level: attr.rate, isEditing: false };
+          });
+        });
+
+        dispatch({
+          type: "fetchFromDatabase",
+          ownedFromDatabase: [...recordsForSite, updatedHobbies],
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchDataFromDatabase();
   }, []);
 
   const listNameCapitalized =
@@ -37,7 +76,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     newSkill: userProfileData.newSkill,
     newLanguage: userProfileData.newLanguage,
     newHobby: userProfileData.newHobby,
-    skills: [],
+    skills: userProfileData.skills,
     languages: userProfileData.languages,
     hobbies: userProfileData.hobbies,
   });
@@ -56,6 +95,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     categoryList !== `hobbies` ? `${categoryList.slice(0, -1)}` : `hobby`;
   const newListName = `new${listNameCapitalized}`;
   const addListName = `add${listNameCapitalized}`;
+
   useEffect(() => {
     if (!userData[newListName].name) {
       setIsDisabledAddBtn(true);
