@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {
   userProfileData,
   getDataFromLocalStorage,
+  updateTableRecordInDatabase,
 } from "./CVCreatorUtils/helpers";
 import { MouseEvent, useEffect, useReducer, useState } from "react";
 import userDetailsListReducer from "../../util/reducers";
@@ -41,6 +42,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
         );
 
         const [skills, languages, hobbies] = dataArr;
+        console.log(skills, languages, hobbies);
 
         const updatedHobbies = hobbies.map((hobby) => {
           return {
@@ -133,6 +135,9 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       listName: listName,
       identifier: identifier,
     });
+
+    console.log(userData[identifier]);
+    updateTableRecordInDatabase("create", listName, userData[identifier]);
   };
 
   const replaceTextWithInput = function (

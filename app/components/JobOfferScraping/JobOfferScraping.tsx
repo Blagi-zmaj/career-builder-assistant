@@ -68,7 +68,7 @@ export default function JobOfferScraping() {
 
   const scrapeOfferSkills = async function (url: string) {
     try {
-      const response = await fetch("pages/api/skills", {
+      const response = await fetch("/pages/api/skills/scrape_skills", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),

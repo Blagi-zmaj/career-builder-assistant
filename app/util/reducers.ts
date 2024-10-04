@@ -3,7 +3,7 @@ import { UserProfile } from "../util/types";
 export default function userDetailsListReducer(state, action) {
   switch (action.type) {
     case "fetchFromDatabase": {
-      console.log(action.ownedFromDatabase);
+      // console.log(action.ownedFromDatabase);
       const [skills, languages, hobbies] = action.ownedFromDatabase;
 
       return {

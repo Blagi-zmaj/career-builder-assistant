@@ -26,7 +26,7 @@ export async function GET() {
        WHERE u.email='daniel.konieczny@gmail.com';
     `);
 
-  console.log(result.rows);
+  // console.log(result.rows);
 
   return new Promise((resolve) => {
     resolve(NextResponse.json(result.rows));
