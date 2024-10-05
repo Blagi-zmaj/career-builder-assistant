@@ -4,7 +4,12 @@ import RadioGroupRating from "../Rating";
 import styles from "./CVForm.module.css";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { hasDuplicates } from "./CVCreatorUtils/helpers";
-import { MouseEvent } from "react";
+import { MouseEvent, useState } from "react";
+import {
+  // userProfileData,
+  // getDataFromLocalStorage,
+  updateTableRecordInDatabase,
+} from "./CVCreatorUtils/helpers";
 
 export default function ProfileDetails({
   hideAllButtons,
@@ -17,6 +22,8 @@ export default function ProfileDetails({
   replaceTextWithInput,
   userData,
   dispatch,
+  actualRecord,
+  setRecordToChange,
 }) {
   const handleChangeUserActualInput = function (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -64,6 +71,8 @@ export default function ProfileDetails({
       identifier: identifier,
       updatedList: updatedList,
     });
+
+    updateTableRecordInDatabase("delete", identifier, skillName);
   };
 
   const handleChangeRatingExistingListItem = function (
@@ -77,6 +86,13 @@ export default function ProfileDetails({
       index: index,
       rate: rate,
     });
+    updateTableRecordInDatabase(
+      "update",
+      identifier,
+      userData[identifier][index],
+      "rate",
+      rate
+    );
   };
 
   const handleBlur = function (categoryList: string, listIndex: number) {
@@ -105,6 +121,16 @@ export default function ProfileDetails({
       categoryList: categoryList,
       listIndex: listIndex,
     });
+
+    updateTableRecordInDatabase(
+      "update",
+      categoryList,
+      {
+        ...userData[categoryList][listIndex],
+        oldName: actualRecord,
+      },
+      "custom_skill_name"
+    );
   };
 
   const handleUserDetailsKeyDown = function (
@@ -128,6 +154,16 @@ export default function ProfileDetails({
         inputName: inputName,
         index: index,
       });
+
+      updateTableRecordInDatabase(
+        "update",
+        inputName,
+        {
+          ...userData[inputName][index],
+          oldName: actualRecord,
+        },
+        "custom_skill_name"
+      );
     }
   };
 

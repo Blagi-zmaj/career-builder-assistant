@@ -13,6 +13,12 @@ import userDetailsListReducer from "../../util/reducers";
 import ProfileDetails from "./ProfileDetails";
 
 export default function UserDetailsList({ categoryList, hideAllButtons }) {
+  const [actualRecord, setActualRecord] = useState("actualRecordTEST");
+
+  const setRecordToChange = function (recordName) {
+    setActualRecord(recordName);
+  };
+
   useEffect(() => {
     async function fetchDataFromDatabase() {
       try {
@@ -42,7 +48,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
         );
 
         const [skills, languages, hobbies] = dataArr;
-        console.log(skills, languages, hobbies);
 
         const updatedHobbies = hobbies.map((hobby) => {
           return {
@@ -53,7 +58,11 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
 
         const recordsForSite = [skills, languages].map((data) => {
           return data.map((attr) => {
-            return { name: attr.name, level: attr.rate, isEditing: false };
+            return {
+              name: attr.custom_skill_name,
+              level: attr.rate,
+              isEditing: false,
+            };
           });
         });
 
@@ -135,8 +144,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
       listName: listName,
       identifier: identifier,
     });
-
-    console.log(userData[identifier]);
     updateTableRecordInDatabase("create", listName, userData[identifier]);
   };
 
@@ -145,7 +152,7 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     listItemIndex: number = 0
   ) {
     setActualRecordUpdated(listItemIndex);
-
+    setRecordToChange(userData[inputName][listItemIndex].name);
     setShowActualRecordTooltip((prevValues) => {
       return { ...prevValues, open: false };
     });
@@ -162,8 +169,11 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     categoryList: string
   ) {
+    console.log(" userData[categoryList]", userData[categoryList]);
     const isInUserProperty = userData[categoryList].filter((el) => {
-      return el.name.toLowerCase() === event.target.value.toLowerCase();
+      if (el.name !== null) {
+        return el.name.toLowerCase() === event.target.value.toLowerCase();
+      }
     });
 
     if (isInUserProperty.length > 0 && userData[identifier] !== "") {
@@ -200,6 +210,8 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
               replaceTextWithInput={replaceTextWithInput}
               userData={userData}
               dispatch={dispatch}
+              actualRecord={actualRecord}
+              setRecordToChange={setRecordToChange}
             />
           </div>
         );

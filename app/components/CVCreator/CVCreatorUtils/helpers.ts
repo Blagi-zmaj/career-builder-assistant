@@ -17,24 +17,10 @@ export async function updateTableRecordInDatabase(
   type: string,
   tableName: string,
   newData: string,
-  recordToUpdate?: string
+  recordToUpdate?: string,
+  rate?: number
 ) {
-  // let newTableNameItem = "";
-  // if (tableName === "skills") {
-  //   newTableNameItem = "AddNewSkill";
-  // }
-  // if (tableName === "languages") {
-  //   newTableNameItem = "AddNewLanguage";
-  // }
-  // if (tableName === "hobbies") {
-  //   newTableNameItem = "AddNewHobby";
-  // }
-
-  console.log(type, tableName, newData);
   if (type === "create") {
-    console.log(`CREATE updateTableRecordInDatabase`);
-
-    // add fetch for POST
     await fetch(`/pages/api/${tableName}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -46,12 +32,16 @@ export async function updateTableRecordInDatabase(
     await fetch(`/pages/api/${tableName}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tableName, recordToUpdate, newData }),
+      body: JSON.stringify({ tableName, newData, rate, recordToUpdate }),
     });
   }
 
   if (type === "delete") {
-    //add fetch for DELETE
+    await fetch(`/pages/api/${tableName}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tableName, newData }),
+    });
   }
 }
 
