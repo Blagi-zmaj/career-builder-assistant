@@ -5,7 +5,6 @@ import styles from "./CVForm.module.css";
 import AddIcon from "@mui/icons-material/Add";
 import {
   userProfileData,
-  getDataFromLocalStorage,
   updateTableRecordInDatabase,
 } from "./CVCreatorUtils/helpers";
 import { MouseEvent, useEffect, useReducer, useState } from "react";
@@ -20,10 +19,12 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
   };
 
   useEffect(() => {
+    const storedLogin = window.localStorage.getItem("login");
+
     async function fetchDataFromDatabase() {
       try {
         const responses = await Promise.all([
-          await fetch("pages/api/skills", {
+          await fetch(`pages/api/skills?login=${storedLogin}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json;charset=utf-8",
@@ -51,24 +52,30 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
 
         const updatedHobbies = hobbies.map((hobby) => {
           return {
-            name: hobby.name,
+            name: hobby.custom_hobby_name,
             isEditing: false,
           };
         });
 
-        const recordsForSite = [skills, languages].map((data) => {
-          return data.map((attr) => {
-            return {
-              name: attr.custom_skill_name,
-              level: attr.rate,
-              isEditing: false,
-            };
-          });
+        const updatedSkills = skills.map((data) => {
+          return {
+            name: data.custom_skill_name,
+            level: data.rate,
+            isEditing: false,
+          };
+        });
+
+        const updatedLanguages = languages.map((data) => {
+          return {
+            name: data.custom_language_name,
+            level: data.rate,
+            isEditing: false,
+          };
         });
 
         dispatch({
           type: "fetchFromDatabase",
-          ownedFromDatabase: [...recordsForSite, updatedHobbies],
+          ownedFromDatabase: [updatedSkills, updatedLanguages, updatedHobbies],
         });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -169,7 +176,6 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
     identifier: string,
     categoryList: string
   ) {
-    console.log(" userData[categoryList]", userData[categoryList]);
     const isInUserProperty = userData[categoryList].filter((el) => {
       if (el.name !== null) {
         return el.name.toLowerCase() === event.target.value.toLowerCase();

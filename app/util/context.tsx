@@ -9,8 +9,12 @@ export const NavAndDrawerContext = createContext({
   toggleShowButtons: () => {},
   showPhoto: true,
   toggleShowPhoto: () => {},
-  userLoggingData: { login: "", password: "" },
-  updateUserLoggingData: (userData: { login: string; password: string }) => {},
+  userLoggingData: { login: "", password: "", isLogged: "" },
+  updateUserLoggingData: (userData: {
+    login: string;
+    password: string;
+    isLogged: string;
+  }) => {},
 });
 
 export const NavAndDrawerProvider = ({ children }) => {

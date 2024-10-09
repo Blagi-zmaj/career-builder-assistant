@@ -33,7 +33,9 @@ export default function Login() {
           "Anonymous",
         password: signupRef?.current.querySelector("#standard-password-input")
           .value,
+        isLogged: "true",
       });
+
       router.push("/");
     }
 

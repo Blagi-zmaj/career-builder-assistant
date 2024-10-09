@@ -20,6 +20,8 @@ export async function updateTableRecordInDatabase(
   recordToUpdate?: string,
   rate?: number
 ) {
+  const storedLogin = window.localStorage.getItem("login");
+
   if (type === "create") {
     await fetch(`/pages/api/${tableName}`, {
       method: "POST",
@@ -34,6 +36,7 @@ export async function updateTableRecordInDatabase(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableName, newData, rate, recordToUpdate }),
     });
+    // }
   }
 
   if (type === "delete") {
@@ -190,7 +193,5 @@ export function hasDuplicates(arr) {
 }
 
 export function getDataFromLocalStorage(key: string) {
-  return JSON.parse(
-    localStorage.getItem(key) ?? `["Machine","AI"]` //or localStorage.getItem("skills") as string
-  );
+  return JSON.parse(localStorage.getItem(key) ?? `["Machine","AI"]`);
 }

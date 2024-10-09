@@ -39,8 +39,11 @@ export default function UserContactDataSection() {
   });
 
   useEffect(() => {
+    const storedLogin = window.localStorage.getItem("login");
+    console.log("storedLogin", storedLogin);
+
     async function fetchDataFromDatabase() {
-      const response = await fetch("pages/api/users", {
+      const response = await fetch(`pages/api/users?login=${storedLogin}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json;charset=utf-8",

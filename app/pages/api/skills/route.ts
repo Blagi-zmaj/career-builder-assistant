@@ -17,12 +17,11 @@ const pool = new Pool({
   database: process.env.NEXT_PUBLIC_DATABASE,
 });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const result = await pool.query(`
     SELECT us.custom_skill_name, us.rate
     FROM users u
     JOIN user_skills us ON u.id = us.user_id
-    JOIN skills s ON s.id = us.skill_id
     WHERE u.email='daniel.konieczny@gmail.com';
   `);
 
@@ -34,42 +33,20 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { tableName, newData, rate, recordToUpdate } = body;
-  const isRecordInDB = await pool.query(
-    `SELECT EXISTS (SELECT 1 FROM ${tableName} WHERE name='${newData.name}')`
-  );
 
-  if (!isRecordInDB.rows[0].exists) {
-    await pool.query(`INSERT INTO skills(name) VALUES ('${newData.name}')`);
-  }
-
-  // find if record exists for user
   const isSkillInDB = await pool.query(`
     SELECT EXISTS (
       SELECT 1 
       FROM user_skills us
-      JOIN skills s ON us.skill_id = s.id
       WHERE us.user_id = ${userId}
-      AND s.name = '${newData.name}'
-    )
-    `);
-
-  const findSkill = await pool.query(`
-      SELECT id, name 
-      FROM skills
-      WHERE name = 'AI';
+      AND us.custom_skill_name = '${newData.name}'
+    );
     `);
 
   if (!isSkillInDB.rows[0].exists) {
     await pool.query(`
-      WITH found_skill AS (
-        SELECT id
-        FROM skills
-        WHERE name = '${newData.name}'
-      )
-      INSERT INTO user_skills (user_id, skill_id, rate, custom_skill_name)
-      SELECT ${userId}, id, ${newData.level}, '${newData.name}'
-      FROM found_skill;
-    `);
+      INSERT INTO user_skills (user_id, rate, custom_skill_name) VALUES (${userId}, ${newData.level}, '${newData.name}');
+      `);
   }
 
   return NextResponse.json(`Record created in Database`);

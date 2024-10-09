@@ -35,7 +35,11 @@ export default function Navigation({
     toggleShowNavAndDrawer,
     toggleShowButtons,
     showButtons,
+    userLoggingData,
+    updateUserLoggingData,
   } = useContext(NavAndDrawerContext);
+  console.log(userLoggingData);
+  console.log(updateUserLoggingData);
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
@@ -51,6 +55,14 @@ export default function Navigation({
 
   React.useEffect(() => {
     const storedLogin = window.localStorage.getItem("login");
+    const storedIsLogged = window.localStorage.getItem("isLogged");
+    console.log("storedLogin", storedLogin);
+    console.log("storedIsLogged", storedIsLogged);
+    updateUserLoggingData({
+      login: storedLogin,
+      password: "",
+      isLogged: storedIsLogged,
+    });
     setLogin(storedLogin);
   }, []);
 
@@ -91,6 +103,11 @@ export default function Navigation({
     handleMobileMenuClose();
     window.localStorage.setItem("isLogged", "false");
     window.localStorage.setItem("login", "undefined");
+    updateUserLoggingData({
+      login: "undefined",
+      password: "",
+      isLogged: "false",
+    });
     router.push("/login_page");
   };
 

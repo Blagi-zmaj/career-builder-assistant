@@ -4,12 +4,9 @@ import RadioGroupRating from "../Rating";
 import styles from "./CVForm.module.css";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { hasDuplicates } from "./CVCreatorUtils/helpers";
-import { MouseEvent, useState } from "react";
-import {
-  // userProfileData,
-  // getDataFromLocalStorage,
-  updateTableRecordInDatabase,
-} from "./CVCreatorUtils/helpers";
+import { MouseEvent, useContext } from "react";
+import { updateTableRecordInDatabase } from "./CVCreatorUtils/helpers";
+import { NavAndDrawerContext } from "../../util/context";
 
 export default function ProfileDetails({
   hideAllButtons,
@@ -23,8 +20,9 @@ export default function ProfileDetails({
   userData,
   dispatch,
   actualRecord,
-  setRecordToChange,
 }) {
+  const { userLoggingData } = useContext(NavAndDrawerContext);
+
   const handleChangeUserActualInput = function (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     identifier: string,
@@ -86,6 +84,7 @@ export default function ProfileDetails({
       index: index,
       rate: rate,
     });
+
     updateTableRecordInDatabase(
       "update",
       identifier,
@@ -122,6 +121,11 @@ export default function ProfileDetails({
       listIndex: listIndex,
     });
 
+    const listNameSingular =
+      categoryList !== `hobbies`
+        ? `${categoryList[0].toLowerCase()}${categoryList.slice(1, -1)}`
+        : `hobby`;
+
     updateTableRecordInDatabase(
       "update",
       categoryList,
@@ -129,7 +133,7 @@ export default function ProfileDetails({
         ...userData[categoryList][listIndex],
         oldName: actualRecord,
       },
-      "custom_skill_name"
+      `custom_${listNameSingular}_name`
     );
   };
 
@@ -155,6 +159,11 @@ export default function ProfileDetails({
         index: index,
       });
 
+      const listNameSingular =
+        inputName !== `hobbies`
+          ? `${inputName[0].toLowerCase()}${inputName.slice(1, -1)}`
+          : `hobby`;
+
       updateTableRecordInDatabase(
         "update",
         inputName,
@@ -162,7 +171,7 @@ export default function ProfileDetails({
           ...userData[inputName][index],
           oldName: actualRecord,
         },
-        "custom_skill_name"
+        `custom_${listNameSingular}_name`
       );
     }
   };

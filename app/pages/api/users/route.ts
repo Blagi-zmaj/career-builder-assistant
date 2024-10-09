@@ -6,7 +6,7 @@ export const config = {
   runtime: "edge",
 };
 
-const userId = 1; // update in future to get email/login
+const userId = 1;
 
 const pool = new Pool({
   user: process.env.NEXT_PUBLIC_USER,
@@ -21,9 +21,7 @@ export async function GET(req: NextRequest) {
   const { id, created_at, ...filteredObj } = result.rows[0];
 
   return new Promise((resolve) => {
-    // setTimeout(() => {
     resolve(NextResponse.json(filteredObj));
-    // }, 500);
   });
 }
 
