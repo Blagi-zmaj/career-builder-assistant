@@ -41,7 +41,3 @@ export function useAddNewItemListFromModal(data) {
 
   return [state, updateState, synchronizeState];
 }
-
-// Consider adding below functions:
-// handleUpdateDate => useUpdateDate
-// handleBlurUser => useUpdateOnBlur

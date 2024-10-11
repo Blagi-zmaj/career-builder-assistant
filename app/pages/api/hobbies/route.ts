@@ -7,7 +7,19 @@ export const config = {
   runtime: "edge",
 };
 
-const userId = 1;
+const getLoginFromUrl = function (url) {
+  const regex = /login=([^&]*)/;
+  const login = url.match(regex);
+  return login[1];
+};
+
+const findUserIdInDB = async function (userLogin) {
+  const userId = await pool.query(`
+    SELECT id FROM users WHERE email = '${userLogin}';
+    `);
+
+  return userId.rows[0].id;
+};
 
 const pool = new Pool({
   user: process.env.NEXT_PUBLIC_USER,
@@ -17,12 +29,16 @@ const pool = new Pool({
   database: process.env.NEXT_PUBLIC_DATABASE,
 });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
+
   const result = await pool.query(`
     SELECT uh.custom_hobby_name 
     FROM user_hobbies uh
     JOIN users u ON u.id = uh.user_id
-    WHERE u.email = 'daniel.konieczny@gmail.com';
+    WHERE u.email = '${userLogin}';
   `);
 
   return new Promise((resolve) => {
@@ -32,6 +48,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
   const { tableName, newData, rate, recordToUpdate } = body;
 
   const isHobbyInDB = await pool.query(`
@@ -54,6 +73,11 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json();
+
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
+
   const { tableName, newData, rate, recordToUpdate } = body;
 
   const valueToSet = recordToUpdate === "rate" ? rate : newData.name;
@@ -69,6 +93,11 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const body = await req.json();
+
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
+
   const { tableName, newData } = body;
 
   pool.query(`

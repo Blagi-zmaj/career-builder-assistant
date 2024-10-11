@@ -5,7 +5,8 @@ export async function updateUserRecordInDatabase(
   newData: string
 ) {
   if (type === "update") {
-    await fetch(`/pages/api/${tableName}`, {
+    const storedLogin = window.localStorage.getItem("login");
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableName, recordToUpdate, newData }),
@@ -23,7 +24,7 @@ export async function updateTableRecordInDatabase(
   const storedLogin = window.localStorage.getItem("login");
 
   if (type === "create") {
-    await fetch(`/pages/api/${tableName}`, {
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableName, newData }),
@@ -31,7 +32,7 @@ export async function updateTableRecordInDatabase(
   }
 
   if (type === "update") {
-    await fetch(`/pages/api/${tableName}`, {
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableName, newData, rate, recordToUpdate }),
@@ -40,7 +41,7 @@ export async function updateTableRecordInDatabase(
   }
 
   if (type === "delete") {
-    await fetch(`/pages/api/${tableName}`, {
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tableName, newData }),
@@ -147,7 +148,7 @@ export const userProfileData = {
       startDate: { value: "2024-04-23", isEditing: false },
       endDate: { value: "2026-11-03", isEditing: false },
       description: {
-        value: "Project AI!",
+        value: "  ",
         isEditing: false,
       },
     },

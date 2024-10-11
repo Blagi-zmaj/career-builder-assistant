@@ -6,7 +6,20 @@ export const config = {
   runtime: "edge",
 };
 
-const userId = 1;
+const getLoginFromUrl = function (url) {
+  const regex = /login=([^&]*)/;
+  const login = url.match(regex);
+
+  return login[1];
+};
+
+const findUserIdInDB = async function (userLogin) {
+  const userId = await pool.query(`
+    SELECT id FROM users WHERE email = '${userLogin}';
+    `);
+
+  return userId.rows[0].id;
+};
 
 const pool = new Pool({
   user: process.env.NEXT_PUBLIC_USER,
@@ -17,6 +30,9 @@ const pool = new Pool({
 });
 
 export async function GET(req: NextRequest) {
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
   const result = await pool.query(`SELECT * FROM users WHERE id=${userId};`);
   const { id, created_at, ...filteredObj } = result.rows[0];
 
@@ -27,6 +43,9 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json();
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
   const { tableName, recordToUpdate, newData } = body;
   await pool.query(
     `UPDATE ${tableName} SET ${recordToUpdate}='${newData}' WHERE id=${userId};`

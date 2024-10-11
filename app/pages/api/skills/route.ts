@@ -7,8 +7,6 @@ export const config = {
   runtime: "edge",
 };
 
-let userId = 1;
-
 const pool = new Pool({
   user: process.env.NEXT_PUBLIC_USER,
   password: process.env.NEXT_PUBLIC_PASSWORD,
@@ -17,12 +15,30 @@ const pool = new Pool({
   database: process.env.NEXT_PUBLIC_DATABASE,
 });
 
+const getLoginFromUrl = function (url) {
+  const regex = /login=([^&]*)/;
+  const login = url.match(regex);
+
+  return login[1];
+};
+
+const findUserIdInDB = async function (userLogin) {
+  const userId = await pool.query(`
+    SELECT id FROM users WHERE email = '${userLogin}';
+    `);
+  return userId.rows[0].id;
+};
+
 export async function GET(req: NextRequest) {
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
+
   const result = await pool.query(`
     SELECT us.custom_skill_name, us.rate
     FROM users u
     JOIN user_skills us ON u.id = us.user_id
-    WHERE u.email='daniel.konieczny@gmail.com';
+    WHERE u.email='${userLogin}';
   `);
 
   return new Promise((resolve) => {
@@ -33,6 +49,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { tableName, newData, rate, recordToUpdate } = body;
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
 
   const isSkillInDB = await pool.query(`
     SELECT EXISTS (
@@ -54,8 +73,10 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const body = await req.json();
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
   const { tableName, newData, rate, recordToUpdate } = body;
-
   const valueToSet = recordToUpdate === "rate" ? rate : newData.name;
 
   if (recordToUpdate === "rate") {
@@ -75,11 +96,14 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const body = await req.json();
+  const { url } = req;
+  const userLogin = getLoginFromUrl(url);
+  const userId = await findUserIdInDB(userLogin);
   const { tableName, newData } = body;
 
   pool.query(`
     DELETE FROM user_skills WHERE user_id = ${userId} AND custom_skill_name = '${newData}'
     `);
 
-  return NextResponse.json("DELETE successful!");
+  return NextResponse.json("DELETE record successful!");
 }

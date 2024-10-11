@@ -30,13 +30,13 @@ export default function UserDetailsList({ categoryList, hideAllButtons }) {
               "Content-Type": "application/json;charset=utf-8",
             },
           }),
-          await fetch("pages/api/languages", {
+          await fetch(`pages/api/languages?login=${storedLogin}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json;charset=utf-8",
             },
           }),
-          await fetch("pages/api/hobbies", {
+          await fetch(`pages/api/hobbies?login=${storedLogin}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json;charset=utf-8",
