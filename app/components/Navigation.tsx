@@ -38,8 +38,6 @@ export default function Navigation({
     userLoggingData,
     updateUserLoggingData,
   } = useContext(NavAndDrawerContext);
-  console.log(userLoggingData);
-  console.log(updateUserLoggingData);
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
@@ -56,8 +54,6 @@ export default function Navigation({
   React.useEffect(() => {
     const storedLogin = window.localStorage.getItem("login");
     const storedIsLogged = window.localStorage.getItem("isLogged");
-    console.log("storedLogin", storedLogin);
-    console.log("storedIsLogged", storedIsLogged);
     updateUserLoggingData({
       login: storedLogin,
       password: "",

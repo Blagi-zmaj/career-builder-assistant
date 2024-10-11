@@ -29,6 +29,31 @@ export default function JobExperienceSection() {
     setUserContact(state);
   }, [state]);
 
+  useEffect(() => {
+    const storedLogin = window.localStorage.getItem("login");
+    async function fetchDataFromDatabase() {
+      const response = await fetch(
+        `/pages/api/experience?login=${storedLogin}`
+      );
+      const data = await response.json();
+
+      const newDataFormat = data.map((el) => {
+        return {
+          institution: { value: el.institution_name, isEditing: false },
+          position: { value: el.position_name, isEditing: false },
+          startDate: { value: el.start_date, isEditing: false },
+          endDate: { value: el.end_date, isEditing: false },
+          description: {
+            value: el.description,
+            isEditing: false,
+          },
+        };
+      });
+    }
+
+    fetchDataFromDatabase();
+  }, []);
+
   const handleReplaceTextWithInput = function (
     listName: string,
     workIndex: number,

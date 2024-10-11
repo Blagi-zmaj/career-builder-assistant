@@ -33,7 +33,6 @@ export async function GET(req: NextRequest) {
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
-
   const result = await pool.query(`
     SELECT us.custom_skill_name, us.rate
     FROM users u

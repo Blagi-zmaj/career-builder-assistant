@@ -142,16 +142,16 @@ export const userProfileData = {
         isEditing: false,
       },
     },
-    {
-      institution: { value: "Amazon", isEditing: false },
-      position: { value: "AI developer", isEditing: false },
-      startDate: { value: "2024-04-23", isEditing: false },
-      endDate: { value: "2026-11-03", isEditing: false },
-      description: {
-        value: "  ",
-        isEditing: false,
-      },
-    },
+    // {
+    //   institution: { value: "Amazon", isEditing: false },
+    //   position: { value: "AI developer", isEditing: false },
+    //   startDate: { value: "2024-04-23", isEditing: false },
+    //   endDate: { value: "2026-11-03", isEditing: false },
+    //   description: {
+    //     value: "  ",
+    //     isEditing: false,
+    //   },
+    // },
   ],
 };
 
