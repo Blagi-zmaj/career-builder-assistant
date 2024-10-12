@@ -8,6 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./ModalDialog.module.css";
 import AddIcon from "@mui/icons-material/Add";
+import { updateDataRecordInDatabase } from "./CVCreatorUtils/helpers";
 
 export default function FormDialog({
   type,
@@ -50,6 +51,8 @@ export default function FormDialog({
             const formJson = Object.fromEntries((formData as any).entries());
             formJson.type = type;
 
+            const tableName = type === "work" ? "experience" : "education";
+            updateDataRecordInDatabase("create", tableName, formJson);
             handleAddNewItemListFromModal(formJson);
 
             handleClose();

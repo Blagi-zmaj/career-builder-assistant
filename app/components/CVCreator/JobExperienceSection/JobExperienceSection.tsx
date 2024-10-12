@@ -1,6 +1,9 @@
 import { useState, useContext, useEffect } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
-import { userProfileData } from "../CVCreatorUtils/helpers";
+import {
+  updateDataRecordInDatabase,
+  userProfileData,
+} from "../CVCreatorUtils/helpers";
 import styles from "./JobExperienceSection.module.css";
 import InputForm from "../InputForm/InputForm";
 import WorkIcon from "@mui/icons-material/Work";
@@ -14,8 +17,10 @@ import { useAddNewItemListFromModal } from "../CVCreatorUtils/customHooks/custom
 
 export default function JobExperienceSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
+  const [actualRecord, setActualRecord] = useState("actualRecordTEST");
   const [userContact, setUserContact] = useState<Experience>({
-    experience: userProfileData.experience,
+    // experience: userProfileData.experience,
+    experience: [],
   });
   const [state, updateState, synchronizeState] =
     useAddNewItemListFromModal(userProfileData);
@@ -49,6 +54,9 @@ export default function JobExperienceSection() {
           },
         };
       });
+
+      setUserContact({ experience: newDataFormat });
+      synchronizeState({ experience: newDataFormat });
     }
 
     fetchDataFromDatabase();
@@ -59,6 +67,8 @@ export default function JobExperienceSection() {
     workIndex: number,
     identifier: string
   ) {
+    setActualRecord(userContact[listName][workIndex][identifier].value);
+
     setActualRecordUpdated(workIndex);
 
     setShowActualRecordTooltip((prevValues) => {
@@ -134,6 +144,17 @@ export default function JobExperienceSection() {
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
+      updateDataRecordInDatabase(
+        "update",
+        listName,
+        // userContact[listName][workIndex],
+        {
+          prevValue: actualRecord,
+          updatedRecord: userContact[listName][workIndex],
+        },
+        identifier
+      );
+
       if (userContact[listName][actualRecordUpdated][identifier].value === "") {
         setShowActualRecordTooltip({ open: true, text: "Empty record" });
         return;
@@ -215,10 +236,14 @@ export default function JobExperienceSection() {
   const handleDeleteListRecord = function (
     event: React.MouseEvent<HTMLButtonElement>,
     listName: string,
-    identifier: string
+    identifier: string,
+    position: string
   ) {
     const filteredData = userContact[listName].filter((record) => {
-      return record.institution.value !== identifier;
+      return (
+        record.institution.value != identifier ||
+        record.position.value != position
+      );
     });
 
     setUserContact((prevValues) => {
@@ -226,6 +251,11 @@ export default function JobExperienceSection() {
     });
 
     synchronizeState({ ...userContact, [listName]: filteredData });
+
+    updateDataRecordInDatabase("delete", listName, {
+      institution: identifier,
+      position,
+    });
   };
 
   return (
@@ -244,7 +274,8 @@ export default function JobExperienceSection() {
                 handleDeleteListRecord(
                   event,
                   "experience",
-                  work.institution.value
+                  work.institution.value,
+                  work.position.value
                 )
               }
             >

@@ -43,25 +43,42 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { tableName, newData } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
+  await pool.query(`
+    INSERT INTO user_experience (user_id, institution_name, position_name, start_date, end_date, description)
+    VALUES (${userId}, '${newData.institution}', '${newData.position}', '${newData.startDate}', '${newData.endDate}', '${newData.description}');
+    `);
 
   return NextResponse.json("POST successful!");
 }
 
 export async function PATCH(req: NextRequest) {
+  const body = await req.json();
+  const { tableName, newData, recordToUpdate } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
 
+  // find record ID in DB
+
+  // UPDATE RECORD BASED ON ABOVE ID FOUND IN DB
   return NextResponse.json("PATCH successful!");
 }
 
 export async function DELETE(req: NextRequest) {
+  const body = await req.json();
+  const { tableName, newData } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
+
+  await pool.query(`
+    DELETE FROM user_experience WHERE user_id = ${userId} AND institution_name = '${newData.institution}' AND position_name = '${newData.position}'
+    `);
 
   return NextResponse.json("DELETE successful!");
 }

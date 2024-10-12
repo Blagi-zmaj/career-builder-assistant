@@ -49,6 +49,40 @@ export async function updateTableRecordInDatabase(
   }
 }
 
+export async function updateDataRecordInDatabase(
+  type: string,
+  tableName: string,
+  newData,
+  recordToUpdate?: string,
+  rate?: number
+) {
+  const storedLogin = window.localStorage.getItem("login");
+  if (type === "create") {
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tableName, newData }),
+    });
+  }
+
+  if (type === "update") {
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tableName, newData, recordToUpdate }),
+    });
+  }
+
+  if (type === "delete") {
+    console.log(tableName, newData);
+    await fetch(`/pages/api/${tableName}?login=${storedLogin}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tableName, newData }),
+    });
+  }
+}
+
 type UserContact = {
   name: string | undefined;
   surname: string | undefined;
@@ -122,26 +156,26 @@ export const userProfileData = {
     },
   ],
   experience: [
-    {
-      institution: { value: "Billennium", isEditing: false },
-      position: { value: "Frontend developer", isEditing: false },
-      startDate: { value: "2021-09-22", isEditing: false },
-      endDate: { value: "2025-03-30", isEditing: false },
-      description: {
-        value: "Manage code, code refactor etc.",
-        isEditing: false,
-      },
-    },
-    {
-      institution: { value: "Google", isEditing: false },
-      position: { value: "Python developer", isEditing: false },
-      startDate: { value: "2021-02-14", isEditing: false },
-      endDate: { value: "2028-05-15", isEditing: false },
-      description: {
-        value: "Process AI!",
-        isEditing: false,
-      },
-    },
+    // {
+    //   institution: { value: "Billennium", isEditing: false },
+    //   position: { value: "Frontend developer", isEditing: false },
+    //   startDate: { value: "2021-09-22", isEditing: false },
+    //   endDate: { value: "2025-03-30", isEditing: false },
+    //   description: {
+    //     value: "Manage code, code refactor etc.",
+    //     isEditing: false,
+    //   },
+    // },
+    // {
+    //   institution: { value: "Google", isEditing: false },
+    //   position: { value: "Python developer", isEditing: false },
+    //   startDate: { value: "2021-02-14", isEditing: false },
+    //   endDate: { value: "2028-05-15", isEditing: false },
+    //   description: {
+    //     value: "Process AI!",
+    //     isEditing: false,
+    //   },
+    // },
     // {
     //   institution: { value: "Amazon", isEditing: false },
     //   position: { value: "AI developer", isEditing: false },
