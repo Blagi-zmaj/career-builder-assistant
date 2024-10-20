@@ -33,30 +33,70 @@ export async function GET(req: NextRequest) {
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
-
-  return NextResponse.json("GET successful!");
+  const data = await pool.query(`
+    SELECT ue.institution_name, ue.subject_name, ue.start_date, ue.end_date, ue.description
+    FROM users u
+    JOIN user_education ue ON u.id = ue.user_id
+    WHERE user_id = ${userId};
+    `);
+  return NextResponse.json(data.rows);
 }
 
 export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { newData } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
+  await pool.query(`
+    INSERT INTO user_education (user_id, institution_name, subject_name, start_date, end_date, description)
+    VALUES (${userId}, '${newData.institution}', '${newData.position}', '${newData.startDate}', '${newData.endDate}', '${newData.description}');
+    `);
 
   return NextResponse.json("POST successful!");
 }
 
 export async function PATCH(req: NextRequest) {
+  const body = await req.json();
+  const { newData, recordToUpdate } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
+
+  const recordID = await pool.query(`
+    SELECT id
+    FROM user_education
+    WHERE institution_name = '${newData.oldRecord.institution.value}' AND subject_name = '${newData.oldRecord.position.value}' AND start_date = '${newData.oldRecord.startDate.value}' AND end_date = '${newData.oldRecord.endDate.value}' AND description = '${newData.oldRecord.description.value}' AND user_id = ${userId};
+    `);
+
+  const recordNameToUpdate =
+    recordToUpdate === "position"
+      ? `subject_name`
+      : recordToUpdate === "institution"
+      ? `${recordToUpdate}_name`
+      : recordToUpdate === "startDate"
+      ? `start_date`
+      : recordToUpdate === "endDate"
+      ? `end_date`
+      : recordToUpdate;
+
+  pool.query(`
+    UPDATE user_education SET ${recordNameToUpdate} = '${newData.newValue}' WHERE id = ${recordID.rows[0].id};
+    `);
 
   return NextResponse.json("PATCH successful!");
 }
 
 export async function DELETE(req: NextRequest) {
+  const body = await req.json();
+  const { newData } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
+
+  await pool.query(`
+    DELETE FROM user_education WHERE user_id = ${userId} AND institution_name = '${newData.institution}' AND subject_name = '${newData.position}'
+    `);
 
   return NextResponse.json("DELETE successful!");
 }

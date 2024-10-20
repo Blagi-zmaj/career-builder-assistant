@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { tableName, newData } = body;
+  const { newData } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
@@ -63,15 +63,33 @@ export async function PATCH(req: NextRequest) {
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);
 
-  // find record ID in DB
+  const recordID = await pool.query(`
+    SELECT id
+    FROM user_experience
+    WHERE institution_name = '${newData.oldRecord.institution.value}' AND position_name = '${newData.oldRecord.position.value}' AND start_date = '${newData.oldRecord.startDate.value}' AND end_date = '${newData.oldRecord.endDate.value}' AND description = '${newData.oldRecord.description.value}' AND user_id = ${userId};
+    `);
 
-  // UPDATE RECORD BASED ON ABOVE ID FOUND IN DB
+  const recordNameToUpdate =
+    recordToUpdate === "position"
+      ? `${recordToUpdate}_name`
+      : recordToUpdate === "institution"
+      ? `${recordToUpdate}_name`
+      : recordToUpdate === "startDate"
+      ? `start_date`
+      : recordToUpdate === "endDate"
+      ? `end_date`
+      : recordToUpdate;
+
+  pool.query(`
+    UPDATE user_experience SET ${recordNameToUpdate} = '${newData.newValue}' WHERE id = ${recordID.rows[0].id};
+    `);
+
   return NextResponse.json("PATCH successful!");
 }
 
 export async function DELETE(req: NextRequest) {
   const body = await req.json();
-  const { tableName, newData } = body;
+  const { newData } = body;
   const { url } = req;
   const userLogin = getLoginFromUrl(url);
   const userId = await findUserIdInDB(userLogin);

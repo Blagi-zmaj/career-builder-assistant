@@ -19,7 +19,6 @@ export default function JobExperienceSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
   const [actualRecord, setActualRecord] = useState("actualRecordTEST");
   const [userContact, setUserContact] = useState<Experience>({
-    // experience: userProfileData.experience,
     experience: [],
   });
   const [state, updateState, synchronizeState] =
@@ -147,10 +146,14 @@ export default function JobExperienceSection() {
       updateDataRecordInDatabase(
         "update",
         listName,
-        // userContact[listName][workIndex],
+
         {
           prevValue: actualRecord,
-          updatedRecord: userContact[listName][workIndex],
+          newValue: userContact[listName][workIndex][identifier].value,
+          oldRecord: {
+            ...userContact[listName][workIndex],
+            [identifier]: { value: actualRecord, isEditing: false },
+          },
         },
         identifier
       );
@@ -188,6 +191,21 @@ export default function JobExperienceSection() {
     workIndex: number,
     identifier: string
   ) {
+    updateDataRecordInDatabase(
+      "update",
+      listName,
+      // userContact[listName][workIndex],
+      {
+        prevValue: actualRecord,
+        newValue: userContact[listName][workIndex][identifier].value,
+        oldRecord: {
+          ...userContact[listName][workIndex],
+          [identifier]: { value: actualRecord, isEditing: false },
+        },
+      },
+      identifier
+    );
+
     const updatedEditState = {
       ...userContact[listName][workIndex],
       [identifier]: {
@@ -215,6 +233,20 @@ export default function JobExperienceSection() {
     index: number,
     identifier: string
   ) {
+    updateDataRecordInDatabase(
+      "update",
+      identifier,
+      {
+        prevValue: userContact[identifier][index][type],
+        newValue: date,
+        oldRecord: {
+          ...userContact[identifier][index],
+          [identifier]: { value: actualRecord, isEditing: false },
+        },
+      },
+      type
+    );
+
     const updatedRecord = {
       ...userContact[identifier][index],
       [type]: { ...userContact[identifier][index][type], value: date },

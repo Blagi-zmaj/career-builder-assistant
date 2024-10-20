@@ -1,19 +1,43 @@
 import InputForm from "../InputForm/InputForm";
 import styles from "./SummarySection.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userProfileData } from "../CVCreatorUtils/helpers";
 import InfoIcon from "@mui/icons-material/Info";
 import { Tooltip } from "@mui/material";
 import { UserProfile } from "../../../util/types";
 
 export default function SummarySection() {
-  const [userContact, setUserContact] = useState<UserProfile>(userProfileData);
+  const [actualRecord, setActualRecord] = useState("");
+  const [userContact, setUserContact] = useState({
+    summary: {
+      description: "",
+      isEditing: false,
+    },
+  });
   const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
     open: false,
     text: "Empty record",
   });
 
+  const storedLogin = window.localStorage.getItem("login");
+
+  useEffect(() => {
+    async function fetchDataFromDatabase() {
+      const response = await fetch(`/pages/api/summary?login=${storedLogin}`);
+      const data = await response.json();
+
+      const newDataFormat = {
+        summary: { description: data[0].description, isEditing: false },
+      };
+
+      setUserContact(newDataFormat);
+    }
+
+    fetchDataFromDatabase();
+  }, []);
+
   const handleSummaryEditingStatus = function () {
+    setActualRecord(userContact.summary.description);
     setUserContact((prevValues) => {
       return {
         ...prevValues,
@@ -50,7 +74,7 @@ export default function SummarySection() {
     });
   };
 
-  const handleSummaryKeyDown = function (event) {
+  const handleSummaryKeyDown = async function (event) {
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
@@ -64,6 +88,13 @@ export default function SummarySection() {
           };
         });
       }
+
+      const response = await fetch(`/pages/api/summary?login=${storedLogin}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description: event.target.value }),
+      });
+      const data = await response.json();
     }
   };
 

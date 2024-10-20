@@ -1,6 +1,9 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { useState, useContext, ChangeEvent, useEffect } from "react";
 import { NavAndDrawerContext } from "@/app/util/context";
-import { userProfileData } from "../CVCreatorUtils/helpers";
+import {
+  updateDataRecordInDatabase,
+  userProfileData,
+} from "../CVCreatorUtils/helpers";
 import styles from "./EducationSection.module.css";
 import InputForm from "../InputForm/InputForm";
 import DatePicker from "../DatePicker";
@@ -13,8 +16,9 @@ import { Education } from "../../../util/types";
 
 export default function EducationSection() {
   const { showButtons } = useContext(NavAndDrawerContext);
+  const [actualRecord, setActualRecord] = useState("");
   const [userContact, setUserContact] = useState<Education>({
-    education: userProfileData.education,
+    education: [],
   });
   const [actualRecordUpdated, setActualRecordUpdated] = useState(-1);
   const [showActualRecordTooltip, setShowActualRecordTooltip] = useState({
@@ -22,10 +26,36 @@ export default function EducationSection() {
     text: "Empty record",
   });
 
+  useEffect(() => {
+    const storedLogin = window.localStorage.getItem("login");
+    async function fetchDataFromDatabase() {
+      const response = await fetch(`/pages/api/education?login=${storedLogin}`);
+      const data = await response.json();
+
+      const newDataFormat = data.map((el) => {
+        return {
+          institution: { value: el.institution_name, isEditing: false },
+          position: { value: el.subject_name, isEditing: false },
+          startDate: { value: el.start_date, isEditing: false },
+          endDate: { value: el.end_date, isEditing: false },
+          description: {
+            value: el.description,
+            isEditing: false,
+          },
+        };
+      });
+
+      setUserContact({ education: newDataFormat });
+    }
+
+    fetchDataFromDatabase();
+  }, []);
+
   const handleDeleteListRecord = function (
     event: React.MouseEvent<HTMLButtonElement>,
     listName: string,
-    identifier: string
+    identifier: string,
+    subject: string
   ) {
     const filteredData = userContact[listName].filter((record) => {
       return record.institution.value !== identifier;
@@ -33,6 +63,11 @@ export default function EducationSection() {
 
     setUserContact((prevValues) => {
       return { ...prevValues, [listName]: filteredData };
+    });
+
+    updateDataRecordInDatabase("delete", listName, {
+      institution: identifier,
+      position: subject,
     });
   };
 
@@ -42,6 +77,20 @@ export default function EducationSection() {
     index: number,
     identifier: string
   ) {
+    updateDataRecordInDatabase(
+      "update",
+      identifier,
+      {
+        prevValue: userContact[identifier][index][type],
+        newValue: date,
+        oldRecord: {
+          ...userContact[identifier][index],
+          [identifier]: { value: actualRecord, isEditing: false },
+        },
+      },
+      type
+    );
+
     const updatedRecord = {
       ...userContact[identifier][index],
       [type]: { ...userContact[identifier][index][type], value: date },
@@ -65,6 +114,20 @@ export default function EducationSection() {
     workIndex: number,
     identifier: string
   ) {
+    updateDataRecordInDatabase(
+      "update",
+      listName,
+      {
+        prevValue: actualRecord,
+        newValue: userContact[listName][workIndex][identifier].value,
+        oldRecord: {
+          ...userContact[listName][workIndex],
+          [identifier]: { value: actualRecord, isEditing: false },
+        },
+      },
+      identifier
+    );
+
     const updatedEditState = {
       ...userContact[listName][workIndex],
       [identifier]: {
@@ -94,6 +157,20 @@ export default function EducationSection() {
     if (event.shiftKey && event.key === "Enter") {
       console.log(`Shift & Enter`);
     } else if (event.key === "Enter") {
+      updateDataRecordInDatabase(
+        "update",
+        listName,
+        {
+          prevValue: actualRecord,
+          newValue: userContact[listName][workIndex][identifier].value,
+          oldRecord: {
+            ...userContact[listName][workIndex],
+            [identifier]: { value: actualRecord, isEditing: false },
+          },
+        },
+        identifier
+      );
+
       if (userContact[listName][actualRecordUpdated][identifier].value === "") {
         setShowActualRecordTooltip({ open: true, text: "Empty record" });
         return;
@@ -159,6 +236,7 @@ export default function EducationSection() {
     workIndex: number,
     identifier: string
   ) {
+    setActualRecord(userContact[listName][workIndex][identifier].value);
     setActualRecordUpdated(workIndex);
 
     setShowActualRecordTooltip((prevValues) => {
@@ -234,7 +312,8 @@ export default function EducationSection() {
                 handleDeleteListRecord(
                   event,
                   "education",
-                  subject.institution.value
+                  subject.institution.value,
+                  subject.position.value
                 )
               }
             >
