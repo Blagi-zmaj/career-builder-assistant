@@ -19,10 +19,9 @@ export default function SummarySection() {
     text: "Empty record",
   });
 
-  const storedLogin = window.localStorage.getItem("login");
-
   useEffect(() => {
     async function fetchDataFromDatabase() {
+      const storedLogin = window.localStorage.getItem("login");
       const response = await fetch(`/pages/api/summary?login=${storedLogin}`);
       const data = await response.json();
 
@@ -88,6 +87,8 @@ export default function SummarySection() {
           };
         });
       }
+
+      const storedLogin = window.localStorage.getItem("login");
 
       const response = await fetch(`/pages/api/summary?login=${storedLogin}`, {
         method: "PATCH",
